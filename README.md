@@ -1,2 +1,1 @@
-# Craiz
 personal project
