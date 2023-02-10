@@ -3,6 +3,7 @@ const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const apiRouter = require("./routes/api.router");
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.use(
 app.use(morgan("combined"));
 
 app.use(express.json());
+app.use("/v1", apiRouter);
 
 module.exports = app;
