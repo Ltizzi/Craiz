@@ -9,13 +9,22 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
+  nickname: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
   birthday: {
     type: Date,
+    required: false,
+  },
+  isAdmin: {
+    type: Boolean,
     required: true,
+    default: false,
   },
   memes: [
     {
