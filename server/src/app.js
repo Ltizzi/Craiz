@@ -36,6 +36,8 @@ require("dotenv").config();
 //   console.log(obj);
 //   done(null, obj);
 // });
+
+//call for passport initial configuration (strategy and user serialization and deserialization)
 setupPassport();
 
 const app = express();
