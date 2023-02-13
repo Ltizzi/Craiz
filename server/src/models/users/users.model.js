@@ -30,16 +30,21 @@ async function saveUser(user) {
   const newUser = Object.assign(user, {
     userId: newUserId,
     isAdmin: false,
-    createdAt: new Date.now(),
     softDeleted: false,
   });
-  await usersRepo.findOneAndUpdate(
+  return await usersRepo.findOneAndUpdate(
     {
       userId: newUser.userId,
     },
     newUser,
     { upsert: true }
   );
+}
+
+async function updateUser(user) {
+  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
 }
 
 async function deleteUser(id) {
@@ -65,4 +70,5 @@ module.exports = {
   getLastUserId,
   saveUser,
   deleteUser,
+  updateUser,
 };
