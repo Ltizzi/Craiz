@@ -28,7 +28,7 @@ async function httpGetUserById(req, res) {
 }
 
 async function httpSaveUser(req, res) {
-  const newUser = req.body;
+  let newUser = req.body;
   // if (!newUser.username || !newUser.nickname || !newUser.email) {
   //   return res.status(400).json({
   //     error: "user data cannot be null",
@@ -41,7 +41,7 @@ async function httpSaveUser(req, res) {
   // }-
   newUser = userHasBirthdayAndValidateIt(newUser);
 
-  newUser.createdAt = new Date.now();
+  newUser.createdAt = Date.now();
   await saveUser(newUser);
   return res.status(201).json(newUser);
 }
@@ -50,7 +50,7 @@ async function httpUpdateUser(req, res) {
   const user = req.body;
   notNullUserValidator(user);
   user = userHasBirthdayAndValidateIt(user);
-  user.updatedAt = new Date.now();
+  user.updatedAt = Date.now();
   await updateUser(user);
   return res.status(200).json(user);
 }
