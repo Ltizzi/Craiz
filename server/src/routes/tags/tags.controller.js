@@ -2,6 +2,7 @@ const {
   getAllTags,
   getTagById,
   saveTag,
+  updatedTag,
   deleteTag,
 } = require("../../models/tags/tags.model");
 
