@@ -24,6 +24,7 @@ async function httpGetUserById(req, res) {
   console.log(req.query);
   const userId = req.query.id;
   const user = await getUserById(userId);
+  if (!user) return res.status(404).json({ error: "User not found!" });
   return res.status(200).json(user);
 }
 
