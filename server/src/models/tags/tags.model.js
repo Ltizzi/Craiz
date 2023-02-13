@@ -31,7 +31,7 @@ async function saveTag(tag) {
     softDeleted: false,
     counter: 0, //TODO counter increment
   });
-  await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
+  return await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
     upsert: true,
   });
 }
