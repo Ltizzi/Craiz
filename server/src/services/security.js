@@ -1,3 +1,6 @@
+const passport = require("passport");
+const { Strategy } = require("passport-google-oauth20");
+//const session = require("express-session");
 require("dotenv").config();
 
 const config = {
@@ -39,6 +42,23 @@ function verifyCallback(accessToken, refreshToken, profile, done) {
   console.log("Google profile: ", profile.id);
   done(null, profile);
 }
+//  moved from app.js and exported as setupPassport() method
+function setupPassport() {
+  passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
+
+  passport.serializeUser((user, done) => {
+    const sessionData = {
+      id: user.id,
+      email: user._json.email,
+    };
+    done(null, sessionData);
+  });
+
+  passport.deserializeUser((obj, done) => {
+    console.log(obj);
+    done(null, obj);
+  });
+}
 
 module.exports = {
   config,
@@ -46,4 +66,5 @@ module.exports = {
   checkLoggedIn,
   checkIsAdmin,
   verifyCallback,
+  setupPassport,
 };
