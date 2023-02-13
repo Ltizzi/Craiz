@@ -12,15 +12,15 @@ async function getAllMemes(skip, limit) {
 }
 
 async function getMemesByUser(user_id) {
-  return await findMeme({ uploader: user_id });
+  return await findMemes({ uploader: user_id });
 }
 
 async function getMemesByTag(tag) {
-  return await findMeme({ tags: tag });
+  return await findMemes({ tags: tag });
 }
 
 async function getMemesByTemplate(template) {
-  return await findMeme({ template: template });
+  return await findMemes({ template: template });
 }
 
 async function getMemeById(id) {
@@ -43,7 +43,14 @@ async function saveMeme(meme) {
     likes: 0,
     createdAt: new Date.now(),
   });
-  await memesRepo.findOneAndUpdate({ memeId: newMeme.memeId }, newMeme, {
+  return await memesRepo.findOneAndUpdate({ memeId: newMeme.memeId }, newMeme, {
+    upsert: true,
+  });
+}
+
+async function updateMeme(meme) {
+  meme.updatedAt = new Date.now();
+  return await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
     upsert: true,
   });
 }
@@ -60,6 +67,10 @@ async function findMeme(filter) {
   return await memesRepo.findOne(filter);
 }
 
+async function findMemes(filter) {
+  return await memesRepo.find(filter);
+}
+
 module.exports = {
   getAllMemes,
   getMemeById,
@@ -68,5 +79,6 @@ module.exports = {
   getMemesByTemplate,
   getLastMemeId,
   saveMeme,
+  updateMeme,
   deleteMeme,
 };

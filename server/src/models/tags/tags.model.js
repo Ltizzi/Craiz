@@ -36,6 +36,13 @@ async function saveTag(tag) {
   });
 }
 
+async function updatedTag(tag) {
+  tag.updatedAt = new Date.now();
+  return await tagsRepo.findOneAndUpdate({ tagUd: tag.tagId }, tag, {
+    upsert: true,
+  });
+}
+
 async function deleteTag(id) {
   const softDeleted = await tagsRepo.updateOne(
     { tagId: id },
@@ -54,4 +61,5 @@ module.exports = {
   getLastTagId,
   saveTag,
   deleteTag,
+  updatedTag,
 };
