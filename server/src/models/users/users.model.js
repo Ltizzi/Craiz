@@ -1,10 +1,10 @@
-const userRepo = require("./users.mongo");
+const usersRepo = require("./users.mongo");
 // const axios = require("axios");
 
 const DEFAULT_USER_ID = 1;
 
 async function getAllUsers(skip, limit) {
-  return await userRepo
+  return await usersRepo
     .find({}, { _id: 0, __v: 0 })
     .sort({ userId: 1 })
     .skip(skip)
@@ -18,7 +18,7 @@ async function getUserById(id) {
 }
 
 async function getLastUserId() {
-  const lastUser = await userRepo.findOne().sort("-userId");
+  const lastUser = await usersRepo.findOne().sort("-userId");
   if (!lastUser) {
     return DEFAULT_USER_ID;
   }
@@ -33,7 +33,7 @@ async function saveUser(user) {
     createdAt: new Date.now(),
     softDeleted: false,
   });
-  await userRepo.findOneAndUpdate(
+  await usersRepo.findOneAndUpdate(
     {
       userId: newUser.userId,
     },
@@ -43,7 +43,7 @@ async function saveUser(user) {
 }
 
 async function deleteUser(id) {
-  const softDeleted = await userRepo.updateOne(
+  const softDeleted = await usersRepo.updateOne(
     {
       userId: id,
     },
@@ -56,7 +56,7 @@ async function deleteUser(id) {
 }
 
 async function findUser(filter) {
-  return await userRepo.findOne(filter);
+  return await usersRepo.findOne(filter);
 }
 
 module.exports = {

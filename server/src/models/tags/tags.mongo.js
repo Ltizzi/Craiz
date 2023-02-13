@@ -18,6 +18,11 @@ const tagsSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  softDeleted: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Tag", tagsSchema);
