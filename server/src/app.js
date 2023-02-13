@@ -14,10 +14,11 @@ const {
   setupPassport,
 } = require("./services/security");
 
+const passport = require("passport");
+const session = require("express-session");
 // moved to security.js and called back as setupPassport() method
-// const passport = require("passport");
 // const { Strategy } = require("passport-google-oauth20");
-// const session = require("express-session");
+//
 
 require("dotenv").config();
 
