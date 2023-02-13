@@ -19,7 +19,7 @@ function userHasBirthdayAndValidateIt(newUser) {
   if (newUser.birthday) {
     newUser.birthday = birthdayValidator(newUser.birthday);
     return newUser;
-  }
+  } else return newUser;
 }
 
 module.exports = {
