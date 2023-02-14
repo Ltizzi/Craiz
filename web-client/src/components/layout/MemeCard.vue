@@ -8,8 +8,9 @@
     </div>
     <div class="mx-12 flex flex-col">
       <img :src="userInfo.imgURL" alt="" class="w-fit" />
-      <div class="flex flex-row">
+      <div class="flex h-12 flex-row justify-between">
         <LikeButton></LikeButton>
+        <BaseTag class="classic my-auto">Classic</BaseTag>
       </div>
     </div>
   </div>
@@ -17,6 +18,7 @@
 <script setup lang="ts">
   import { ref, Ref } from "vue";
   import LikeButton from "../common/LikeButton.vue";
+  import BaseTag from "../common/BaseTag.vue";
 
   const userInfo: Object = ref({
     name: "Leo",
