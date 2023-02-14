@@ -3,13 +3,13 @@
     <BaseButton :class="props.classes" @click="handleButtonClick">
       <Font-awesome-icon icon="fa-solid fa-heart" />
     </BaseButton>
-    <p class="pt-5">{{ likeCounter }}</p>
+    <p class="ml-2 pt-3">{{ likeCounter }}</p>
   </div>
   <div class="flex flex-row bg-white" v-else>
     <BaseButton :class="props.classes" @click="handleButtonClick">
       <Font-awesome-icon icon="fa-regular fa-heart"
     /></BaseButton>
-    <p v-if="likeCounter" class="pt-5">{{ likeCounter }}</p>
+    <p v-if="likeCounter" class="ml-2 pt-3">{{ likeCounter }}</p>
   </div>
 </template>
 <script setup lang="ts">
@@ -19,7 +19,7 @@
   import BaseButton from "./BaseButton.vue";
 
   const props = {
-    classes: "text-black p-5 ",
+    classes: "text-black justify-center items-center",
   };
 
   const liked: Ref<boolean> = ref(false);
