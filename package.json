@@ -5,6 +5,7 @@
   "main": " ",
   "scripts": {
     "server": "npm run watch --prefix server",
+    "web": "npm run dev --prefix web-client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ltizzi",
