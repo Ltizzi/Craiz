@@ -4,6 +4,7 @@
   "description": "a meme social network",
   "main": " ",
   "scripts": {
+    "watch": "npm run server && npm run web",
     "server": "npm run watch --prefix server",
     "web": "npm run dev --prefix web-client",
     "test": "echo \"Error: no test specified\" && exit 1"
