@@ -12,51 +12,56 @@
     ></div> -->
     <!-- Dialog -->
     <dialog
-      class="fixed z-50 mt-32 flex w-1/3 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
+      class="fixed z-50 mt-32 flex w-2/5 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
     >
       <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
         Create meme
       </h1>
-      <div
-        class="flex h-auto flex-col items-center justify-center bg-gray-100 p-5"
-      >
-        <img
-          :src="memeUrl"
-          v-if="memeUrl"
-          ref="memeImage"
-          class="object-cover"
-        />
-        <div class="h-96 w-full bg-gray-300" v-else></div>
-      </div>
+
       <form @submit.prevent="generateMeme">
-        <input
-          type="text"
-          class="draggable"
-          :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
-          :placeholder="topText"
-        />
+        <div class="flex h-auto bg-gray-100 p-5">
+          <div
+            class="relative mx-auto flex h-auto w-auto flex-col items-center justify-center overflow-hidden"
+          >
+            <input
+              type="text"
+              class="draggable"
+              :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
+              :placeholder="topText"
+            />
 
-        <input
-          type="text"
-          class="draggable"
-          :style="{
-            top: bottomTextTop + 'px',
-            left: bottomTextLeft + 'px',
-          }"
-          :placeholder="bottomText"
-        />
+            <input
+              type="text"
+              class="draggable mx-auto"
+              :style="{
+                top: bottomTextTop + 'px',
+                left: bottomTextLeft + 'px',
+              }"
+              :placeholder="bottomText"
+            />
 
-        <input
-          type="text"
-          class="draggable"
-          v-for="textField in textFields"
-          :key="textField.id"
-          :style="{
-            top: textField.top + 'px',
-            left: textField.left + 'px',
-          }"
-          :placeholder="textField.text"
-        />
+            <input
+              type="text"
+              class="draggable"
+              @keydown.delete="deleteTextField(textField.id)"
+              v-for="textField in textFields"
+              :key="textField.id"
+              :style="{
+                top: textField.top + 'px',
+                left: textField.left + 'px',
+              }"
+              :placeholder="textField.text"
+            />
+            <img
+              :src="memeUrl"
+              v-if="memeUrl"
+              ref="memeImage"
+              class="h-96 max-h-fit w-96 object-contain"
+            />
+            <div class="h-96 w-96 bg-gray-300" v-else></div>
+          </div>
+        </div>
+
         <div class="my-4 flex flex-row justify-around">
           <BaseButton :class="btnClasses.green" @click.prevent="addTextField"
             >Add Textfield</BaseButton
@@ -105,10 +110,10 @@
   // const textFields = reactive([]);
   const textFields = ref<TextField[]>([]);
   const textFieldsCount = ref(0);
-  const topTextTop = ref(100);
-  const topTextLeft = ref(120);
-  const bottomTextTop = ref(380);
-  const bottomTextLeft = ref(120);
+  const topTextTop = ref(15);
+  const topTextLeft = ref(70);
+  const bottomTextTop = ref(300);
+  const bottomTextLeft = ref(70);
 
   onMounted(() => {
     makeTextFieldsDraggable();
@@ -133,7 +138,7 @@
     const txtField: TextField = {
       id: textFieldsCount.value,
       top: 220,
-      left: 120,
+      left: 195,
       text: "Placeholder",
     };
     textFields.value.push(txtField);
@@ -142,6 +147,11 @@
       makeTextFieldsDraggable();
     });
   }
+
+  function deleteTextField(id: number) {
+    textFields.value = textFields.value.filter((field) => field.id != id);
+  }
+
   async function generateMeme() {
     const fields = textFields.value.map((field: any) => {
       // const element = ref(["textField" + field.id]);
@@ -200,8 +210,9 @@
     text-shadow: 2px 2px black;
     cursor: move;
     user-select: none;
-    border: 5px dotted gray;
+    border: 3px dotted gray;
     background: transparent;
+    width: 15rem;
   }
 
   .draggable:focus {
