@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center">
-    <CreateMeme></CreateMeme>
+    <NewMemeMenu></NewMemeMenu>
     <MemeCard></MemeCard>
     <MemeCard></MemeCard>
     <MemeCard></MemeCard>
@@ -8,9 +8,8 @@
 </template>
 
 <script setup lang="ts">
-  import LikeButton from "./components/common/LikeButton.vue";
   import MemeCard from "./components/layout/MemeCard.vue";
-  import CreateMeme from "./components/layout/CreateMeme.vue";
+  import NewMemeMenu from "./components/layout/NewMemeMenu.vue";
 </script>
 
 <style scoped></style>

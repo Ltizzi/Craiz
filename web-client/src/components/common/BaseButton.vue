@@ -1,10 +1,6 @@
 <template>
-  <button
-    :class="props.classes"
-    :disabled="props.disabled"
-    @click="handleClick"
-    v-if="!props.link"
-  >
+  <button :class="props.classes" :disabled="props.disabled" v-if="!props.link">
+    <!-- @click="handleClick" -->
     <slot></slot>
   </button>
   <router-link v-else :to="props.to" :class="props.classes"
@@ -28,10 +24,10 @@
     classes: "",
   };
 
-  const emits = defineEmits(["click"]);
+  // const emits = defineEmits(["click"]);
 
-  function handleClick() {
-    emits("click");
-  }
+  // function handleClick() {
+  //   emits("click");
+  // }
 </script>
 <style lang=""></style>
