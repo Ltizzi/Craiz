@@ -1,87 +1,91 @@
 <template lang="">
-  <teleport to="body">
+  <div
+    classes=" top-0 left-0 w-screen h-screen z-0 flex items-center justify-center"
+  >
     <!-- Background -->
     <div
-      class="pin fixed top-0 z-50 flex h-screen w-screen overflow-auto bg-gray-900/75"
+      class="fixed top-0 left-0 z-20 h-full w-full bg-black/50 backdrop-blur-lg"
+      @click="$emit('closeModal')"
+    ></div>
+    <!-- <div
+      class="fixed top-0 left-0 z-10 h-full w-full bg-gray-600/60 blur-2xl"
+    ></div> -->
+    <!-- Dialog -->
+    <dialog
+      class="fixed z-50 mt-32 flex w-1/3 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
     >
-      <!-- Dialog -->
+      <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
+        Create meme
+      </h1>
       <div
-        class="my-auto mx-auto flex w-1/3 flex-col justify-center border-2 bg-white px-5 shadow-md"
+        class="flex h-auto flex-col items-center justify-center bg-gray-100 p-5"
       >
-        <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
-          Create meme
-        </h1>
-        <div
-          class="flex h-auto flex-col items-center justify-center bg-gray-100 p-5"
-        >
-          <img
-            :src="memeUrl"
-            v-if="memeUrl"
-            ref="memeImage"
-            class="object-cover"
-          />
-          <div class="h-96 w-full bg-gray-300" v-else></div>
-        </div>
-        <form @submit.prevent="generateMeme">
-          <input
-            type="text"
-            class="draggable"
-            :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
-            :placeholder="topText"
-          />
-
-          <input
-            type="text"
-            class="draggable"
-            :style="{ top: bottomTextTop + 'px', left: bottomTextLeft + 'px' }"
-            :placeholder="bottomText"
-          />
-
-          <input
-            type="text"
-            class="draggable"
-            v-for="textField in textFields"
-            :key="textField.id"
-            :style="{ top: textField.top + 'px', left: textField.left + 'px' }"
-            :placeholder="textField.text"
-          />
-          <div class="my-4 flex flex-row justify-around">
-            <button
-              class="rounded-md bg-green-200 py-1 px-3 text-lg font-bold text-gray-600"
-              @click.prevent="addTextField"
-            >
-              Add Text Field
-            </button>
-            <button
-              class="rounded-md bg-orange-200 py-1 px-3 text-lg font-bold text-gray-600"
-              @click="generateMeme"
-            >
-              Generate Meme
-            </button>
-            <button
-              class="rounded-md bg-red-200 py-1 px-3 text-lg font-bold text-gray-600"
-              @click=""
-            >
-              Close dialog
-            </button>
-          </div>
-        </form>
+        <img
+          :src="memeUrl"
+          v-if="memeUrl"
+          ref="memeImage"
+          class="object-cover"
+        />
+        <div class="h-96 w-full bg-gray-300" v-else></div>
+      </div>
+      <form @submit.prevent="generateMeme">
+        <input
+          type="text"
+          class="draggable"
+          :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
+          :placeholder="topText"
+        />
 
         <input
-          class="ml-32 mb-5"
-          type="file"
-          ref="fileInput"
-          @change="handleFileInputChange"
+          type="text"
+          class="draggable"
+          :style="{
+            top: bottomTextTop + 'px',
+            left: bottomTextLeft + 'px',
+          }"
+          :placeholder="bottomText"
         />
-      </div>
-    </div>
-  </teleport>
+
+        <input
+          type="text"
+          class="draggable"
+          v-for="textField in textFields"
+          :key="textField.id"
+          :style="{
+            top: textField.top + 'px',
+            left: textField.left + 'px',
+          }"
+          :placeholder="textField.text"
+        />
+        <div class="my-4 flex flex-row justify-around">
+          <BaseButton :class="btnClasses.green" @click.prevent="addTextField"
+            >Add Textfield</BaseButton
+          >
+          <BaseButton :class="btnClasses.orange" @click.prevent="generateMeme"
+            >Generate Meme</BaseButton
+          >
+          <BaseButton :class="btnClasses.red" @click="$emit('closeModal')"
+            >Close Dialog</BaseButton
+          >
+        </div>
+      </form>
+
+      <input
+        class="ml-32 mb-5"
+        type="file"
+        ref="fileInput"
+        @change="handleFileInputChange"
+      />
+    </dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, nextTick, onMounted } from "vue";
+  import { ref, nextTick, onMounted, PropType } from "vue";
   import axios from "axios";
   import interact from "interactjs";
+  import BaseButton from "../common/BaseButton.vue";
+  import { btnClasses } from "../../utils/models";
 
   interface TextField {
     id: Number;
@@ -90,16 +94,21 @@
     text: string;
   }
 
+  const props = {
+    showModal: Boolean as PropType<boolean>,
+    required: true,
+  };
+
   const topText = ref("Top text");
   const bottomText = ref("Bottom text");
   const memeUrl = ref();
   // const textFields = reactive([]);
   const textFields = ref<TextField[]>([]);
   const textFieldsCount = ref(0);
-  const topTextTop = ref(265);
-  const topTextLeft = ref(785);
-  const bottomTextTop = ref(550);
-  const bottomTextLeft = ref(785);
+  const topTextTop = ref(100);
+  const topTextLeft = ref(120);
+  const bottomTextTop = ref(380);
+  const bottomTextLeft = ref(120);
 
   onMounted(() => {
     makeTextFieldsDraggable();
@@ -109,7 +118,12 @@
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
-      memeUrl.value = event.target.result || "";
+      if (event.target) {
+        memeUrl.value = event.target.result;
+      } else {
+        console.error("Select a file!");
+        return;
+      }
     };
     reader.readAsDataURL(file);
   }
@@ -118,8 +132,8 @@
     textFieldsCount.value++;
     const txtField: TextField = {
       id: textFieldsCount.value,
-      top: 450,
-      left: 785,
+      top: 220,
+      left: 120,
       text: "Placeholder",
     };
     textFields.value.push(txtField);
@@ -179,7 +193,7 @@
   .draggable {
     position: absolute;
     text-align: center;
-    font-size: 32px;
+    font-size: 2.5rem;
     font-family: Impact, sans-serif;
     justify-content: center;
     color: white;
