@@ -11,28 +11,35 @@ const {
   checkLoggedIn,
   checkIsAdmin,
   verifyCallback,
+  setupPassport,
 } = require("./services/security");
 
 const passport = require("passport");
-const { Strategy } = require("passport-google-oauth20");
 const session = require("express-session");
+// moved to security.js and called back as setupPassport() method
+// const { Strategy } = require("passport-google-oauth20");
+//
 
 require("dotenv").config();
 
-passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
+//moved to security.js and called back as setupPassport() method
+// passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
-passport.serializeUser((user, done) => {
-  const sessionData = {
-    id: user.id,
-    email: user._json.email,
-  };
-  done(null, sessionData);
-});
+// passport.serializeUser((user, done) => {
+//   const sessionData = {
+//     id: user.id,
+//     email: user._json.email,
+//   };
+//   done(null, sessionData);
+// });
 
-passport.deserializeUser((obj, done) => {
-  console.log(obj);
-  done(null, obj);
-});
+// passport.deserializeUser((obj, done) => {
+//   console.log(obj);
+//   done(null, obj);
+// });
+
+//call for passport initial configuration (strategy and user serialization and deserialization)
+setupPassport();
 
 const app = express();
 
