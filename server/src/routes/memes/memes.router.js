@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   httpGetAllMemes,
+  httpGetAllSoftDeletedMemes,
   httpGetMemeById,
   httpGetAllMemesByTag,
   httpGetAllMemesByTemplate,
@@ -16,6 +17,7 @@ const {
 const memesRouter = express.Router();
 
 memesRouter.get("/", httpGetAllMemes);
+memesRouter.get("/softDeleted", httpGetAllSoftDeletedMemes);
 memesRouter.get("/byId", httpGetMemeById);
 memesRouter.get("/byTag", httpGetAllMemesByTag);
 memesRouter.get("/byTemplate", httpGetAllMemesByTemplate);

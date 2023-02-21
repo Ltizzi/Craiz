@@ -9,9 +9,13 @@ const {
 const { getPagination } = require("../../services/query");
 
 async function httpGetAllTags(req, res) {
-  const { skip, limit } = getPagination(req.query);
-  const tags = await getAllTags(skip, limit);
-  return res.status(200).json(tags);
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const tags = await getAllTags(skip, limit);
+    return res.status(200).json(tags);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpGetTagById(req, res) {

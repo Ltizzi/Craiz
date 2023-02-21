@@ -1,4 +1,8 @@
 const memesRepo = require("./memes.mongo");
+const {
+  tagIncrementalCounter,
+  tagDecrementalCounter,
+} = require("../tags/tags.model");
 const { getUserById, updateUser } = require("../users/users.model");
 //const axios = require("axios");
 
@@ -7,6 +11,14 @@ const DEFAULT_MEME_ID = 0;
 async function getAllMemes(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ memeId: 1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getAllSoftDeletedMemes(skip, limit) {
+  return await memesRepo
+    .find({ softDeleted: true }, { _id: 0, __v: 0 })
     .sort({ memeId: 1 })
     .skip(skip)
     .limit(limit);
@@ -52,6 +64,10 @@ async function saveMeme(meme) {
     likes: 0,
     createdAt: Date.now(),
   });
+  const tagNames = meme.tags;
+  tagNames.forEach((tag) => {
+    tagIncrementalCounter(tag);
+  });
 
   const savedMeme = await memesRepo.findOneAndUpdate(
     { memeId: newMeme.memeId },
@@ -79,6 +95,10 @@ async function addCommentToMeme(memeId, comment) {
 }
 
 async function updateMeme(meme) {
+  // const tagNames = meme.tags;
+  // tagNames.forEach((tag) => {
+  //   tagIncrementalCounter(tag);
+  // });
   meme.updatedAt = Date.now();
   return await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
     upsert: true,
@@ -86,11 +106,13 @@ async function updateMeme(meme) {
 }
 
 async function deleteMeme(id) {
-  const softDeleted = await memesRepo.updateOne(
-    { memeId: id },
-    { softDeleted: true, updatedAt: new Date.now() }
-  );
-  return softDeleted.acknowledged === true && softDeleted.modifiedCount === 1;
+  const meme = await findMeme({ memeId: id });
+  const user = await getUserById(meme.uploader);
+  meme.softDeleted = true;
+  meme.updatedAt = Date.now();
+  user.memes = user.memes.filter((mm) => mm != id);
+  const softDeleted = await updateMeme(meme);
+  await updateUser(user);
 }
 
 async function likeMeme(memeId, userId) {
@@ -132,6 +154,7 @@ async function findMemes(filter, skip, limit) {
 
 module.exports = {
   getAllMemes,
+  getAllSoftDeletedMemes,
   getMemeById,
   getMemesByTag,
   getMemesByUser,

@@ -1,5 +1,6 @@
 const {
   getAllMemes,
+  getAllSoftDeletedMemes,
   getMemeById,
   getMemesByTag,
   getMemesByUser,
@@ -14,33 +15,63 @@ const {
 const { getPagination } = require("../../services/query");
 
 async function httpGetAllMemes(req, res) {
-  const { skip, limit } = getPagination(req.query);
-  const memes = await getAllMemes(skip, limit);
-  return res.status(200).json(memes);
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getAllMemes(skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetAllSoftDeletedMemes(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getAllSoftDeletedMemes(skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    return res.status(404).json({ error: err.messag });
+  }
 }
 
 async function httpGetMemeById(req, res) {
-  const memeId = req.query.id;
-  const meme = await getMemeById(memeId);
-  return res.status(200).json(meme);
+  try {
+    const memeId = req.query.id;
+    const meme = await getMemeById(memeId);
+    return res.status(200).json(meme);
+  } catch (err) {
+    return res.status(404).json({ error: err.messag });
+  }
 }
 
 async function httpGetAllMemesByTag(req, res) {
-  const tag = req.query.tag;
-  const memes = await getMemesByTag(tag);
-  return res.status(200).json(memes);
+  try {
+    const tag = req.query.tag;
+    const memes = await getMemesByTag(tag);
+    return res.status(200).json(memes);
+  } catch (err) {
+    return res.status(404).json({ error: err.messag });
+  }
 }
 
 async function httpGetAllMemesByTemplate(req, res) {
-  const template = req.query.template;
-  const memes = await getMemesByTemplate(template);
-  return res.status(200).json(memes);
+  try {
+    const template = req.query.template;
+    const memes = await getMemesByTemplate(template);
+    return res.status(200).json(memes);
+  } catch (err) {
+    return res.status(404).json({ error: err.messag });
+  }
 }
 
 async function httpGetAllMemesByUser(req, res) {
-  const userId = req.query.user_id;
-  const memes = await getMemesByUser(userId);
-  return res.status(200).json(memes);
+  try {
+    const userId = req.query.user_id;
+    const memes = await getMemesByUser(userId);
+    return res.status(200).json(memes);
+  } catch (err) {
+    return res.status(404).json({ error: err.messag });
+  }
 }
 
 async function httpSaveMeme(req, res) {
@@ -55,6 +86,8 @@ async function httpSaveMeme(req, res) {
 }
 
 async function httpUpdateMeme(req, res) {
+  try {
+  } catch (err) {}
   const meme = req.body;
   // meme.updatedAt = new Date.now();
   await updateMeme(meme);
@@ -62,23 +95,18 @@ async function httpUpdateMeme(req, res) {
 }
 
 async function httpDeleteMeme(req, res) {
-  const memeId = req.query.id;
-  const existingMeme = await getMemeById(memeId);
-  if (!existingMeme) {
-    return res.status(404).json({
-      error: "Meme not found",
-    });
-  }
-  const removed = await deleteMeme(memeId);
-  if (!removed) {
-    return res.status(400).json({
-      error: "Can't delete meme",
-    });
-  }
-  if (deleted) {
-    return res.status(200).json({
-      ok: "Meme deleted!",
-    });
+  try {
+    const memeId = req.query.id;
+    const existingMeme = await getMemeById(memeId);
+    if (!existingMeme) {
+      return res.status(404).json({
+        error: "Meme not found",
+      });
+    }
+    await deleteMeme(memeId);
+    return res.status(200).json({ ok: "meme deleted" });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
 }
 
@@ -106,6 +134,7 @@ async function httpLikeMeme(req, res) {
 
 module.exports = {
   httpGetAllMemes,
+  httpGetAllSoftDeletedMemes,
   httpGetMemeById,
   httpGetAllMemesByTag,
   httpGetAllMemesByTemplate,
