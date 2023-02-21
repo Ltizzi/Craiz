@@ -103,14 +103,6 @@ async function findUser(filter) {
   return await usersRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
-function isFriend(friends, friendId) {
-  const foundFriend = friends.filter((friend) => {
-    friend == friendId;
-  });
-  if (foundFriend) return true;
-  else return false;
-}
-
 module.exports = {
   getAllUsers,
   getSoftDeletedUsers,

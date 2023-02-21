@@ -7,7 +7,7 @@ const memesSchema = new mongoose.Schema({
     unique: true,
   },
   uploader: {
-    type: mongoose.ObjectId,
+    type: Number,
     ref: "User",
     required: true,
   },
@@ -34,6 +34,11 @@ const memesSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false,
+  },
+  parentMeme: {
+    type: Number,
+    ref: "Meme",
+    required: false,
   },
   comments: [
     {
