@@ -2,7 +2,7 @@ const usersRepo = require("./users.mongo");
 const memesRepo = require("../memes/memes.mongo");
 // const axios = require("axios");
 
-const DEFAULT_USER_ID = 1;
+const DEFAULT_USER_ID = 0;
 
 async function getAllUsers(skip, limit) {
   return await usersRepo

@@ -1,18 +1,18 @@
 const tagsRepo = require("./tags.mongo");
 // const axios = require("axios");
 
-const DEFAULT_TAG_ID = 1;
+const DEFAULT_TAG_ID = 0;
 
 async function getAllTags(skip, limit) {
-  return await memesRepo
-    .find({}, { _id: 0, __v: 0 })
+  return await tagsRepo
+    .find({ softDeleted: false }, { _id: 0, __v: 0 })
     .sort({ tagId: 1 })
     .skip(skip)
     .limit(limit);
 }
 
 async function getTagById(id) {
-  return await findTag({ tagId: id });
+  return await findTag({ tagId: id, softDeleted: false });
 }
 
 async function getLastTagId() {
@@ -25,9 +25,14 @@ async function getLastTagId() {
 
 async function saveTag(tag) {
   const newTagId = (await getLastTagId()) + 1;
+
+  const alreadyMaked = await findTag({ name: tag.name });
+  if (alreadyMaked) {
+    throw new Error("Duplicated tag name");
+  }
   const newTag = Object.assign(tag, {
     tagId: newTagId,
-    createdAt: new Date.now(),
+    createdAt: Date.now(),
     softDeleted: false,
     counter: 0, //TODO counter increment
   });
@@ -37,8 +42,8 @@ async function saveTag(tag) {
 }
 
 async function updatedTag(tag) {
-  tag.updatedAt = new Date.now();
-  return await tagsRepo.findOneAndUpdate({ tagUd: tag.tagId }, tag, {
+  tag.updatedAt = Date.now();
+  return await tagsRepo.findOneAndUpdate({ tagId: tag.tagId }, tag, {
     upsert: true,
   });
 }
@@ -46,13 +51,13 @@ async function updatedTag(tag) {
 async function deleteTag(id) {
   const softDeleted = await tagsRepo.updateOne(
     { tagId: id },
-    { softDeleted: true, updatedAt: ewDate.now() }
+    { softDeleted: true, updatedAt: Date.now() }
   );
   return softDeleted.acknowledged === true && softDeleted.modifiedCount === 1;
 }
 
 async function findTag(filter) {
-  return await tagsRepo.findOne(filter);
+  return await tagsRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
 module.exports = {

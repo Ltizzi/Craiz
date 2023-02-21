@@ -9,6 +9,7 @@ const tagsSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
@@ -16,7 +17,7 @@ const tagsSchema = new mongoose.Schema({
   },
   counter: {
     type: Number,
-    required: true,
+    required: false,
     default: 0,
   },
   softDeleted: {

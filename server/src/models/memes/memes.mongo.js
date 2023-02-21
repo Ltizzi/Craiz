@@ -26,8 +26,8 @@ const memesSchema = new mongoose.Schema({
   likedBy: [
     {
       type: Number,
+      ref: "User",
       required: false,
-      default: 0,
     },
   ],
   isComment: {
@@ -37,7 +37,7 @@ const memesSchema = new mongoose.Schema({
   },
   comments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Meme",
       required: false,
     },
@@ -48,7 +48,7 @@ const memesSchema = new mongoose.Schema({
   },
   tags: [
     {
-      type: mongoose.ObjectId,
+      type: String,
       ref: "Tag",
       required: true,
     },
