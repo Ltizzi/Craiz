@@ -1,5 +1,6 @@
 const {
   getAllUsers,
+  getSoftDeletedUsers,
   getUserById,
   saveUser,
   updateUser,
@@ -22,6 +23,12 @@ async function httpGetAllUsers(req, res) {
   return res.status(200).json(users);
 }
 
+async function httpGetSoftDeletedUsers(req, res) {
+  const { skip, limit } = getPagination(req.query);
+  const softDeletedUsers = await getSoftDeletedUsers(skip, limit);
+  return res.status(200).json(softDeletedUsers);
+}
+
 async function httpGetUserById(req, res) {
   console.log(req.query);
   const userId = req.query.id;
@@ -37,8 +44,12 @@ async function httpSaveUser(req, res) {
   newUser = userHasBirthdayAndValidateIt(newUser);
 
   newUser.createdAt = Date.now();
-  await saveUser(newUser);
-  return res.status(201).json(newUser);
+  try {
+    await saveUser(newUser);
+    return res.status(201).json(newUser);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 }
 
 async function httpUpdateUser(req, res) {
@@ -48,6 +59,27 @@ async function httpUpdateUser(req, res) {
   user.updatedAt = Date.now();
   await updateUser(user);
   return res.status(200).json(user);
+}
+
+async function httpDeleteUser(req, res) {
+  const userId = req.query.id;
+  const existUser = await getUserById(userId);
+  if (!existUser) {
+    return res.status(404).json({
+      error: "User not found",
+    });
+  }
+  const deleted = await deleteUser(userId);
+  if (!deleted) {
+    return res.status(400).json({
+      error: "Can't delete user",
+    });
+  }
+  if (deleted) {
+    return res.status(200).json({
+      ok: "User deleted",
+    });
+  }
 }
 
 async function httpAddFriendToUser(req, res) {
@@ -98,29 +130,9 @@ async function httpRemoveFriendFromUser(req, res) {
   }
 }
 
-async function httpDeleteUser(req, res) {
-  const userId = req.query.id;
-  const existUser = await getUserById(userId);
-  if (!existUser) {
-    return res.status(404).json({
-      error: "User not found",
-    });
-  }
-  const deleted = await deleteUser(userId);
-  if (!deleted) {
-    return res.status(400).json({
-      error: "Can't delete user",
-    });
-  }
-  if (deleted) {
-    return res.status(200).json({
-      ok: "User deleted",
-    });
-  }
-}
-
 module.exports = {
   httpGetAllUsers,
+  httpGetSoftDeletedUsers,
   httpGetUserById,
   httpSaveUser,
   httpUpdateUser,
