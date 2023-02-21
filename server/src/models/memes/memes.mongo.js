@@ -4,6 +4,7 @@ const memesSchema = new mongoose.Schema({
   memeId: {
     type: Number,
     required: true,
+    unique: true,
   },
   uploader: {
     type: mongoose.ObjectId,
@@ -22,11 +23,13 @@ const memesSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  likes: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
+  likedBy: [
+    {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+  ],
   isComment: {
     type: Boolean,
     required: true,
@@ -34,7 +37,7 @@ const memesSchema = new mongoose.Schema({
   },
   comments: [
     {
-      type: mongoose.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Meme",
       required: false,
     },

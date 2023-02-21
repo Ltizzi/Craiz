@@ -4,6 +4,7 @@ const usersSchema = new mongoose.Schema({
   userId: {
     type: Number,
     required: true,
+    unique: true,
   },
   username: {
     type: String,
@@ -16,6 +17,7 @@ const usersSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   avatar: {
     type: String,
@@ -32,22 +34,29 @@ const usersSchema = new mongoose.Schema({
   },
   memes: [
     {
-      type: mongoose.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Meme",
       required: false,
     },
   ],
   likedMemes: [
     {
-      type: mongoose.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Meme",
       required: false,
     },
   ],
   tags: [
     {
-      type: mongoose.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Tag",
+      required: false,
+    },
+  ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: false,
     },
   ],
