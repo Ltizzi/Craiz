@@ -58,6 +58,11 @@ const memesSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  softDeleted: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Meme", memesSchema);

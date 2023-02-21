@@ -104,23 +104,23 @@ async function likeMeme(memeId, userId) {
   }
   const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
   console.log(likedMeme);
-  if (!likedMeme) {
+  if (likedMeme.length == 0) {
     meme.likedBy.push(user.userId);
     user.likedMemes.push(meme.memeId);
     await updateMeme(meme);
     await updateUser(user);
-    return json({ ok: "liked meme" });
+    return { ok: "liked meme" };
   } else {
     meme.likedBy = meme.likedBy.filter((usr) => usr != userId);
     user.likedMemes = user.likedMemes.filter((mm) => mm != memeId);
     await updateMeme(meme);
     await updateUser(user);
-    return json({ ok: "unliked meme" });
+    return { ok: "unliked meme" };
   }
 }
 
 async function findMeme(filter) {
-  return await memesRepo.findOne(filter);
+  return await memesRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
 async function findMemes(filter, skip, limit) {
