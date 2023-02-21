@@ -60,6 +60,18 @@ async function findTag(filter) {
   return await tagsRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
+async function tagIncrementalCounter(tagName) {
+  const tag = await findTag({ name: tagName });
+  tag.counter += 1;
+  return await updatedTag(tag);
+}
+
+async function tagDecrementalCounter(tagName) {
+  const tag = await findTag({ name: tagName });
+  tag.counter -= 1;
+  return await updatedTag(tag);
+}
+
 module.exports = {
   getAllTags,
   getTagById,
@@ -67,4 +79,6 @@ module.exports = {
   saveTag,
   deleteTag,
   updatedTag,
+  tagIncrementalCounter,
+  tagDecrementalCounter,
 };

@@ -17,24 +17,35 @@ const {
 } = require("../../services/validators");
 
 async function httpGetAllUsers(req, res) {
-  console.log(req.query);
-  const { skip, limit } = getPagination(req.query);
-  const users = await getAllUsers(skip, limit);
-  return res.status(200).json(users);
+  try {
+    console.log(req.query);
+    const { skip, limit } = getPagination(req.query);
+    const users = await getAllUsers(skip, limit);
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpGetSoftDeletedUsers(req, res) {
-  const { skip, limit } = getPagination(req.query);
-  const softDeletedUsers = await getSoftDeletedUsers(skip, limit);
-  return res.status(200).json(softDeletedUsers);
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const softDeletedUsers = await getSoftDeletedUsers(skip, limit);
+    return res.status(200).json(softDeletedUsers);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpGetUserById(req, res) {
-  console.log(req.query);
-  const userId = req.query.id;
-  const user = await getUserById(userId);
-  if (!user) return res.status(404).json({ error: "User not found!" });
-  return res.status(200).json(user);
+  try {
+    const userId = req.query.id;
+    const user = await getUserById(userId);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpSaveUser(req, res) {
@@ -53,12 +64,16 @@ async function httpSaveUser(req, res) {
 }
 
 async function httpUpdateUser(req, res) {
-  var user = req.body;
-  notNullUserValidator(user);
-  user = userHasBirthdayAndValidateIt(user);
-  user.updatedAt = Date.now();
-  await updateUser(user);
-  return res.status(200).json(user);
+  try {
+    var user = req.body;
+    notNullUserValidator(user);
+    user = userHasBirthdayAndValidateIt(user);
+    user.updatedAt = Date.now();
+    await updateUser(user);
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpDeleteUser(req, res) {
