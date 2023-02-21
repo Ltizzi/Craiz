@@ -4,6 +4,8 @@ const {
   saveUser,
   updateUser,
   deleteUser,
+  addFriendToUser,
+  removeFriendFromUser,
 } = require("../../models/users/users.model");
 
 const { getPagination } = require("../../services/query");
@@ -48,6 +50,54 @@ async function httpUpdateUser(req, res) {
   return res.status(200).json(user);
 }
 
+async function httpAddFriendToUser(req, res) {
+  const userId = req.query.id;
+  const friendId = req.query.friendId;
+  try {
+    const user = await getUserById(userId);
+    const friend = await getUserById(friendId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    if (!friend) {
+      return res.status(404).json({ error: "Invalid user Id" });
+    }
+    await addFriendToUser(user, friend);
+    return res.status(200).json({
+      user: userId,
+      friend: friendId,
+      message: "Friend added to user",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function httpRemoveFriendFromUser(req, res) {
+  const userId = req.query.id;
+  const friendId = req.query.friendId;
+  try {
+    const user = await getUserById(userId);
+    const friend = await getUserById(friendId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    if (!friend) {
+      return res.status(404).json({ error: "Invalid user Id" });
+    }
+    await removeFriendFromUser(user, friend);
+    return res.status(200).json({
+      user: userId,
+      friend: friendId,
+      message: "Friend removed from user",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 async function httpDeleteUser(req, res) {
   const userId = req.query.id;
   const existUser = await getUserById(userId);
@@ -75,4 +125,6 @@ module.exports = {
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,
+  httpAddFriendToUser,
+  httpRemoveFriendFromUser,
 };
