@@ -9,7 +9,7 @@ const {
 
 const tagsRouter = express.Router();
 
-tagsRouter.get("/", httpGetAllTags);
+tagsRouter.get("/all", httpGetAllTags);
 tagsRouter.get("/byId", httpGetTagById);
 tagsRouter.post("/new", httpSaveTag);
 tagsRouter.patch("/update", httpUpdateTag);
