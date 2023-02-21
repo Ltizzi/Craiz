@@ -20,6 +20,10 @@ const usersSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  avatar: {
+    type: String,
+    required: false,
+  },
   birthday: {
     type: Date,
     required: false,
