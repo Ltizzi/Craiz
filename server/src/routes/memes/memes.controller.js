@@ -7,6 +7,7 @@ const {
   saveMeme,
   deleteMeme,
   updateMeme,
+  addCommentToMeme,
 } = require("../../models/memes/memes.model");
 
 const { getPagination } = require("../../services/query");
@@ -43,14 +44,14 @@ async function httpGetAllMemesByUser(req, res) {
 
 async function httpSaveMeme(req, res) {
   const meme = req.body;
-  meme.createdAt = new Date.now();
+  // meme.createdAt = new Date.now();
   await saveMeme(meme);
   return res.status(201).json(meme);
 }
 
 async function httpUpdateMeme(req, res) {
   const meme = req.body;
-  meme.updatedAt = new Date.now();
+  // meme.updatedAt = new Date.now();
   await updateMeme(meme);
   return res.status(200).json(meme);
 }
@@ -76,6 +77,17 @@ async function httpDeleteMeme(req, res) {
   }
 }
 
+async function httpAddCommentToMeme(req, res) {
+  try {
+    const memeId = req.query.id;
+    const comment = req.body;
+    await addCommentToMeme(memeId, comment);
+    return res.status(201).json({ ok: "Added comment!" });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 module.exports = {
   httpGetAllMemes,
   httpGetMemeById,
@@ -85,4 +97,5 @@ module.exports = {
   httpSaveMeme,
   httpUpdateMeme,
   httpDeleteMeme,
+  httpAddCommentToMeme,
 };
