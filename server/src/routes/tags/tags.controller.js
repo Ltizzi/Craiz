@@ -9,29 +9,45 @@ const {
 const { getPagination } = require("../../services/query");
 
 async function httpGetAllTags(req, res) {
-  const { skip, limit } = getPagination(req.query);
-  const tags = await getAllTags(skip, limit);
-  return res.status(200).json(tags);
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const tags = await getAllTags(skip, limit);
+    return res.status(200).json(tags);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 }
 
 async function httpGetTagById(req, res) {
   const tagId = req.query.id;
-  const tag = await getTagById(tagId);
-  return res.status(200).json(tag);
+  try {
+    const tag = await getTagById(tagId);
+    return res.status(200).json(tag);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 }
 
 async function httpSaveTag(req, res) {
-  const tag = req.body;
-  tag.createdAt = new Date.now();
-  const newTag = await saveTag(tag);
-  return res.status(201).json(newTag);
+  // tag.createdAt = Date.now();
+  try {
+    const tag = req.body;
+    const newTag = await saveTag(tag);
+    return res.status(201).json(tag);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 }
 
 async function httpUpdateTag(req, res) {
-  const tag = req.body;
-  tag.updatedAt = new Date.now();
-  const newTag = await updatedTag(tag);
-  return res.status(200).json(newTag);
+  // tag.updatedAt = Date.now();
+  try {
+    const tag = req.body;
+    const newTag = await updatedTag(tag);
+    return res.status(200).json(tag);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 }
 
 async function httpDeleteTag(req, res) {
@@ -50,7 +66,7 @@ async function httpDeleteTag(req, res) {
   }
   if (removed) {
     return res.status(200).json({
-      ok: "User deleted",
+      ok: "Tag deleted",
     });
   }
 }

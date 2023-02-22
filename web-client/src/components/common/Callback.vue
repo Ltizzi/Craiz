@@ -20,7 +20,7 @@
     const code = searchParams.get("code");
     if (code) {
       const response = await axios.post(
-        "localhost:4246/v1/auth/google/callback",
+        "http://localhost:4246/v1/auth/google/callback",
         { code }
       );
       userStore.setAccessToken(response.data.access_token);

@@ -4,9 +4,10 @@ const memesSchema = new mongoose.Schema({
   memeId: {
     type: Number,
     required: true,
+    unique: true,
   },
   uploader: {
-    type: mongoose.ObjectId,
+    type: Number,
     ref: "User",
     required: true,
   },
@@ -22,19 +23,26 @@ const memesSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  likes: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
+  likedBy: [
+    {
+      type: Number,
+      ref: "User",
+      required: false,
+    },
+  ],
   isComment: {
     type: Boolean,
     required: true,
     default: false,
   },
+  parentMeme: {
+    type: Number,
+    ref: "Meme",
+    required: false,
+  },
   comments: [
     {
-      type: mongoose.ObjectId,
+      type: Number,
       ref: "Meme",
       required: false,
     },
@@ -45,11 +53,16 @@ const memesSchema = new mongoose.Schema({
   },
   tags: [
     {
-      type: mongoose.ObjectId,
+      type: String,
       ref: "Tag",
       required: true,
     },
   ],
+  softDeleted: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Meme", memesSchema);
