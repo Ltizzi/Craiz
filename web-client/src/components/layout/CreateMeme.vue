@@ -110,8 +110,8 @@
     required: true,
   };
 
-  const topInput = ref(null);
-  const bottomInput = ref(null);
+  const topInput: any = ref(null);
+  const bottomInput: any = ref(null);
   const topText = ref("Top text");
   const bottomText = ref("Bottom text");
   const memeUrl = ref();
@@ -178,13 +178,13 @@
       fields: JSON.stringify(fields),
       topText: {
         text: topText.value,
-        top: parseFloat(topInput.value.dataset.y || topTextTop.value),
-        left: parseFloat(topInput.value.dataset.x || topTextLeft.value),
+        top: parseFloat(topInput.value!.dataset.y || topTextTop.value),
+        left: parseFloat(topInput.value!.dataset.x || topTextLeft.value),
       },
       bottomText: {
         text: bottomText.value,
-        top: parseFloat(bottomInput.value.dataset.y || bottomTextTop.value),
-        left: parseFloat(bottomInput.value.dataset.x || bottomTextLeft.value),
+        top: parseFloat(bottomInput.value!.dataset.y || bottomTextTop.value),
+        left: parseFloat(bottomInput.value!.dataset.x || bottomTextLeft.value),
       },
     };
 

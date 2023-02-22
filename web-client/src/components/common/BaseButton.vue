@@ -3,9 +3,9 @@
     <!-- @click="handleClick" -->
     <slot></slot>
   </button>
-  <router-link v-else :to="props.to" :class="props.classes"
+  <!-- <router-link v-else :to="props.to" :class="props.classes"
     ><slot></slot
-  ></router-link>
+  ></router-link> -->
 </template>
 
 <script setup lang="ts">

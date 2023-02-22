@@ -1,5 +1,6 @@
 const passport = require("passport");
 const { Strategy } = require("passport-google-oauth20");
+const { saveUser, getUserByEmail } = require("../models/users/users.model");
 //const session = require("express-session");
 require("dotenv").config();
 
@@ -11,7 +12,7 @@ const config = {
 };
 
 const AUTH_OPTIONS = {
-  callBackURL: "/auth/google/callback",
+  callBackURL: "/v1/auth/google/callback",
   clientID: config.CLIENT_ID,
   clientSecret: config.CLIENT_SECRET,
 };
@@ -38,12 +39,21 @@ function checkIsAdmin(req, res, next) {
   next();
 }
 
-function verifyCallback(accessToken, refreshToken, profile, done) {
+async function verifyCallback(accessToken, refreshToken, profile, done) {
   console.log("Google profile: ", profile.id);
+  const user = {
+    name: profile.displayName,
+    email: profile.emails[0].value,
+  };
+  const alreadyUser = await getUserByEmail(user.email);
+  if (!alreadyUser) {
+    await saveUser(user);
+  }
   done(null, profile);
 }
 //  moved from app.js and exported as setupPassport() method
 function setupPassport() {
+  console.log("configurando passport...");
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
