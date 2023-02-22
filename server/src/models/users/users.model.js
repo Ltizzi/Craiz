@@ -27,6 +27,13 @@ async function getUserById(id) {
   });
 }
 
+async function getUserByEmail(email) {
+  return await findUser({
+    email: email,
+    softDeleted: false,
+  });
+}
+
 async function getLastUserId() {
   const lastUser = await usersRepo.findOne().sort("-userId");
   if (!lastUser) {
@@ -107,6 +114,7 @@ module.exports = {
   getAllUsers,
   getSoftDeletedUsers,
   getUserById,
+  getUserByEmail,
   getLastUserId,
   saveUser,
   deleteUser,

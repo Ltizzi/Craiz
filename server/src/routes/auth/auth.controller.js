@@ -1,6 +1,7 @@
 const passport = require("passport");
 
 async function googleAuth(req, res) {
+  console.log("asdasd");
   passport.authenticate("google", {
     scope: ["email", "profile"],
   });
