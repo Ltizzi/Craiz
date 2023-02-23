@@ -40,6 +40,8 @@ passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 passport.serializeUser((user, done) => {
   const sessionData = {
     id: user.id,
+    name: user._json.name,
+    picture: user._json.picture,
     email: user._json.email,
   };
   done(null, sessionData);
@@ -58,6 +60,20 @@ const app = express();
 app.use(helmet());
 
 app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://accounts.google.com"],
+  })
+);
+
+// app.use(function (req, res, next) {
+//   res.setHeader(
+//     "Content-Security-Policy-Report-Only",
+//     "default-src 'self'; connect-src 'self' https//accounts.google.com/; font-src 'self' https://kit.fontawesome.com/; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
+//   );
+//   next();
+// });
+
+app.use(
   session({
     secret: [config.SECRET_KEY_1, config.SECRET_KEY_2],
     resave: false,
@@ -67,12 +83,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(
-  cors({
-    origin: "http//localhost:4246",
-  })
-);
 
 app.use(morgan("combined"));
 
@@ -94,12 +104,18 @@ app.get(
   "/v1/auth/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/failure",
-    successRedirect: "/",
+    successRedirect: "/success",
     session: true,
   }),
-  (req, res) => {
-    res.redirect("/");
-  }
+  (req, res) => {}
 );
+
+app.get("/success", (req, res) => {
+  res.redirect("http://localhost:5173/home?loggedIn=true");
+});
+
+app.get("/failure", (req, res) => {
+  res.redirect("http://localhost:5173/home?loggedIn=false");
+});
 
 module.exports = app;

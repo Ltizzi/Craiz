@@ -42,9 +42,11 @@ function checkIsAdmin(req, res, next) {
 async function verifyCallback(accessToken, refreshToken, profile, done) {
   console.log("Google profile: ", profile.id);
   const user = {
-    name: profile.displayName,
-    email: profile.emails[0].value,
+    email: profile._json.email,
+    nickname: profile._json.given_name,
+    avatar: profile._json.picture,
   };
+  console.log(user);
   const alreadyUser = await getUserByEmail(user.email);
   if (!alreadyUser) {
     await saveUser(user);

@@ -9,18 +9,17 @@
   <button v-else @click="handleSignOutClick">Sign Out</button>
 </template>
 <script setup lang="ts">
-  import { useUserStore } from "@/store/user";
+  import { useAuthStore } from "@/store/user";
   import axios from "axios";
 
-  const userStore = useUserStore();
+  const userStore = useAuthStore();
 
   const handleSignInClick = async () => {
-    const response = await axios.get("http://localhost:4246/v1/auth/google");
-    window.location = response.data.url;
+    window.location.href = "http://localhost:4246/v1/auth/google";
   };
 
   const handleSignOutClick = () => {
-    userStore.clearAccessToken();
+    userStore.logout();
   };
 </script>
 <style lang=""></style>
