@@ -12,13 +12,14 @@ const config = {
 };
 
 const AUTH_OPTIONS = {
-  callBackURL: "/v1/auth/google/callback",
+  callbackURL: "/v1/auth/google/callback",
   clientID: config.CLIENT_ID,
   clientSecret: config.CLIENT_SECRET,
 };
 
 function checkLoggedIn(req, res, next) {
-  console.log("Current user is:", req.user);
+  console.log("Current user is:", req.session);
+  console.log(req.isAuthenticated());
   const isLoggedIn = req.isAuthenticated() && req.user;
   if (!isLoggedIn) {
     return res.status(401).json({
@@ -45,23 +46,25 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
     email: profile._json.email,
     nickname: profile._json.given_name,
     avatar: profile._json.picture,
+    googleId: profile.id,
   };
-  console.log(user);
+  //console.log(user);
   const alreadyUser = await getUserByEmail(user.email);
   if (!alreadyUser) {
     await saveUser(user);
   }
   done(null, profile);
 }
+
 //  moved from app.js and exported as setupPassport() method
 function setupPassport() {
   console.log("configurando passport...");
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
+    console.log(user);
     const sessionData = {
       id: user.id,
-      email: user._json.email,
     };
     done(null, sessionData);
   });
