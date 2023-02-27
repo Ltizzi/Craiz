@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -11,6 +13,15 @@ mongoose.connection.on("error", (err) => {
 });
 
 mongoose.set("strictQuery", false);
+
+const sessionStore = new MongoDBStore({
+  uri: MONGO_URL,
+  collection: "Sessions",
+});
+
+sessionStore.on("error", function (err) {
+  console.log(err);
+});
 
 async function mongoConnect() {
   await mongoose.connect(MONGO_URL, {
@@ -28,4 +39,5 @@ async function mongoDisconnect() {
 module.exports = {
   mongoConnect,
   mongoDisconnect,
+  sessionStore,
 };

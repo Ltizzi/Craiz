@@ -6,10 +6,19 @@ const usersSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  googleId: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
   username: {
     type: String,
     required: true,
     unique: true,
+  },
+  name: {
+    type: String,
+    required: true,
   },
   nickname: {
     type: String,

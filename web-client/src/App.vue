@@ -12,6 +12,15 @@
   import SignInButton from "./components/common/SignInButton.vue";
   import MemeCard from "./components/layout/MemeCard.vue";
   import NewMemeMenu from "./components/layout/NewMemeMenu.vue";
+  import { onMounted } from "vue";
+  import axios from "axios";
+
+  onMounted(async () => {
+    const response = await axios.get(
+      "http://localhost:4246/v1/auth/logincheck"
+    );
+    console.log(response);
+  });
 </script>
 
 <style scoped></style>

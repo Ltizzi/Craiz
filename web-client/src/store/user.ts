@@ -1,20 +1,18 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 //import { createPersistPlugin } from "pinia-persist";
 
-export const useUserStore = defineStore("user", {
+export const useAuthStore = defineStore({
+  id: "auth",
   state: () => ({
-    accessToken: "",
-    isSignedIn: false,
+    loggedIn: false,
+    userInfo: null,
   }),
   // plugins: [createPersistPlugin()],
   actions: {
-    setAccessToken(token: string) {
-      this.accessToken = token;
-      this.isSignedIn = true;
+    async logingChecker() {
+      const response = await axios.get;
     },
-    clearAccessToken() {
-      this.accessToken = "";
-      this.isSignedIn = false;
-    },
+    async logout() {},
   },
 });
