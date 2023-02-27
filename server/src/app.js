@@ -54,6 +54,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://accounts.google.com"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 
@@ -93,31 +94,31 @@ app.get(
     successRedirect: "/success",
     session: true,
   }),
-  (req, res) => {}
+  (req, res) => {
+    console.log("is auth");
+    console.log(req.isAuthenticated());
+    console.log(req.user);
+  }
 );
 
-app.get("/v1/auth/logincheck", (req, res) => {
-  console.log(req.isAuthenticated());
-  return res.status(200).json(req.user);
+app.get("/v1/auth/logincheck", checkLoggedIn, (req, res) => {
+  console.log("is auth?" + req.isAuthenticated());
+  return res.status(200).json({ user: req.user });
 });
 
 app.get("/success", async (req, res) => {
-  console.log("Current user is:", req.user);
+  console.log("Current user is:....", req.user);
   console.log(req.isAuthenticated());
 
   const user = await getUserByGoogleId(req.user.id);
-  const session = new Session({
-    userId: user.userId,
-    googleId: req.user.id,
-  });
-  session.save();
-  // Call the login function from Passport
+
+  // // Call the login function from Passport
   req.login(req.user, (err) => {
     if (err) {
       console.log(err);
     }
-    console.log(req.user);
-    res.redirect("http://localhost:5173/home?loggedIn=true");
+    console.log("usuario logueado " + req.user.id);
+    res.redirect(`http://localhost:5173/home?loggedIn=true&id=${req.user.id}`);
   });
 });
 

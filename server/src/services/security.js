@@ -62,6 +62,7 @@ function setupPassport() {
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
+    console.log("serializando..");
     console.log(user);
     const sessionData = {
       id: user.id,
@@ -70,6 +71,7 @@ function setupPassport() {
   });
 
   passport.deserializeUser((obj, done) => {
+    console.log("deserializando");
     console.log(obj);
     done(null, obj);
   });

@@ -10,9 +10,7 @@ export const useAuthStore = defineStore({
   }),
   // plugins: [createPersistPlugin()],
   actions: {
-    async login() {
-      this.loggedIn = true;
-
+    async logingChecker() {
       const response = await axios.get;
     },
     async logout() {},
