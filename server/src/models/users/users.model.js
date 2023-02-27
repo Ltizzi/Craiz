@@ -27,6 +27,13 @@ async function getUserById(id) {
   });
 }
 
+async function getUserByGoogleId(id) {
+  return await findUser({
+    googleId: id,
+    softDeleted: false,
+  });
+}
+
 async function getUserByEmail(email) {
   return await findUser({
     email: email,
@@ -115,6 +122,7 @@ module.exports = {
   getSoftDeletedUsers,
   getUserById,
   getUserByEmail,
+  getUserByGoogleId,
   getLastUserId,
   saveUser,
   deleteUser,
