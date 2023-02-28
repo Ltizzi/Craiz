@@ -55,6 +55,7 @@ app.use(
   cors({
     origin: ["http://localhost:5173", "https://accounts.google.com"],
     exposedHeaders: ["set-cookie"],
+    credentials: true,
   })
 );
 
@@ -73,9 +74,15 @@ app.use(passport.session());
 app.use(morgan("combined"));
 
 app.use(express.json());
+
+//static
 // app.use(express.static(path.join(__dirname, "..", "public")));
 
 // app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+// });
+
+// app.get("/home", (req, res) => {
 //   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 // });
 
@@ -94,23 +101,18 @@ app.get(
     successRedirect: "/success",
     session: true,
   }),
-  (req, res) => {
-    console.log("is auth");
-    console.log(req.isAuthenticated());
-    console.log(req.user);
-  }
+  (req, res) => {}
 );
 
-app.get("/v1/auth/logincheck", checkLoggedIn, (req, res) => {
+app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   console.log("is auth?" + req.isAuthenticated());
-  return res.status(200).json({ user: req.user });
+  const user = await getUserByGoogleId(req.user.id);
+  return res.status(200).json({ user: user });
 });
 
 app.get("/success", async (req, res) => {
   console.log("Current user is:....", req.user);
   console.log(req.isAuthenticated());
-
-  const user = await getUserByGoogleId(req.user.id);
 
   // // Call the login function from Passport
   req.login(req.user, (err) => {
