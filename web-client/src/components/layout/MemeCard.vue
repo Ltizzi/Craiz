@@ -1,33 +1,75 @@
 <template lang="">
   <div class="container my-3 flex w-1/3 flex-col border-2 p-5 shadow-md">
     <div class="container flex flex-row">
-      <img :src="`${userInfo.avatar}`" alt="" class="mr-2 w-12" />
-      <h3 class="ml-1 pt-1 text-2xl font-bold">{{ userInfo.name }}</h3>
-      <h4 class="pt-2 pl-2 text-lg italic">{{ userInfo.username }}</h4>
-      <h5 class="text-md pt-3 pl-2 italic">{{ userInfo.createdAt }}</h5>
+      <img :src="user.avatar" alt="" class="mr-2 w-12" />
+      <h3 class="ml-1 pt-1 text-2xl font-bold">{{ user.nickname }}</h3>
+      <h4 class="pt-2 pl-2 text-lg italic">@{{ user.username }}</h4>
     </div>
+    <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
     <div class="mx-12 flex flex-col">
-      <img :src="userInfo.imgURL" alt="" class="w-fit" />
+      <img :src="props.data.imgUrl" alt="" class="w-fit" />
+
       <div class="flex h-12 flex-row justify-between">
         <LikeButton></LikeButton>
-        <BaseTag class="classic my-auto">Classic</BaseTag>
+        <BaseTag
+          v-for="(tag, index) in lowerCaseTags"
+          :key="index"
+          :class="tag.toLowerCase()"
+          class="my-auto"
+          >{{ tag }}</BaseTag
+        >
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, Ref } from "vue";
+  import { onMounted, reactive, ref, Ref } from "vue";
+  import { useMemeStore } from "@/store/meme";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
+  import axios from "axios";
 
-  const userInfo: Object = ref({
-    name: "Leo",
-    username: "@ltizzi",
-    avatar: "./assets/img/user.png",
-    createdAt: "14/2/2023",
-    imgURL: "./assets/img/hiworld.jpg",
-    comments: [],
-    tags: [],
-    template: "Red dres girl",
+  const memeStore = useMemeStore();
+
+  const user = ref({});
+  const props = defineProps<{
+    data: {
+      memeId: number;
+      uploader: number;
+      createdAt: Date;
+      imgUrl: string;
+      tags: Array<string>;
+      likedBy: Array<any>;
+      comments: Array<any>;
+    };
+  }>();
+  const isLoaded = ref(false);
+  let lowerCaseTags = ref<string[]>([]);
+
+  // const userInfo: Object = ref({
+  //   name: "Leo",
+  //   username: "@ltizzi",
+  //   avatar: "./assets/img/user.png",
+  //   createdAt: "14/2/2023",
+  //   imgURL: "./assets/img/hiworld.jpg",
+  //   comments: [],
+  //   tags: [],
+  //   template: "Red dres girl",
+  // });
+
+  onMounted(async () => {
+    const userData = await axios.get(
+      `http://localhost:4246/v1/user/byId?id=${props.data.uploader}`
+    );
+    if (userData) {
+      user.value = userData.data;
+    }
+
+    lowerCaseTags.value = props.data.tags;
+    // lowerCaseTags.value = props.data.tags.map((tag: string) =>
+    //   tag.toLowerCase()
+    // );
+    isLoaded.value = true;
+    memeStore.setMemeById(props.data.memeId);
   });
 </script>
