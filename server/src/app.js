@@ -105,14 +105,13 @@ app.get(
 );
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
-  console.log("is auth?" + req.isAuthenticated());
   const user = await getUserByGoogleId(req.user.id);
   return res.status(200).json({ user: user });
 });
 
 app.get("/success", async (req, res) => {
   console.log("Current user is:....", req.user);
-  console.log(req.isAuthenticated());
+  const user = await getUserByGoogleId(req.user.id);
 
   // // Call the login function from Passport
   req.login(req.user, (err) => {
@@ -120,9 +119,10 @@ app.get("/success", async (req, res) => {
       console.log(err);
     }
     console.log("usuario logueado " + req.user.id);
-    if (!req.user.username) {
-      res.redirect(`http://localhost:5173/home/loginfo?loggedIn=true`);
+    if (!user.username) {
+      res.redirect(`http://localhost:5173/home/`);
     } else {
+      console.log(user.username);
       res.redirect("http://localhost:5173");
     }
   });

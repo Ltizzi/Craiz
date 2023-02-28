@@ -2,16 +2,16 @@
   <div class="flex flex-col items-center justify-center">
     <SignInButton></SignInButton>
     <NewMemeMenu></NewMemeMenu>
-    <MemeCard></MemeCard>
-    <MemeCard></MemeCard>
-    <MemeCard></MemeCard>
+    <MemeList></MemeList>
+    <Callback></Callback>
   </div>
 </template>
 
 <script setup lang="ts">
   import SignInButton from "./components/common/SignInButton.vue";
-  import MemeCard from "./components/layout/MemeCard.vue";
+  import MemeList from "./components/layout/MemeList.vue";
   import NewMemeMenu from "./components/layout/NewMemeMenu.vue";
+  import Callback from "./components/common/Callback.vue";
   import { useUserStore } from "@/store";
   import { onMounted } from "vue";
   import axios from "axios";

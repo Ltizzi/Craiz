@@ -1,11 +1,11 @@
-<template lang="">
-  <div v-if="!userIsSignedIn">
-    <p>Authenticating...</p>
+<template>
+  <div v-if="!isUserDataLoaded">
+    <h1>Autenticando con google..</h1>
   </div>
   <div v-else>
     <p>
-      Welcome {{ user.value.nickname }}You are signed in with Google. Now, we
-      need you to fullfil this form to complete your profile
+      Welcome {{ user.nickname }}, you are signed in with Google. Now, we need
+      you to fullfil this form to complete your profile
     </p>
     <form>
       <div>
@@ -14,7 +14,7 @@
           type="text"
           id="nickname"
           v-model="nickname"
-          placeholder="user.value.nickname"
+          :placeholder="user.nickname"
         />
       </div>
       <div>
@@ -25,7 +25,7 @@
         <label for="birthday">Pick your birthday:</label>
         <input type="date" id="birthday" v-model="birthday" />
       </div>
-      <BaseButton @submit.prevent="handleSubmit">Update Profile</BaseButton>
+      <button @click="handleSubmit">Update Profile</button>
     </form>
   </div>
 </template>
@@ -39,8 +39,10 @@
   const userStore = useUserStore();
   const router = useRouter();
 
+  const isUserDataLoaded = ref(false);
+
   let userIsSignedIn = ref(userStore.isSignedIn);
-  let user: any = reactive(userStore.user);
+  let user: any = reactive({});
 
   const nickname = ref("");
   const username = ref("");
@@ -55,27 +57,28 @@
       birthday: birthday.value,
     };
     const response = await axios.patch(
-      "localhost:4246/v1/user/update",
+      "http://localhost:4246/v1/user/update",
       updatedUser,
       { withCredentials: true }
     );
     console.log(response);
     userStore.setUser(response.data.user);
+    if (response.data.user) {
+      router.push("/");
+    }
   }
 
   onMounted(async () => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const loggedIn = searchParams.get("loggedIn");
-    if (loggedIn) {
-      const response = await axios.get(
-        "http://localhost:4246/v1/auth/logincheck",
-        { withCredentials: true }
-      );
+    const response = await axios.get(
+      "http://localhost:4246/v1/auth/logincheck",
+      { withCredentials: true }
+    );
 
-      userStore.setUser(response.data.user);
+    user = response.data.user;
+    isUserDataLoaded.value = true;
+    //router.push("/");
 
-      //router.push("/");
-    } else router.push("/");
+    //else router.push("/");
   });
 
   watch(

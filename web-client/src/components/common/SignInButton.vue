@@ -8,7 +8,7 @@
   </button>
   <button
     v-else
-    class="rounded-md bg-red-600 px-2 py-1 font-bold text-white"
+    class="rounded-md bg-red-500 px-2 py-1 font-bold text-white"
     @click="handleSignOutClick"
   >
     Sign Out

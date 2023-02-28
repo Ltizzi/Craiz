@@ -19,7 +19,6 @@ const AUTH_OPTIONS = {
 
 function checkLoggedIn(req, res, next) {
   console.log("Current user is:", req.session);
-  console.log(req.isAuthenticated());
   const isLoggedIn = req.isAuthenticated() && req.user;
   if (!isLoggedIn) {
     return res.status(401).json({
@@ -30,7 +29,6 @@ function checkLoggedIn(req, res, next) {
 }
 
 function checkIsAdmin(req, res, next) {
-  console.log("Current user is: ", req.user);
   const isAdmin = req.isAdmin() && req.user;
   if (!isAdmin) {
     return res.status(403).json({
@@ -62,8 +60,6 @@ function setupPassport() {
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
-    console.log("serializando..");
-    console.log(user);
     const sessionData = {
       id: user.id,
     };
@@ -71,8 +67,6 @@ function setupPassport() {
   });
 
   passport.deserializeUser((obj, done) => {
-    console.log("deserializando");
-    console.log(obj);
     done(null, obj);
   });
 }
