@@ -12,15 +12,19 @@
   import SignInButton from "./components/common/SignInButton.vue";
   import MemeCard from "./components/layout/MemeCard.vue";
   import NewMemeMenu from "./components/layout/NewMemeMenu.vue";
+  import { useUserStore } from "@/store";
   import { onMounted } from "vue";
   import axios from "axios";
+
+  const userStore = useUserStore();
 
   onMounted(async () => {
     const response = await axios.get(
       "http://localhost:4246/v1/auth/logincheck",
       { withCredentials: true }
     );
-    console.log(response);
+    console.log(response.data.user);
+    userStore.setUser(response.data.user);
   });
 </script>
 

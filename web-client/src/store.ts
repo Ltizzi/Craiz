@@ -3,17 +3,19 @@ import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    accessToken: "",
     isSignedIn: false,
+    user: {},
   }),
   // plugins: [createPersistPlugin()],
   actions: {
-    setAccessToken(token: string) {
-      this.accessToken = token;
-      this.isSignedIn = true;
+    setUser(user: any) {
+      if (user) {
+        this.user = user;
+        this.isSignedIn = true;
+      }
     },
-    clearAccessToken() {
-      this.accessToken = "";
+    logout() {
+      this.user = {};
       this.isSignedIn = false;
     },
   },

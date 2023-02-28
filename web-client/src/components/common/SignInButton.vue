@@ -1,18 +1,25 @@
 <template lang="">
   <button
     class="rounded-md bg-green-600 px-2 py-1 font-bold text-white"
-    v-if="!isSignedIn"
+    v-if="!userIsSignedIn"
     @click="handleSignInClick"
   >
     Sign in With Google
   </button>
-  <button v-else @click="handleSignOutClick">Sign Out</button>
+  <button
+    v-else
+    class="rounded-md bg-red-600 px-2 py-1 font-bold text-white"
+    @click="handleSignOutClick"
+  >
+    Sign Out
+  </button>
 </template>
 <script setup lang="ts">
-  import { useAuthStore } from "@/store/user";
-  import axios from "axios";
+  import { useUserStore } from "@/store";
+  import { ref, watch } from "vue";
 
-  const userStore = useAuthStore();
+  const userStore = useUserStore();
+  let userIsSignedIn = ref(userStore.isSignedIn);
 
   const handleSignInClick = async () => {
     window.location.href = "http://localhost:4246/v1/auth/google";
@@ -21,5 +28,12 @@
   const handleSignOutClick = () => {
     userStore.logout();
   };
+
+  watch(
+    () => userStore.isSignedIn,
+    (newValue) => {
+      userIsSignedIn.value = newValue;
+    }
+  );
 </script>
 <style lang=""></style>
