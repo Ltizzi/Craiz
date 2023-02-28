@@ -17,7 +17,8 @@
 
   onMounted(async () => {
     const response = await axios.get(
-      "http://localhost:4246/v1/auth/logincheck"
+      "http://localhost:4246/v1/auth/logincheck",
+      { withCredentials: true }
     );
     console.log(response);
   });
