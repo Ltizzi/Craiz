@@ -23,7 +23,7 @@
         "http://localhost:4246/v1/auth/google/callback",
         { code }
       );
-      userStore.setAccessToken(response.data.access_token);
+      userStore.setUser(response.data.access_token);
       router.push("/");
     }
   });
