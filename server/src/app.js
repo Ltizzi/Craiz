@@ -120,7 +120,11 @@ app.get("/success", async (req, res) => {
       console.log(err);
     }
     console.log("usuario logueado " + req.user.id);
-    res.redirect(`http://localhost:5173/home?loggedIn=true&id=${req.user.id}`);
+    if (!req.user.username) {
+      res.redirect(`http://localhost:5173/home/loginfo?loggedIn=true`);
+    } else {
+      res.redirect("http://localhost:5173");
+    }
   });
 });
 
