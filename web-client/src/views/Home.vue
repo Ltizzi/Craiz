@@ -8,7 +8,6 @@
         class="flex w-3/5 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50"
       >
         <MemeList></MemeList>
-        <Callback></Callback>
       </div>
       <div class="w-1/5"></div>
     </div>

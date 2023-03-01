@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-row bg-white" v-if="liked">
-    <BaseButton :class="props.classes" @click="handleButtonClick">
+    <BaseButton @click="handleButtonClick">
       <Font-awesome-icon icon="fa-solid fa-heart" />
     </BaseButton>
     <p class="ml-2 pt-3">{{ likeCounter }}</p>
   </div>
   <div class="flex flex-row bg-white" v-else>
-    <BaseButton :class="props.classes" @click="handleButtonClick">
+    <BaseButton @click="handleButtonClick">
       <Font-awesome-icon icon="fa-regular fa-heart"
     /></BaseButton>
     <p v-if="likeCounter" class="ml-2 pt-3">{{ likeCounter }}</p>
