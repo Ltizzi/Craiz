@@ -9,6 +9,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     isSignedIn: false,
     user: {},
+    userId: 5,
   }),
   // plugins: [createPersistPlugin()],
   actions: {
@@ -16,6 +17,7 @@ export const useUserStore = defineStore("user", {
       if (user) {
         this.user = user as User;
         this.isSignedIn = true;
+        this.userId = user.userId;
       }
     },
     async fetchUser(id: number) {

@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="items-left ml-3 mt-24 flex w-3/6 flex-col">
+  <div class="items-left fixed ml-4 mt-24 flex w-3/6 flex-col">
     <SignInButton></SignInButton>
     <NewMemeMenu></NewMemeMenu>
   </div>

@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="container my-3 mx-20 flex w-5/6 flex-col border-2 p-5 shadow-md">
+  <div class="container my-3 flex w-5/6 flex-col border-2 p-5 shadow-md">
     <div class="container flex flex-row">
       <img :src="user.avatar" alt="" class="mr-2 w-12" />
       <h3 class="ml-1 pt-1 text-2xl font-bold">{{ user.nickname }}</h3>
@@ -7,10 +7,13 @@
     </div>
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
     <div class="mx-12 flex flex-col">
-      <img :src="props.data.imgUrl" alt="" class="w-fit" />
+      <img :src="props.data.imgUrl" alt="" class="w-fit rounded-3xl" />
 
       <div class="flex h-12 flex-row justify-between">
-        <LikeButton></LikeButton>
+        <LikeButton
+          :memeId="props.data.memeId"
+          :userId="props.data.uploader"
+        ></LikeButton>
         <BaseTag
           v-for="(tag, index) in lowerCaseTags"
           :key="index"
