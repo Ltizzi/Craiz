@@ -14,6 +14,7 @@
           :memeId="props.data.memeId"
           :userId="props.data.uploader"
         ></LikeButton>
+        <CommentIcon :commentCounter="props.data.comments.length"></CommentIcon>
         <BaseTag
           v-for="(tag, index) in lowerCaseTags"
           :key="index"
@@ -28,6 +29,7 @@
 <script setup lang="ts">
   import { onMounted, reactive, ref, Ref } from "vue";
   import { useMemesStore } from "@/store/memes.store";
+  import CommentIcon from "../common/CommentIcon.vue";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";

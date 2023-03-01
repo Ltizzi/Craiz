@@ -15,7 +15,7 @@
   const isLoaded = ref(false);
 
   onMounted(async () => {
-    const response = await axios.get("http://localhost:4246/v1/meme/");
+    const response = await axios.get("http://localhost:4246/v1/meme/allWoC");
     if (response.data) {
       isLoaded.value = true;
       memes.value = response.data;

@@ -8,9 +8,9 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHeart as faHeartS } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
-library.add(faHeart, faHeartS);
+library.add(faHeart, faHeartS, faComment);
 
 const app = createApp(App);
 
