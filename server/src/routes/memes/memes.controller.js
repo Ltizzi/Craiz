@@ -1,6 +1,8 @@
 const {
   getAllMemes,
   getAllSoftDeletedMemes,
+  getAllMemesWithoutComments,
+  getAllCommentsFromAMemeById,
   getMemeById,
   getMemesByTag,
   getMemesByUser,
@@ -20,6 +22,7 @@ async function httpGetAllMemes(req, res) {
     const memes = await getAllMemes(skip, limit);
     return res.status(200).json(memes);
   } catch (err) {
+    console.log(err);
     return res.status(404).json({ error: err.message });
   }
 }
@@ -30,7 +33,31 @@ async function httpGetAllSoftDeletedMemes(req, res) {
     const memes = await getAllSoftDeletedMemes(skip, limit);
     return res.status(200).json(memes);
   } catch (err) {
-    return res.status(404).json({ error: err.messag });
+    console.log(err);
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetAllMemesWithoutComments(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getAllMemesWithoutComments(skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetAllCommentsFromMemeById(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const memeId = req.query.id;
+    const comments = await getAllCommentsFromAMemeById(memeId, skip, limit);
+    return res.status(200).json(comments);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -40,7 +67,8 @@ async function httpGetMemeById(req, res) {
     const meme = await getMemeById(memeId);
     return res.status(200).json(meme);
   } catch (err) {
-    return res.status(404).json({ error: err.messag });
+    console.log(err);
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -50,7 +78,8 @@ async function httpGetAllMemesByTag(req, res) {
     const memes = await getMemesByTag(tag);
     return res.status(200).json(memes);
   } catch (err) {
-    return res.status(404).json({ error: err.messag });
+    console.log(err);
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -60,7 +89,8 @@ async function httpGetAllMemesByTemplate(req, res) {
     const memes = await getMemesByTemplate(template);
     return res.status(200).json(memes);
   } catch (err) {
-    return res.status(404).json({ error: err.messag });
+    console.log(err);
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -70,7 +100,8 @@ async function httpGetAllMemesByUser(req, res) {
     const memes = await getMemesByUser(userId);
     return res.status(200).json(memes);
   } catch (err) {
-    return res.status(404).json({ error: err.messag });
+    console.log(err);
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -81,17 +112,21 @@ async function httpSaveMeme(req, res) {
     await saveMeme(meme);
     return res.status(201).json(meme);
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: err.message });
   }
 }
 
 async function httpUpdateMeme(req, res) {
   try {
-  } catch (err) {}
-  const meme = req.body;
-  // meme.updatedAt = new Date.now();
-  await updateMeme(meme);
-  return res.status(200).json(meme);
+    const meme = req.body;
+    // meme.updatedAt = new Date.now();
+    await updateMeme(meme);
+    return res.status(200).json(meme);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json(err.message);
+  }
 }
 
 async function httpDeleteMeme(req, res) {
@@ -106,6 +141,7 @@ async function httpDeleteMeme(req, res) {
     await deleteMeme(memeId);
     return res.status(200).json({ ok: "meme deleted" });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: err.message });
   }
 }
@@ -117,6 +153,7 @@ async function httpAddCommentToMeme(req, res) {
     await addCommentToMeme(memeId, comment);
     return res.status(201).json({ ok: "Added comment!" });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: err.message });
   }
 }
@@ -128,6 +165,7 @@ async function httpLikeMeme(req, res) {
     const response = await likeMeme(memeId, userId);
     return res.status(201).json(response);
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: err.message });
   }
 }
@@ -135,6 +173,8 @@ async function httpLikeMeme(req, res) {
 module.exports = {
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
+  httpGetAllMemesWithoutComments,
+  httpGetAllCommentsFromMemeById,
   httpGetMemeById,
   httpGetAllMemesByTag,
   httpGetAllMemesByTemplate,
