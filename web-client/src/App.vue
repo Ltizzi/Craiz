@@ -1,9 +1,7 @@
 <template>
   <div class="bg-gray-800">
     <div class="mx-auto flex w-9/12 flex-row justify-center bg-slate-700">
-      <div
-        class="h-screen w-1/5 rounded-sm border-2 border-r-0 border-stone-500"
-      >
+      <div class="h-screen w-1/5 rounded-sm">
         <LateralMenu></LateralMenu>
       </div>
       <div

@@ -12,35 +12,39 @@
     <p v-if="likeCounter" class="ml-2 pt-3">{{ likeCounter }}</p>
   </div>
 </template>
+
 <script setup lang="ts">
   import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
   import axios from "axios";
-  import { onMounted, ref, Ref } from "vue";
-  import { useMemeStore } from "@/store/meme";
-  import { useUserStore } from "@/store";
+  import { onMounted, ref, Ref, watch } from "vue";
+
   import BaseButton from "./BaseButton.vue";
-  import { Meme, User } from "../../utils/models";
 
-  const memeStore = useMemeStore();
-  const userStore = useUserStore();
+  let meme = ref<any>({});
 
-  let meme: Meme;
+  let user = ref<any>({});
 
-  let user: User;
+  const props = defineProps({
+    //classes: "text-black justify-center items-center",
+    memeId: {
+      type: Number,
+      required: true,
+    },
+    userId: {
+      type: Number,
+      required: true,
+    },
+  });
 
-  let memeId = 0;
-  let userId = 0;
+  let memeId = props.memeId;
+  let userId = props.userId;
 
-  const props = {
-    classes: "text-black justify-center items-center",
-  };
-
-  const liked: Ref<boolean> = ref(false);
-  const likeCounter = ref();
+  const liked = ref(false);
+  const likeCounter = ref(0);
 
   async function handleButtonClick() {
     const response = await axios.post(
-      `http://localhost:4246/v1/meme/like?memeId=${memeId}&userId=${userId}`
+      `http://localhost:4246/v1/meme/like?memeId=${meme.value.memeId}&userId=${user.value.userId}`
     );
     console.log(response.data);
     if (response.data.ok == "liked meme") {
@@ -57,21 +61,38 @@
     }
   }
 
+  async function getMeme(id: number) {
+    const response = await axios.get(
+      `http://localhost:4246/v1/meme/byId?id=${id}`
+    );
+    return response.data;
+  }
+
+  async function getUser(id: number) {
+    const response = await axios.get(
+      `http://localhost:4246/v1/user/byId?id=${id}`,
+      { withCredentials: true }
+    );
+    return response.data;
+  }
+
   onMounted(async () => {
-    meme = (await memeStore.meme) as Meme;
-    user = (await userStore.user) as User;
-    console.log(meme);
-    console.log(user);
-    if (meme && user) {
-      let likedList = meme.likedBy as Array<number>;
+    try {
+      meme.value = await getMeme(memeId);
+      user.value = await getUser(userId);
+
+      let likedList = meme.value.likedBy as Array<number>;
+
       likeCounter.value = likedList.length;
-      let isLikedByUser = user.likedMemes.filter(
-        (mem: number) => mem == meme.memeId
+      let isLikedByUser = user.value.likedMemes.filter(
+        (mem: number) => mem == meme.value.memeId
       );
 
       if (isLikedByUser.length > 0) liked.value = true;
-      memeId = meme.memeId;
-      userId = user.userId;
+      // memeId = meme.memeId;
+      // userId = user.userId;
+    } catch (err) {
+      console.log(err);
     }
   });
 </script>
