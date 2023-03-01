@@ -1,16 +1,25 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
-    <SignInButton></SignInButton>
-    <NewMemeMenu></NewMemeMenu>
-    <MemeList></MemeList>
-    <Callback></Callback>
+  <div class="bg-gray-800">
+    <div class="mx-auto flex w-9/12 flex-row justify-center bg-slate-700">
+      <div
+        class="h-screen w-1/5 rounded-sm border-2 border-r-0 border-stone-500"
+      >
+        <LateralMenu></LateralMenu>
+      </div>
+      <div
+        class="flex w-3/5 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50"
+      >
+        <MemeList></MemeList>
+        <Callback></Callback>
+      </div>
+      <div class="w-1/5"></div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import SignInButton from "./components/common/SignInButton.vue";
   import MemeList from "./components/layout/MemeList.vue";
-  import NewMemeMenu from "./components/layout/NewMemeMenu.vue";
+  import LateralMenu from "./components/layout/LateralMenu.vue";
   import Callback from "./components/common/Callback.vue";
   import { useUserStore } from "@/store";
   import { onMounted } from "vue";
