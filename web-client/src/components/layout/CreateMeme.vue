@@ -12,7 +12,7 @@
     ></div> -->
     <!-- Dialog -->
     <dialog
-      class="container fixed z-50 mt-32 flex w-2/5 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
+      class="container fixed z-50 my-auto flex w-2/5 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
     >
       <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
         Create meme

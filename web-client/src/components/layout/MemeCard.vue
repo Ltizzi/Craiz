@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="container my-3 flex w-1/3 flex-col border-2 p-5 shadow-md">
+  <div class="container my-3 mx-20 flex w-5/6 flex-col border-2 p-5 shadow-md">
     <div class="container flex flex-row">
       <img :src="user.avatar" alt="" class="mr-2 w-12" />
       <h3 class="ml-1 pt-1 text-2xl font-bold">{{ user.nickname }}</h3>
@@ -24,12 +24,12 @@
 </template>
 <script setup lang="ts">
   import { onMounted, reactive, ref, Ref } from "vue";
-  import { useMemeStore } from "@/store/meme";
+  import { useMemesStore } from "@/store/memes.store";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";
 
-  const memeStore = useMemeStore();
+  const memeStore = useMemesStore();
 
   const user = ref({});
   const props = defineProps<{
@@ -46,17 +46,6 @@
   const isLoaded = ref(false);
   let lowerCaseTags = ref<string[]>([]);
 
-  // const userInfo: Object = ref({
-  //   name: "Leo",
-  //   username: "@ltizzi",
-  //   avatar: "./assets/img/user.png",
-  //   createdAt: "14/2/2023",
-  //   imgURL: "./assets/img/hiworld.jpg",
-  //   comments: [],
-  //   tags: [],
-  //   template: "Red dres girl",
-  // });
-
   onMounted(async () => {
     const userData = await axios.get(
       `http://localhost:4246/v1/user/byId?id=${props.data.uploader}`
@@ -70,6 +59,8 @@
     //   tag.toLowerCase()
     // );
     isLoaded.value = true;
+    console.log("la id del meme es:");
+    console.log(props.data.memeId);
     memeStore.setMemeById(props.data.memeId);
   });
 </script>

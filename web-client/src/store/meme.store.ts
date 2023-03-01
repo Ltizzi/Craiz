@@ -1,4 +1,4 @@
-import { Meme } from "./../utils/models";
+import { Meme } from "../utils/models";
 import { defineStore } from "pinia";
 import axios from "axios";
 //import { createPersistPlugin } from "pinia-persist";
