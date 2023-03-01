@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import CallbackVue from "./components/common/Callback.vue";
-import HomeVue from "./components/layout/Home.vue";
+import HomeVue from "./views/Home.vue";
 
 const router = createRouter({
   history: createWebHistory(),

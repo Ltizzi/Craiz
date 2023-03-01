@@ -43,7 +43,7 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
   const user = {
     email: profile._json.email,
     nickname: profile._json.given_name,
-    avatar: profile._json.picture,
+    avatar: "https://iili.io/HVxfJnV.png",
     googleId: profile.id,
   };
   //console.log(user);
