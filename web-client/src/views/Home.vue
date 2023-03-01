@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-  import MemeList from "../layout/MemeList.vue";
-  import LateralMenu from "../layout/LateralMenu.vue";
-  import Callback from "../common/Callback.vue";
+  import MemeList from "../components/layout/MemeList.vue";
+  import LateralMenu from "../components/layout/LateralMenu.vue";
+  import Callback from "../components/common/Callback.vue";
   import { useUserStore } from "@/store";
   import { onMounted } from "vue";
   import axios from "axios";
