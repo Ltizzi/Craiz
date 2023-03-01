@@ -24,6 +24,19 @@ async function getAllSoftDeletedMemes(skip, limit) {
     .limit(limit);
 }
 
+async function getAllMemesWithoutComments(skip, limit) {
+  return await memesRepo
+    .find({ softDeleted: false, isComment: false }, { _id: 0, __v: 0 })
+    .sort({ memeId: 1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getAllCommentsFromAMemeById(meme_id, skip, limit) {
+  const meme = await getMemeById(meme_id);
+  return meme.comments;
+}
+
 async function getMemesByUser(user_id, skip, limit) {
   return await findMemes(
     { uploader: user_id, softDeleted: false },
@@ -155,6 +168,8 @@ async function findMemes(filter, skip, limit) {
 module.exports = {
   getAllMemes,
   getAllSoftDeletedMemes,
+  getAllMemesWithoutComments,
+  getAllCommentsFromAMemeById,
   getMemeById,
   getMemesByTag,
   getMemesByUser,
