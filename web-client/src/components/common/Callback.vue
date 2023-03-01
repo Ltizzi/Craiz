@@ -1,32 +1,34 @@
 <template>
-  <div v-if="!isUserDataLoaded">
-    <h1>Autenticando con google..</h1>
-  </div>
-  <div v-else>
-    <p>
-      Welcome {{ user.nickname }}, you are signed in with Google. Now, we need
-      you to fullfil this form to complete your profile
-    </p>
-    <form>
-      <div>
-        <label for="nickname">Pick a nickname:</label>
-        <input
-          type="text"
-          id="nickname"
-          v-model="nickname"
-          :placeholder="user.nickname"
-        />
-      </div>
-      <div>
-        <label for="username">Pick the username (@example123):</label>
-        <input type="text" id="username" v-model="username" />
-      </div>
-      <div>
-        <label for="birthday">Pick your birthday:</label>
-        <input type="date" id="birthday" v-model="birthday" />
-      </div>
-      <button @click="handleSubmit">Update Profile</button>
-    </form>
+  <div class="bg-gray-800">
+    <div v-if="!isUserDataLoaded">
+      <h1>Autenticando con google..</h1>
+    </div>
+    <div v-else>
+      <p>
+        Welcome {{ user.nickname }}, you are signed in with Google. Now, we need
+        you to fullfil this form to complete your profile
+      </p>
+      <form>
+        <div>
+          <label for="nickname">Pick a nickname:</label>
+          <input
+            type="text"
+            id="nickname"
+            v-model="nickname"
+            :placeholder="user.nickname"
+          />
+        </div>
+        <div>
+          <label for="username">Pick the username (@example123):</label>
+          <input type="text" id="username" v-model="username" />
+        </div>
+        <div>
+          <label for="birthday">Pick your birthday:</label>
+          <input type="date" id="birthday" v-model="birthday" />
+        </div>
+        <button @click="handleSubmit">Update Profile</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -88,5 +90,3 @@
     }
   );
 </script>
-
-<style lang=""></style>
