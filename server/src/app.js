@@ -119,8 +119,10 @@ app.get("/success", async (req, res) => {
       console.log(err);
     }
     console.log("usuario logueado " + req.user.id);
-    if (!user.username) {
-      res.redirect(`http://localhost:5173/home/`);
+
+    if (!req.user.username) {
+      res.redirect(`http://localhost:5173/callback`);
+
     } else {
       console.log(user.username);
       res.redirect("http://localhost:5173");
