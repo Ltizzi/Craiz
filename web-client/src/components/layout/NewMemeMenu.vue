@@ -1,8 +1,11 @@
 <template lang="">
-  <div class="mt-2 flex flex-row justify-around">
-    <BaseButton :class="btnClasses.green" @click="modalSwitch"
+  <div class="mt-2 flex flex-col">
+    <BaseButton
+      class="w-64 bg-emerald-500 py-1 font-bold text-white"
+      @click="modalSwitch"
       >Crear Meme</BaseButton
     >
+
     <CreateMeme v-if="showModal" @closeModal="modalSwitch"></CreateMeme>
   </div>
 </template>
