@@ -14,7 +14,11 @@
           :memeId="props.data.memeId"
           :userId="props.data.uploader"
         ></LikeButton>
-        <CommentIcon :commentCounter="props.data.comments.length"></CommentIcon>
+        <CommentIcon
+          :commentCounter="props.data.comments.length"
+          @click="openMeme(props.data)"
+          class="hover:cursor-pointer"
+        ></CommentIcon>
         <BaseTag
           v-for="(tag, index) in lowerCaseTags"
           :key="index"
@@ -29,10 +33,12 @@
 <script setup lang="ts">
   import { onMounted, ref } from "vue";
   import { useMemesStore } from "@/store/memes";
+  import router from "@/router";
   import CommentIcon from "../common/CommentIcon.vue";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";
+  import { Meme } from "@/utils/models";
 
   const memesStore = useMemesStore();
 
@@ -50,6 +56,12 @@
   }>();
   const isLoaded = ref(false);
   let lowerCaseTags = ref<string[]>([]);
+
+  function openMeme(meme: Meme) {
+    memesStore.setMeme(meme);
+    console.log(meme);
+    router.push("/meme");
+  }
 
   onMounted(async () => {
     const userData = await axios.get(
