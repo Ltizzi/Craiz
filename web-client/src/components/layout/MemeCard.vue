@@ -25,17 +25,16 @@
       </div>
     </div>
   </div>
-  <div v-if="toggleComments"></div>
 </template>
 <script setup lang="ts">
-  import { onMounted, reactive, ref, Ref } from "vue";
-  import { useMemesStore } from "@/store/memes.store";
+  import { onMounted, ref } from "vue";
+  import { useMemesStore } from "@/store/memes";
   import CommentIcon from "../common/CommentIcon.vue";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";
 
-  const memeStore = useMemesStore();
+  const memesStore = useMemesStore();
 
   const user = ref({});
   const props = defineProps<{
@@ -61,12 +60,9 @@
     }
 
     lowerCaseTags.value = props.data.tags;
-    // lowerCaseTags.value = props.data.tags.map((tag: string) =>
-    //   tag.toLowerCase()
-    // );
     isLoaded.value = true;
     console.log("la id del meme es:");
     console.log(props.data.memeId);
-    memeStore.setMemeById(props.data.memeId);
+    memesStore.fetchMemeById(props.data.memeId);
   });
 </script>
