@@ -1,4 +1,3 @@
-import { useMemeStore } from "./meme.store";
 import { Meme } from "../utils/models";
 import { defineStore } from "pinia";
 import axios from "axios";
@@ -6,16 +5,17 @@ import axios from "axios";
 
 const API_URL = "http://localhost:4246/v1/";
 
-export const useMemesStore = defineStore({
-  id: "memes",
-  state: () => ({
-    memes: [],
-    memeById: {},
-    meme: {},
-  }),
-  // plugins: [createPersistPlugin()],
+export const useMemesStore = defineStore("memes", {
+  state: () => {
+    return {
+      memes: [],
+      memeById: {},
+      meme: {},
+    };
+  },
+
   actions: {
-    async setMemeById(id: number) {
+    async fetchMemeById(id: number) {
       const response = await axios.get(`${API_URL}meme/byId?id=${id}`);
       this.memeById = response.data as Meme;
       console.log(this.memeById);
