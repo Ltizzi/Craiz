@@ -1,13 +1,13 @@
 <template lang="">
   <div class="-mt-2 flex flex-col items-center justify-center">
     <template v-for="comment in comments" :key="comment.memeId">
-      <div class="fit flex flex-row justify-center">
+      <div class="fit flex w-11/12 flex-row justify-center">
         <div class="flex h-full flex-col justify-center">
           <div class="h-full w-10 border-l-2 border-b-2 border-gray-300"></div>
           <div class="h-full w-10 border-l-2 border-gray-300"></div>
         </div>
 
-        <MemeCard :data="comment" class="w-3/4"></MemeCard>
+        <MemeCard :data="comment" class="w-3/5"></MemeCard>
       </div>
     </template>
   </div>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
   import axios from "axios";
   import { onMounted, ref } from "vue";
-  import MemeCard from "./MemeCard.vue";
+  import MemeCard from "../ui/MemeCard.vue";
   import { useMemesStore } from "@/store/memes";
   import { API_URL } from "@/main";
 
