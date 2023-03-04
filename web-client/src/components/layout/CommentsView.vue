@@ -14,13 +14,15 @@
 
   const memesStore = useMemesStore();
 
-  let meme = ref(memesStore.meme);
+  let id = memesStore.id;
 
   let comments = ref([]);
 
-  const response = await axios.get(
-    `http://localhost:4246/v1/meme/getCommentsById?id=${meme.memeId}`
-  );
-  comments.value = response.data;
+  onMounted(async () => {
+    const response = await axios.get(
+      `http://localhost:4246/v1/meme/getCommentsById?id=${id}`
+    );
+    comments.value = response.data;
+    console.log(comments.value);
+  });
 </script>
-<style lang=""></style>
