@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-800">
-    <div class="mx-auto flex w-9/12 flex-row justify-center bg-slate-700">
+    <div class="mx-auto flex w-9/12 flex-row justify-center gap-0 bg-slate-700">
       <div class="h-screen w-1/5 rounded-sm">
         <LateralMenu></LateralMenu>
       </div>

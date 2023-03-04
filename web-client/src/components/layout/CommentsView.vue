@@ -1,9 +1,12 @@
 <template lang="">
-  <MemeCard
-    v-for="comment in comments"
-    :key="meme.memeId"
-    :data="meme"
-  ></MemeCard>
+  <div class="flex flex-col items-center justify-center">
+    <MemeCard
+      v-for="comment in comments"
+      :key="comment.memeId"
+      :data="comment"
+      class="w-3/4"
+    ></MemeCard>
+  </div>
 </template>
 
 <script setup lang="ts">

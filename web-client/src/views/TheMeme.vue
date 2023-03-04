@@ -1,7 +1,9 @@
 <template lang="">
-  <div class="flex flex-col justify-center">
-    <MemeCard :data="meme"></MemeCard>
-    <CommentsView></CommentsView>
+  <div class="flex w-full flex-col items-center justify-center">
+    <div class="mx-auto flex flex-col justify-center">
+      <MemeCard :data="meme" class="mx-auto"></MemeCard>
+      <CommentsView class="mx-auto"></CommentsView>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
