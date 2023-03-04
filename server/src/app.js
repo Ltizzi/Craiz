@@ -54,7 +54,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://accounts.google.com"],
-    exposedHeaders: ["set-cookie"],
+    //   exposedHeaders: ["set-cookie"],
     credentials: true,
   })
 );

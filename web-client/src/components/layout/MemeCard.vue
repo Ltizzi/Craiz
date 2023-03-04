@@ -14,6 +14,11 @@
           :memeId="props.data.memeId"
           :userId="props.data.uploader"
         ></LikeButton>
+        <CommentIcon
+          :commentCounter="props.data.comments.length"
+          @click="openMeme(props.data)"
+          class="hover:cursor-pointer"
+        ></CommentIcon>
         <BaseTag
           v-for="(tag, index) in lowerCaseTags"
           :key="index"
@@ -26,13 +31,16 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, reactive, ref, Ref } from "vue";
-  import { useMemesStore } from "@/store/memes.store";
+  import { onMounted, ref } from "vue";
+  import { useMemesStore } from "@/store/memes";
+  import router from "@/router";
+  import CommentIcon from "../common/CommentIcon.vue";
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";
+  import { Meme } from "@/utils/models";
 
-  const memeStore = useMemesStore();
+  const memesStore = useMemesStore();
 
   const user = ref({});
   const props = defineProps<{
@@ -47,7 +55,14 @@
     };
   }>();
   const isLoaded = ref(false);
+  let id = 0;
   let lowerCaseTags = ref<string[]>([]);
+
+  function openMeme(meme: Meme) {
+    memesStore.setMeme(meme);
+    console.log(meme);
+    router.push(`/meme?id=${id}`); //props.data.memeId
+  }
 
   onMounted(async () => {
     const userData = await axios.get(
@@ -58,12 +73,10 @@
     }
 
     lowerCaseTags.value = props.data.tags;
-    // lowerCaseTags.value = props.data.tags.map((tag: string) =>
-    //   tag.toLowerCase()
-    // );
     isLoaded.value = true;
     console.log("la id del meme es:");
     console.log(props.data.memeId);
-    memeStore.setMemeById(props.data.memeId);
+    memesStore.fetchMemeById(props.data.memeId);
+    id = memesStore.id;
   });
 </script>
