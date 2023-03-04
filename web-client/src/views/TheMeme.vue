@@ -7,9 +7,9 @@
   </div>
 </template>
 <script setup lang="ts">
-  import MemeCard from "@/components/layout/MemeCard.vue";
+  import MemeCard from "@/components/ui/MemeCard.vue";
   import CommentsView from "@/components/layout/CommentsView.vue";
-  import { onMounted, ref } from "vue";
+  import { onBeforeMount, onMounted, ref } from "vue";
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
   import axios from "axios";
@@ -22,7 +22,7 @@
   console.log(meme.value);
   meme.value = memesStore.meme;
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
     if (!meme.value) {
       const route = useRoute();
       memeId = route.query.id;

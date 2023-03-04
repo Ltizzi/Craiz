@@ -9,7 +9,7 @@
 <script setup lang="ts">
   import axios from "axios";
   import { onMounted, ref } from "vue";
-  import MemeCard from "./MemeCard.vue";
+  import MemeCard from "../ui/MemeCard.vue";
   import { API_URL } from "@/main";
 
   let memes: any = ref([]);
