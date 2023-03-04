@@ -34,7 +34,17 @@ async function getAllMemesWithoutComments(skip, limit) {
 
 async function getAllCommentsFromAMemeById(meme_id, skip, limit) {
   const meme = await getMemeById(meme_id);
-  return meme.comments;
+  let comments = await memesRepo
+    .find(
+      {
+        memeId: { $in: meme.comments },
+        softDeleted: false,
+      },
+      { _id: 0, __v: 0 }
+    )
+    .skip(skip)
+    .limit(limit);
+  return comments;
 }
 
 async function getMemesByUser(user_id, skip, limit) {
