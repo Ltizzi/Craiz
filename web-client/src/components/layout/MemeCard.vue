@@ -55,12 +55,13 @@
     };
   }>();
   const isLoaded = ref(false);
+  let id = 0;
   let lowerCaseTags = ref<string[]>([]);
 
   function openMeme(meme: Meme) {
     memesStore.setMeme(meme);
     console.log(meme);
-    router.push("/meme");
+    router.push(`/meme?id=${id}`); //props.data.memeId
   }
 
   onMounted(async () => {
@@ -76,5 +77,6 @@
     console.log("la id del meme es:");
     console.log(props.data.memeId);
     memesStore.fetchMemeById(props.data.memeId);
+    id = memesStore.id;
   });
 </script>

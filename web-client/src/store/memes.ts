@@ -10,6 +10,7 @@ export const useMemesStore = defineStore("memes", {
     memes: [],
     memeById: {},
     meme: {},
+    id: 0,
   }),
 
   actions: {
@@ -24,6 +25,7 @@ export const useMemesStore = defineStore("memes", {
     },
     setMeme(meme: Meme) {
       this.meme = meme;
+      this.id = meme.memeId;
     },
   },
 });

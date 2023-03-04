@@ -7,7 +7,7 @@
       <div
         class="flex w-3/5 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50"
       >
-        <MemeList></MemeList>
+        <RouterView></RouterView>
       </div>
       <div class="w-1/5"></div>
     </div>
@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-  import MemeList from "../components/layout/MemeList.vue";
   import LateralMenu from "../components/layout/LateralMenu.vue";
   import Callback from "../components/common/Callback.vue";
   import { useUserStore } from "@/store";
