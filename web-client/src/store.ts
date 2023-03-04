@@ -1,9 +1,9 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { User } from "../src/utils/models";
-//import { createPersistPlugin } from "pinia-persist";
+import { API_URL } from "./main";
 
-const API_URL = "http://localhost:4246/v1/";
+// const API_URL = "http://localhost:4246/v1/";
 
 export const useUserStore = defineStore("user", {
   state: () => ({

@@ -1,9 +1,10 @@
 import { Meme } from "../utils/models";
 import { defineStore } from "pinia";
 import axios from "axios";
+import { API_URL } from "@/main";
 //import { createPersistPlugin } from "pinia-persist";
 
-const API_URL = "http://localhost:4246/v1/";
+// const API_URL = "http://localhost:4246/v1/";
 
 export const useMemesStore = defineStore("memes", {
   state: () => ({

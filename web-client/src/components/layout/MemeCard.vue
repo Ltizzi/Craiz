@@ -1,5 +1,7 @@
 <template lang="">
-  <div class="container my-3 flex w-5/6 flex-col border-2 p-5 shadow-md">
+  <div
+    class="container my-2 flex w-5/6 flex-col rounded-xl border-2 p-5 shadow-md"
+  >
     <div class="container flex flex-row">
       <img :src="user.avatar" alt="" class="mr-2 w-12" />
       <h3 class="ml-1 pt-1 text-2xl font-bold">{{ user.nickname }}</h3>
@@ -39,6 +41,7 @@
   import BaseTag from "../common/BaseTag.vue";
   import axios from "axios";
   import { Meme } from "@/utils/models";
+  import { API_URL } from "@/main";
 
   const memesStore = useMemesStore();
 
@@ -66,7 +69,8 @@
 
   onMounted(async () => {
     const userData = await axios.get(
-      `http://localhost:4246/v1/user/byId?id=${props.data.uploader}`
+      `${API_URL}user/byId?id=${props.data.uploader}`
+      // `http://localhost:4246/v1/user/byId?id=${props.data.uploader}`
     );
     if (userData) {
       user.value = userData.data;

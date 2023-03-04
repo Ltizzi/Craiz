@@ -10,12 +10,14 @@
   import axios from "axios";
   import { onMounted, ref } from "vue";
   import MemeCard from "./MemeCard.vue";
+  import { API_URL } from "@/main";
 
   let memes: any = ref([]);
   const isLoaded = ref(false);
 
   onMounted(async () => {
-    const response = await axios.get("http://localhost:4246/v1/meme/allWoC");
+    const response = await axios.get(`${API_URL}meme/allWoC`);
+    // const response = await axios.get("http://localhost:4246/v1/meme/allWoC");
     if (response.data) {
       isLoaded.value = true;
       memes.value = response.data;

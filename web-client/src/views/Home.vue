@@ -20,12 +20,14 @@
   import { useUserStore } from "@/store";
   import { onMounted } from "vue";
   import axios from "axios";
+  import { API_URL } from "@/main";
 
   const userStore = useUserStore();
 
   onMounted(async () => {
     const response = await axios.get(
-      "http://localhost:4246/v1/auth/logincheck",
+      `${API_URL}auth/logincheck`,
+      //"http://localhost:4246/v1/auth/logincheck",
       { withCredentials: true }
     );
     console.log(response.data.user);

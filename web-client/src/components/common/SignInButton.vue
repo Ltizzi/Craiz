@@ -17,12 +17,14 @@
 <script setup lang="ts">
   import { useUserStore } from "@/store";
   import { ref, watch } from "vue";
+  import { API_URL } from "@/main";
 
   const userStore = useUserStore();
   let userIsSignedIn = ref(userStore.isSignedIn);
 
   const handleSignInClick = async () => {
-    window.location.href = "http://localhost:4246/v1/auth/google";
+    window.location.href = `${API_URL}auth/google`;
+    //window.location.href = "http://localhost:4246/v1/auth/google";
   };
 
   const handleSignOutClick = () => {

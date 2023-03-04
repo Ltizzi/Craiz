@@ -13,6 +13,7 @@
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
   import axios from "axios";
+  import { API_URL } from "@/main";
 
   const memesStore = useMemesStore();
   let meme = ref();
@@ -26,7 +27,8 @@
       const route = useRoute();
       memeId = route.query.id;
       const response = await axios.get(
-        `http://localhost:4246/v1/meme/byId?id=${memeId}`
+        `${API_URL}meme/byId?id=${memeId}`
+        //`http://localhost:4246/v1/meme/byId?id=${memeId}`
       );
       console.log("response:");
       console.log(response.data);
