@@ -1,93 +1,78 @@
 <template lang="">
-  <div
-    classes=" top-0 left-0 w-screen h-screen z-0 flex items-center justify-center"
-  >
-    <!-- Background -->
-    <div
-      class="fixed top-0 left-0 z-20 h-full w-full bg-black/50 backdrop-blur-lg"
-      @click="$emit('closeModal')"
-    ></div>
-    <!-- <div
-      class="fixed top-0 left-0 z-10 h-full w-full bg-gray-600/60 blur-2xl"
-    ></div> -->
-    <!-- Dialog -->
-    <dialog
-      class="container fixed z-50 my-auto flex w-2/5 flex-col rounded-md border-2 bg-white px-5 shadow-xl"
-    >
-      <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
-        Create meme
-      </h1>
+  <div class="container my-auto mx-auto flex w-auto flex-col bg-white px-5">
+    <h1 class="mt-2 text-center text-4xl font-bold text-slate-600">
+      Create meme
+    </h1>
 
-      <form @submit.prevent="generateMeme">
-        <div class="container flex h-auto bg-gray-100 p-5">
-          <div
-            class="container relative mx-auto flex h-auto w-auto flex-col items-center justify-center overflow-hidden"
-          >
-            <input
-              type="text"
-              class="draggable"
-              ref="topInput"
-              :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
-              :placeholder="topText"
-              v-model="topText"
-            />
+    <form @submit.prevent="generateMeme">
+      <div class="container flex h-auto bg-gray-100 p-5">
+        <div
+          class="container relative mx-auto flex h-auto w-auto flex-col items-center justify-center overflow-hidden"
+        >
+          <input
+            type="text"
+            class="draggable"
+            ref="topInput"
+            :style="{ top: topTextTop + 'px', left: topTextLeft + 'px' }"
+            :placeholder="topText"
+            v-model="topText"
+          />
 
-            <input
-              type="text"
-              class="draggable mx-auto"
-              ref="bottomInput"
-              v-model="bottomText"
-              :style="{
-                top: bottomTextTop + 'px',
-                left: bottomTextLeft + 'px',
-              }"
-              :placeholder="bottomText"
-            />
+          <input
+            type="text"
+            class="draggable mx-auto"
+            ref="bottomInput"
+            v-model="bottomText"
+            :style="{
+              top: bottomTextTop + 'px',
+              left: bottomTextLeft + 'px',
+            }"
+            :placeholder="bottomText"
+          />
 
-            <input
-              type="text"
-              class="draggable"
-              ref="textField"
-              v-model="textField.text"
-              @keydown.delete="deleteTextField(textField.id)"
-              v-for="textField in textFields"
-              :key="textField.id"
-              :style="{
-                top: textField.top + 'px',
-                left: textField.left + 'px',
-              }"
-              :placeholder="textField.text"
-            />
-            <img
-              :src="memeUrl"
-              v-if="memeUrl"
-              ref="memeImage"
-              class="h-96 max-h-fit w-96 object-contain"
-            />
-            <div class="h-96 w-96 bg-gray-300" v-else></div>
-          </div>
+          <input
+            type="text"
+            class="draggable"
+            ref="textField"
+            v-model="textField.text"
+            @keydown.delete="deleteTextField(textField.id)"
+            v-for="textField in textFields"
+            :key="textField.id"
+            :style="{
+              top: textField.top + 'px',
+              left: textField.left + 'px',
+            }"
+            :placeholder="textField.text"
+          />
+          <img
+            :src="memeUrl"
+            v-if="memeUrl"
+            ref="memeImage"
+            class="h-96 max-h-fit w-96 object-contain"
+          />
+          <div class="h-96 w-96 bg-gray-300" v-else></div>
         </div>
+      </div>
 
-        <div class="my-4 flex flex-row justify-around">
-          <BaseButton :class="btnClasses.green" @click.prevent="addTextField"
-            >Add Textfield</BaseButton
-          >
-          <BaseButton :class="btnClasses.orange" @click.prevent="generateMeme"
-            >Generate Meme</BaseButton
-          >
-          <BaseButton :class="btnClasses.red" @click="$emit('closeModal')"
-            >Close Dialog</BaseButton
-          >
-        </div>
-      </form>
+      <div class="my-4 flex flex-row justify-around">
+        <BaseButton :class="btnClasses.green" @click.prevent="addTextField"
+          >Add Textfield</BaseButton
+        >
+        <BaseButton :class="btnClasses.orange" @click.prevent="generateMeme"
+          >Generate Meme</BaseButton
+        >
+        <BaseButton :class="btnClasses.red" @click="$emit('closeModal')"
+          >Close Dialog</BaseButton
+        >
+      </div>
+    </form>
 
-      <input
-        class="ml-32 mb-5"
-        type="file"
-        ref="fileInput"
-        @change="handleFileInputChange"
-      />
-    </dialog>
+    <input
+      class="ml-32 mb-5"
+      type="file"
+      ref="fileInput"
+      @change="handleFileInputChange"
+    />
   </div>
 </template>
 

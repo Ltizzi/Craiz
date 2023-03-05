@@ -56,6 +56,7 @@
   import { useRouter } from "vue-router";
   import { onMounted, reactive, ref, watch } from "vue";
   import axios from "axios";
+  import { API_URL } from "@/main";
 
   const userStore = useUserStore();
   const router = useRouter();
@@ -78,7 +79,8 @@
       birthday: birthday.value,
     };
     const response = await axios.patch(
-      "http://localhost:4246/v1/user/update",
+      `${API_URL}user/update`,
+      //"http://localhost:4246/v1/user/update",
       updatedUser,
       { withCredentials: true }
     );
@@ -91,7 +93,8 @@
 
   onMounted(async () => {
     const response = await axios.get(
-      "http://localhost:4246/v1/auth/logincheck",
+      `${API_URL}auth/logincheck`,
+      //"http://localhost:4246/v1/auth/logincheck",
       { withCredentials: true }
     );
 
