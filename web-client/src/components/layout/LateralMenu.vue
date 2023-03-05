@@ -1,8 +1,10 @@
 <template lang="">
-  <div class="items-left fixed ml-4 mt-24 flex w-60 flex-col">
+  <div
+    class="items-left container fixed mt-24 flex w-60 flex-col sm:ml-2 sm:w-2/5 lg:ml-2"
+  >
     <h1
       @click="goHome()"
-      class="my-5 text-center text-xl font-bold text-white hover:cursor-pointer"
+      class="my-5 text-xl font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg lg:ml-2 lg:text-start"
     >
       Inicio
     </h1>

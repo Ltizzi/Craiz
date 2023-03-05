@@ -3,6 +3,6 @@ const { httpUploadImage } = require("./utils.controller");
 
 const utilsRouter = express.Router();
 
-utilsRouter.use("/uploadImg", httpUploadImage);
+utilsRouter.post("/uploadImg", httpUploadImage);
 
 module.exports = utilsRouter;

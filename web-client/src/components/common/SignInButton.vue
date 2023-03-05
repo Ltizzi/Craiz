@@ -1,6 +1,6 @@
 <template lang="">
   <button
-    class="w-64 rounded-md bg-emerald-600 px-2 py-1 font-bold text-white"
+    class="sm:max-w-20 rounded-md bg-emerald-600 px-2 py-1 font-bold text-white sm:w-3/12 sm:text-lg"
     v-if="!userIsSignedIn"
     @click="handleSignInClick"
   >
@@ -8,7 +8,7 @@
   </button>
   <button
     v-else
-    class="w-64 rounded-md bg-red-400 px-2 py-1 font-bold text-white"
+    class="sm:max-w-20 sm:text-md w-64 rounded-md bg-red-400 px-2 py-1 font-bold text-white sm:w-3/12"
     @click="handleSignOutClick"
   >
     Sign Out

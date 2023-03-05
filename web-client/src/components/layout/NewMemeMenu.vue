@@ -1,7 +1,7 @@
 <template lang="">
   <div class="mt-2 flex flex-col">
     <BaseButton
-      class="w-64 bg-emerald-500 py-1 font-bold text-white"
+      class="w-64 bg-emerald-500 py-1 font-bold text-white sm:w-3/12 sm:text-base"
       @click="modalSwitch"
       >Crear Meme</BaseButton
     >

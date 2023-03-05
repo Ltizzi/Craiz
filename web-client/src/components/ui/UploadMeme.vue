@@ -3,9 +3,9 @@
     <h1 class="py-2 text-center text-2xl font-bold">Upload new meme</h1>
 
     <img
-      :src="memeUrl"
-      v-if="memeUrl"
-      ref="memeImage"
+      :src="memeImage"
+      v-if="memeImage"
+      ref="meme"
       class="mx-auto h-96 object-contain"
     />
     <div v-else class="my-2 h-72 w-full bg-gray-200"></div>
@@ -66,14 +66,14 @@
   let selectedTags = ref<any[]>([]);
   selectedTags.value = [];
 
-  const memeUrl = ref();
+  const memeImage = ref();
 
   function handleFileInput(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
       if (event.target) {
-        memeUrl.value = event.target.result;
+        memeImage.value = event.target.result;
       } else {
         console.error("Select a file!");
         return;
@@ -100,7 +100,17 @@
   }
 
   async function uploadMeme() {
-    //const response = UPLOADED IMG
+    const imageToUpload = memeImage.value;
+    const response = await axios.post(
+      `${API_URL}utils/uploadImg`,
+      {
+        imageToUpload,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response);
     const selTags = selectedTagsToStringArray();
     const memeData = {
       uploader: userStore.userId,
@@ -108,14 +118,14 @@
       tags: selTags,
       isComment: false,
     };
-    const res = await axios.post(`${API_URL}meme/new`, {
-      withCredentials: true,
-    });
-    if (res.status == 200) {
-      router.push("/");
-    } else {
-      //TODO redirect to error page
-    }
+    // const res = await axios.post(`${API_URL}meme/new`, {
+    //   withCredentials: true,
+    // });
+    // if (res.status == 200) {
+    //   router.push("/");
+    // } else {
+    //   console.log("error al subir la imagen");
+    // }
   }
 
   onBeforeMount(async () => {
