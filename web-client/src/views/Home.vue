@@ -1,15 +1,17 @@
 <template>
   <div class="bg-gray-800">
-    <div class="mx-auto flex w-9/12 flex-row justify-center gap-0 bg-slate-700">
-      <div class="h-screen w-1/5 rounded-sm">
+    <div
+      class="max-w-sm:full xs:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 sm:w-full sm:justify-start md:w-11/12 lg:w-9/12"
+    >
+      <div class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-52">
         <LateralMenu></LateralMenu>
       </div>
       <div
-        class="flex w-3/5 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50"
+        class="flex w-10/12 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50 sm:w-10/12 md:w-9/12 lg:w-8/12"
       >
         <RouterView></RouterView>
       </div>
-      <div class="w-1/5"></div>
+      <div class="w-14 sm:w-14 md:w-32 lg:w-1/5"></div>
     </div>
   </div>
 </template>
