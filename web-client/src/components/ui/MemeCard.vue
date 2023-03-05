@@ -1,9 +1,13 @@
 <template lang="">
   <div
-    class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full lg:w-5/6"
+    class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-5/6"
   >
-    <div class="container flex flex-row lg:my-1">
-      <img :src="uploader.avatar" alt="" class="mr-2 sm:w-10 lg:w-14" />
+    <div class="xs:w-10 container flex flex-row lg:my-1">
+      <img
+        :src="uploader.avatar"
+        alt=""
+        class="mr-2 w-10 sm:w-10 md:w-12 lg:w-14"
+      />
       <h3 class="lg:text-2x2 ml-1 pt-1 font-bold sm:text-xl lg:mt-3">
         {{ uploader.nickname }}
       </h3>

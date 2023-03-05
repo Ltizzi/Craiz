@@ -1,13 +1,21 @@
 <template lang="">
-  <div class="-mt-2 flex flex-col items-center justify-center">
+  <div
+    class="mx-auto -mt-2 flex flex-col items-center justify-center gap-0 md:mr-8"
+  >
     <template v-for="comment in comments" :key="comment.memeId">
-      <div class="fit flex w-11/12 flex-row justify-center">
-        <div class="flex h-full flex-col justify-center">
-          <div class="h-full w-10 border-l-2 border-b-2 border-gray-300"></div>
-          <div class="h-full w-10 border-l-2 border-gray-300"></div>
+      <div
+        class="fit flex w-full flex-row justify-center gap-0 sm:w-11/12 lg:w-11/12"
+      >
+        <div
+          class="mx-auto flex h-full w-6 flex-col items-center justify-center"
+        >
+          <div
+            class="h-full w-3 border-l-2 border-b-2 border-gray-300 sm:w-10 md:ml-4 lg:w-10"
+          ></div>
+          <div class="h-full w-full border-l-2 border-gray-300"></div>
         </div>
 
-        <MemeCard :data="comment" class="w-3/5"></MemeCard>
+        <MemeCard :data="comment" class="mx-0 w-full"></MemeCard>
       </div>
     </template>
   </div>
