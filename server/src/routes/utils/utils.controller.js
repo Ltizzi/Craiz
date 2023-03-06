@@ -1,40 +1,56 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const axios = require("axios");
+const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
 
 const FREEIMG = {
   KEY: process.env.FREEIMG_KEY,
-  URL: "http://freeimage.host/api/1/upload/",
+  URL: "https://thumbsnap.com/api/upload",
 };
 
-app.use(bodyParser.json());
-
 async function httpUploadImage(req, res) {
-  const imageData = {
-    key: FREEIMG.KEY,
-    action: "upload",
-    source: req.body.imageToUpload,
-    format: "json",
-  };
+  const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
 
-  const options = JSON.stringify(imageData);
+  const fileData = await readFileAsBlob(filePath);
 
-  // try {
+  let imageData = new FormData();
+  imageData.append("key", FREEIMG.KEY);
+  imageData.append("media", fileData, req.file.originalname);
 
-  const response = await axios.post(`${FREEIMG.URL}`, options);
+  try {
+    const response = await axios.post(`${FREEIMG.URL}`, imageData, {
+      "Content-Type": "multipart/form-data",
+    });
 
-  console.log(response.data);
-  const imageUrl = {
-    url: response.data.image.url,
-    url_viewer: response.data.image.url_viewer,
-  };
-  return res.status(200).json(imageUrl);
-  // } catch (err) {
-  //   return res.status(403).json({ error: err });
-  // }
+    const imageUrl = {
+      url: response.data.data.media,
+    };
+
+    fs.unlink(filePath, (error) => {
+      if (error) {
+        console.error(`No se pudo borrar el archivo ${filePath}: ${error}`);
+      }
+    });
+    return res.status(200).json(imageUrl);
+  } catch (err) {
+    return res.status(403).json({ error: err });
+  }
+}
+
+async function readFileAsBlob(filePath) {
+  return await new Promise((resolve, reject) => {
+    fs.readFile(filePath, (error, data) => {
+      if (error) {
+        reject(error);
+      } else {
+        const blob = new Blob([data], { type: "image/jpeg" });
+        resolve(blob);
+      }
+    });
+  });
 }
 
 module.exports = {

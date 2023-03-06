@@ -27,7 +27,7 @@ async function getAllSoftDeletedMemes(skip, limit) {
 async function getAllMemesWithoutComments(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false, isComment: false }, { _id: 0, __v: 0 })
-    .sort({ memeId: 1 })
+    .sort({ memeId: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -88,6 +88,9 @@ async function saveMeme(meme) {
     createdAt: Date.now(),
   });
   const tagNames = meme.tags;
+  console.log(meme);
+  console.log("***");
+  console.log(tagNames);
   tagNames.forEach((tag) => {
     tagIncrementalCounter(tag);
   });
