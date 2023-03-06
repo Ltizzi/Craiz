@@ -8,16 +8,31 @@
 </template>
 <script setup lang="ts">
   import axios from "axios";
-  import { onMounted, ref } from "vue";
+  import { onMounted, ref, inject, InjectionKey, onBeforeMount } from "vue";
   import MemeCard from "../ui/MemeCard.vue";
   import { API_URL } from "@/main";
+  import { useMemesStore } from "@/store/memes";
 
   let memes: any = ref([]);
   const isLoaded = ref(false);
 
+  const memeStore = useMemesStore();
+
+  // const app = inject(appContext as InjectionKey<any>);
+
+  // const onUpload = (data: Boolean) => {
+  //   memes.value = memeStore.memesWoC;
+  // };
+
+  // app?.component?.proxy?.$on("reloadList", onUpload);
+
+  onBeforeMount(async () => {
+    await memeStore.fetchMemesWoC();
+    memes.value = memeStore.memesWoC;
+  });
   onMounted(async () => {
     const response = await axios.get(`${API_URL}meme/allWoC`);
-    // const response = await axios.get("http://localhost:4246/v1/meme/allWoC");
+
     if (response.data) {
       isLoaded.value = true;
       memes.value = response.data;

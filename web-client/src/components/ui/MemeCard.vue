@@ -3,11 +3,7 @@
     class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-5/6"
   >
     <div class="xs:w-10 container flex flex-row lg:my-1">
-      <img
-        :src="uploader.avatar"
-        alt=""
-        class="mr-2 w-10 sm:w-10 md:w-12 lg:w-14"
-      />
+      <img :src="uploader.avatar" alt="" class="mr-2 w-10 sm:w-10 md:w-12" />
       <h3 class="lg:text-2x2 ml-1 pt-1 font-bold sm:text-xl lg:mt-3">
         {{ uploader.nickname }}
       </h3>
@@ -17,7 +13,7 @@
     </div>
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
     <div class="flex flex-col sm:mx-1 lg:mx-12">
-      <img :src="props.data.imgUrl" alt="" class="w-fit rounded-3xl" />
+      <img :src="props.data.imgUrl" alt="" class="mx-auto w-fit rounded-3xl" />
 
       <div class="flex h-12 flex-row justify-between">
         <LikeButton :memeId="props.data.memeId" :userId="userId"></LikeButton>
@@ -26,13 +22,15 @@
           @click="openMeme(props.data)"
           class="hover:cursor-pointer"
         ></CommentIcon>
-        <BaseTag
-          v-for="(tag, index) in lowerCaseTags"
-          :key="index"
-          :class="tag.toLowerCase()"
-          class="my-auto"
-          >{{ tag }}</BaseTag
-        >
+        <div class="flex justify-center">
+          <BaseTag
+            v-for="(tag, index) in lowerCaseTags"
+            :key="index"
+            :class="tag.toLowerCase()"
+            class="my-auto mr-1"
+            >{{ tag }}</BaseTag
+          >
+        </div>
       </div>
     </div>
   </div>
