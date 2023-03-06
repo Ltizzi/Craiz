@@ -1,6 +1,7 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const axios = require("axios");
+const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -10,28 +11,46 @@ const FREEIMG = {
   URL: "https://thumbsnap.com/api/upload",
 };
 
-app.use(bodyParser.json());
-
 async function httpUploadImage(req, res) {
-  const image = req.file;
+  const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
+
+  const fileData = await readFileAsBlob(filePath);
+
   let imageData = new FormData();
   imageData.append("key", FREEIMG.KEY);
-  imageData.append("media", req.file);
+  imageData.append("media", fileData, req.file.originalname);
 
-  // try {
+  try {
+    const response = await axios.post(`${FREEIMG.URL}`, imageData, {
+      "Content-Type": "multipart/form-data",
+    });
 
-  const response = await axios.post(`${FREEIMG.URL}`, imageData, {
-    "Content-Type": "multipart/form-data",
+    const imageUrl = {
+      url: response.data.data.media,
+    };
+
+    fs.unlink(filePath, (error) => {
+      if (error) {
+        console.error(`No se pudo borrar el archivo ${filePath}: ${error}`);
+      }
+    });
+    return res.status(200).json(imageUrl);
+  } catch (err) {
+    return res.status(403).json({ error: err });
+  }
+}
+
+async function readFileAsBlob(filePath) {
+  return await new Promise((resolve, reject) => {
+    fs.readFile(filePath, (error, data) => {
+      if (error) {
+        reject(error);
+      } else {
+        const blob = new Blob([data], { type: "image/jpeg" });
+        resolve(blob);
+      }
+    });
   });
-
-  console.log(response.data);
-  const imageUrl = {
-    url: response.data.media,
-  };
-  return res.status(200).json(imageUrl);
-  // } catch (err) {
-  //   return res.status(403).json({ error: err });
-  // }
 }
 
 module.exports = {
