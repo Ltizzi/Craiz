@@ -24,14 +24,15 @@
             >Create new meme</BaseButton
           >
         </div>
-        <UploadMeme v-if="showUpload"></UploadMeme>
+        <UploadMeme v-if="showUpload" @closeModal="modalSwitch"></UploadMeme>
         <CreateMeme @closeModal="modalSwitch" v-if="!showUpload"></CreateMeme>
       </div>
     </BaseDialog>
   </div>
 </template>
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, watch } from "vue";
+
   import BaseDialog from "../common/BaseDialog.vue";
   import BaseButton from "../common/BaseButton.vue";
   import CreateMeme from "../ui/CreateMeme.vue";

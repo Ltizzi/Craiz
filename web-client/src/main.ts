@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, InjectionKey, provide } from "vue";
 import router from "./router";
 import App from "./App.vue";
 
@@ -24,3 +24,5 @@ app.use(pinia);
 //app.provide("authStore", useAuthStore());
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");
+
+//export const appContext: InjectionKey<any> = Symbol();
