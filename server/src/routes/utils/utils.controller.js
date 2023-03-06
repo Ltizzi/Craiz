@@ -7,29 +7,26 @@ const app = express();
 
 const FREEIMG = {
   KEY: process.env.FREEIMG_KEY,
-  URL: "http://freeimage.host/api/1/upload/",
+  URL: "https://thumbsnap.com/api/upload",
 };
 
 app.use(bodyParser.json());
 
 async function httpUploadImage(req, res) {
-  const imageData = {
-    key: FREEIMG.KEY,
-    action: "upload",
-    source: req.body.imageToUpload,
-    format: "json",
-  };
-
-  const options = JSON.stringify(imageData);
+  const image = req.file;
+  let imageData = new FormData();
+  imageData.append("key", FREEIMG.KEY);
+  imageData.append("media", req.file);
 
   // try {
 
-  const response = await axios.post(`${FREEIMG.URL}`, options);
+  const response = await axios.post(`${FREEIMG.URL}`, imageData, {
+    "Content-Type": "multipart/form-data",
+  });
 
   console.log(response.data);
   const imageUrl = {
-    url: response.data.image.url,
-    url_viewer: response.data.image.url_viewer,
+    url: response.data.media,
   };
   return res.status(200).json(imageUrl);
   // } catch (err) {
