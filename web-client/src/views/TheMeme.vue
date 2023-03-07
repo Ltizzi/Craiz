@@ -26,6 +26,7 @@
     if (!meme.value) {
       const route = useRoute();
       memeId = route.query.id;
+      console.log("********* meme id : ", memeId);
       const response = await axios.get(
         `${API_URL}meme/byId?id=${memeId}`
         //`http://localhost:4246/v1/meme/byId?id=${memeId}`

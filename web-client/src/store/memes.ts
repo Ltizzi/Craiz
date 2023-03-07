@@ -19,7 +19,6 @@ export const useMemesStore = defineStore("memes", {
     async fetchMemeById(id: number) {
       const response = await axios.get(`${API_URL}meme/byId?id=${id}`);
       this.memeById = response.data as Meme;
-      console.log(this.memeById);
     },
     async fetchAllMemes() {
       const response = await axios.get(`${API_URL}meme/`);

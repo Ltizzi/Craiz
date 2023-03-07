@@ -1,5 +1,10 @@
 <template>
-  <button :class="props.classes" :disabled="props.disabled" v-if="!props.link">
+  <button
+    :class="props.classes"
+    :disabled="props.disabled"
+    v-if="!props.link"
+    class="hover:cursor-pointer"
+  >
     <!-- @click="handleClick" -->
     <slot></slot>
   </button>

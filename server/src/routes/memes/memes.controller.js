@@ -131,14 +131,15 @@ async function httpUpdateMeme(req, res) {
 
 async function httpDeleteMeme(req, res) {
   try {
-    const memeId = req.query.id;
+    const memeId = req.query.memeId;
+    const userId = req.query.userId;
     const existingMeme = await getMemeById(memeId);
     if (!existingMeme) {
       return res.status(404).json({
         error: "Meme not found",
       });
     }
-    await deleteMeme(memeId);
+    await deleteMeme(memeId, userId);
     return res.status(200).json({ ok: "meme deleted" });
   } catch (err) {
     console.log(err);
