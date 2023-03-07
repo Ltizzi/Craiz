@@ -1,4 +1,6 @@
 const express = require("express");
+const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
+
 const {
   httpGetAllTags,
   httpGetTagById,
@@ -11,8 +13,8 @@ const tagsRouter = express.Router();
 
 tagsRouter.get("/all", httpGetAllTags);
 tagsRouter.get("/byId", httpGetTagById);
-tagsRouter.post("/new", httpSaveTag);
-tagsRouter.patch("/update", httpUpdateTag);
-tagsRouter.delete("/delete", httpDeleteTag);
+tagsRouter.post("/new", checkLoggedIn, httpSaveTag);
+tagsRouter.patch("/update", checkIsAdmin, httpUpdateTag);
+tagsRouter.delete("/delete", checkIsAdmin, httpDeleteTag);
 
 module.exports = tagsRouter;
