@@ -1,4 +1,5 @@
 const express = require("express");
+const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
 
 const {
   httpGetAllMemes,
@@ -26,10 +27,10 @@ memesRouter.get("/byId", httpGetMemeById);
 memesRouter.get("/byTag", httpGetAllMemesByTag);
 memesRouter.get("/byTemplate", httpGetAllMemesByTemplate);
 memesRouter.get("/byUser", httpGetAllMemesByUser);
-memesRouter.post("/new", httpSaveMeme);
-memesRouter.post("/comment", httpAddCommentToMeme);
-memesRouter.post("/like", httpLikeMeme);
-memesRouter.patch("/update", httpUpdateMeme);
-memesRouter.delete("/delete", httpDeleteMeme);
+memesRouter.post("/new", checkLoggedIn, httpSaveMeme);
+memesRouter.post("/comment", checkLoggedIn, httpAddCommentToMeme);
+memesRouter.post("/like", checkLoggedIn, httpLikeMeme);
+memesRouter.patch("/update", checkLoggedIn, httpUpdateMeme);
+memesRouter.delete("/delete", checkLoggedIn, httpDeleteMeme);
 
 module.exports = memesRouter;
