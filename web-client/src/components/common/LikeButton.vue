@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+  import { Motion } from "motion/vue";
+  import { spring } from "motion";
   import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
   import axios from "axios";
   import { onMounted, ref, Ref, watch } from "vue";

@@ -15,6 +15,7 @@ const router = createRouter({
         { path: "meme", component: TheMeme },
       ],
     },
+
     { path: "/callback", component: CallbackVue },
   ],
 });

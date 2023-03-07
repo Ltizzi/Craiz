@@ -5,6 +5,7 @@
       @click="modalSwitch"
       >Crear Meme</BaseButton
     >
+
     <BaseDialog
       :is-active="showModal"
       v-if="showModal"
