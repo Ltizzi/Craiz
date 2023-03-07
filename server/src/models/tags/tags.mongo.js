@@ -11,6 +11,15 @@ const tagsSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  class: {
+    type: String,
+    required: true,
+  },
+  isCustom: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   description: {
     type: String,
     required: true,
