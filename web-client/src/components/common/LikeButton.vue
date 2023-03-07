@@ -48,8 +48,9 @@
 
   async function handleButtonClick() {
     const response = await axios.post(
-      `${API_URL}meme/like?memeId=${meme.value.memeId}&userId=${user.value.userId}`
-      //`http://localhost:4246/v1/meme/like?memeId=${meme.value.memeId}&userId=${user.value.userId}`
+      `${API_URL}meme/like?memeId=${meme.value.memeId}&userId=${user.value.userId}`,
+      null,
+      { withCredentials: true }
     );
     console.log(response.data);
     if (response.data.ok == "liked meme") {
@@ -76,9 +77,8 @@
 
   async function getUser(id: number) {
     const response = await axios.get(
-      `${API_URL}user/byId?id=${id}`,
+      `${API_URL}user/byId?id=${id}`
       //`http://localhost:4246/v1/user/byId?id=${id}`,
-      { withCredentials: true }
     );
     return response.data;
   }

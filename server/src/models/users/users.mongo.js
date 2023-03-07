@@ -70,6 +70,29 @@ const usersSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  followers: [
+    {
+      type: Number,
+      ref: "User",
+    },
+  ],
+  follows: [
+    {
+      type: Number,
+      ref: "User",
+    },
+  ],
+  likeCounter: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  searchEntries: [
+    {
+      type: String,
+      required: false,
+    },
+  ],
   createdAt: {
     type: Date,
     required: true,
