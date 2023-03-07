@@ -9,6 +9,7 @@ import { API_URL } from "@/main";
 export const useMemesStore = defineStore("memes", {
   state: () => ({
     memes: [],
+    memesWoC: [],
     memeById: {},
     meme: {},
     id: 0,
@@ -23,6 +24,10 @@ export const useMemesStore = defineStore("memes", {
     async fetchAllMemes() {
       const response = await axios.get(`${API_URL}meme/`);
       this.memes = response.data;
+    },
+    async fetchMemesWoC() {
+      const response = await axios.get(`${API_URL}meme/allWoC`);
+      this.memesWoC = response.data;
     },
     setMeme(meme: Meme) {
       this.meme = meme;

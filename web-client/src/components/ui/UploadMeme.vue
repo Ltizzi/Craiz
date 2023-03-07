@@ -6,7 +6,7 @@
       :src="memeImage"
       v-if="memeImage"
       ref="meme"
-      class="mx-auto h-96 object-contain"
+      class="mx-auto h-96 w-4/5 object-contain"
     />
     <div v-else class="my-2 h-72 w-full bg-gray-200"></div>
     <div
@@ -16,7 +16,7 @@
       <BaseTag
         v-for="tag in selectedTags"
         :key="tag.tagId"
-        class="mb-1"
+        class="mb-1 mt-1"
         :class="tag.name"
         >{{ tag.name }}</BaseTag
       >
@@ -49,27 +49,37 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, ref, inject } from "vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
+  import { useMemesStore } from "@/store/memes";
+  import { defineEmits } from "vue";
+  import EventBus from "@/utils/EventBus";
+
   import axios from "axios";
-  import { API_URL } from "@/main";
   import router from "@/router";
+  import { API_URL } from "@/main";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
+  const memeStore = useMemesStore();
+
+  const emits = defineEmits({
+    closeModal: () => true,
+  });
 
   const tags = ref(tagStore.tags);
-  const user = userStore.user;
   let selectedTags = ref<any[]>([]);
   selectedTags.value = [];
 
   const memeImage = ref();
+  let fileToUpload: any;
 
   function handleFileInput(event: any) {
     const file = event.target.files[0];
+    fileToUpload = file;
     const reader = new FileReader();
     reader.onload = (event) => {
       if (event.target) {
@@ -91,41 +101,47 @@
       );
     }
   }
+
   function selectedTagsToStringArray() {
     const names: Array<string> = [];
     selectedTags.value.forEach((selTag: any) => {
-      names.push(selTag.nanme);
+      names.push(selTag.name);
     });
+
     return names;
   }
 
   async function uploadMeme() {
-    const imageToUpload = memeImage.value;
-    const response = await axios.post(
-      `${API_URL}utils/uploadImg`,
-      {
-        imageToUpload,
+    //prepara imagen para ser subida a la ThumbSnap
+    const formData = new FormData();
+    console.log(fileToUpload);
+    formData.append("file", fileToUpload);
+    console.log(formData);
+    const response = await axios.post(`${API_URL}utils/uploadImg`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-      {
-        withCredentials: true,
-      }
-    );
-    console.log(response);
+      withCredentials: true,
+    });
+
     const selTags = selectedTagsToStringArray();
     const memeData = {
       uploader: userStore.userId,
-      imgUrl: "",
+      imgUrl: response.data.url,
       tags: selTags,
       isComment: false,
     };
-    // const res = await axios.post(`${API_URL}meme/new`, {
-    //   withCredentials: true,
-    // });
-    // if (res.status == 200) {
-    //   router.push("/");
-    // } else {
-    //   console.log("error al subir la imagen");
-    // }
+
+    const res = await axios.post(`${API_URL}meme/new`, memeData, {
+      withCredentials: true,
+    });
+    if (res.status == 201) {
+      await memeStore.fetchMemesWoC();
+      EventBus.emit("reloadMemes");
+      emits("closeModal");
+    } else {
+      console.log("error al subir la imagen");
+    }
   }
 
   onBeforeMount(async () => {
