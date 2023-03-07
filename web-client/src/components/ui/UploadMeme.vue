@@ -16,7 +16,7 @@
       <BaseTag
         v-for="tag in selectedTags"
         :key="tag.tagId"
-        class="mb-1"
+        class="mb-1 mt-1"
         :class="tag.name"
         >{{ tag.name }}</BaseTag
       >
@@ -49,16 +49,18 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref, inject, InjectionKey } from "vue";
+  import { onBeforeMount, ref, inject } from "vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
   import { useMemesStore } from "@/store/memes";
   import { defineEmits } from "vue";
+  import EventBus from "@/utils/EventBus";
+
   import axios from "axios";
+  import router from "@/router";
   import { API_URL } from "@/main";
-  // import { appContext } from "@/main";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
@@ -67,10 +69,6 @@
   const emits = defineEmits({
     closeModal: () => true,
   });
-
-  // const emit = inject(appContext as InjectionKey<any>).emit;
-
-  const user = userStore.user;
 
   const tags = ref(tagStore.tags);
   let selectedTags = ref<any[]>([]);
@@ -103,6 +101,7 @@
       );
     }
   }
+
   function selectedTagsToStringArray() {
     const names: Array<string> = [];
     selectedTags.value.forEach((selTag: any) => {
@@ -132,15 +131,14 @@
       tags: selTags,
       isComment: false,
     };
-    console.log(memeData);
+
     const res = await axios.post(`${API_URL}meme/new`, memeData, {
       withCredentials: true,
     });
     if (res.status == 201) {
-      memeStore.fetchMemesWoC();
-      // emit("reloadList", true);
+      await memeStore.fetchMemesWoC();
+      EventBus.emit("reloadMemes");
       emits("closeModal");
-      location.reload(); // FIX MOMENTANEO
     } else {
       console.log("error al subir la imagen");
     }
