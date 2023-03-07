@@ -47,6 +47,21 @@ const memesSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  isLooped: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  loopMemeId: {
+    type: Number,
+    ref: "Meme",
+    required: false,
+  },
+  looperId: {
+    type: Number,
+    ref: "User",
+    required: false,
+  },
   template: {
     type: String, // placeholder
     required: false,

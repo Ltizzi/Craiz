@@ -1,4 +1,5 @@
 const express = require("express");
+const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
 const {
   httpGetAllUsers,
   httpGetSoftDeletedUsers,
@@ -16,9 +17,10 @@ usersRouter.get("/all", httpGetAllUsers);
 usersRouter.get("/softDeleted", httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);
 usersRouter.post("/new", httpSaveUser);
-usersRouter.patch("/update", httpUpdateUser);
+usersRouter.patch("/update", checkLoggedIn, httpUpdateUser);
+usersRouter.delete("/delete", checkLoggedIn, httpDeleteUser);
+
 usersRouter.patch("/update/friends/add", httpAddFriendToUser);
 usersRouter.patch("/update/friends/remove", httpRemoveFriendFromUser);
-usersRouter.delete("/delete", httpDeleteUser);
 
 module.exports = usersRouter;
