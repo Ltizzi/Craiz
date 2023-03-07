@@ -10,6 +10,7 @@
       <Font-awesome-icon icon="fa-regular fa-heart"
     /></BaseButton>
     <p v-if="likeCounter" class="ml-2 pt-3">{{ likeCounter }}</p>
+    <p v-else class="ml-2 pt-3 opacity-0">{{ likeCounter }}</p>
   </div>
 </template>
 
