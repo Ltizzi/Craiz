@@ -23,22 +23,57 @@
 
 <script setup lang="ts">
   import axios from "axios";
-  import { onMounted, ref } from "vue";
+  import { onBeforeMount, ref, watch } from "vue";
   import MemeCard from "../ui/MemeCard.vue";
   import { useMemesStore } from "@/store/memes";
+  import EventBus from "@/utils/EventBus";
+  import { useRoute } from "vue-router";
+  import { Meme } from "@/utils/models";
+  import { defineProps } from "vue";
   import { API_URL } from "@/main";
 
   const memesStore = useMemesStore();
+  const route = useRoute();
 
-  let id = memesStore.id;
+  const props = defineProps({
+    memeId: {
+      type: Number,
+    },
+  });
+
+  let id = ref(props.memeId);
 
   let comments = ref([]);
 
-  onMounted(async () => {
+  // EventBus.on("reloadComments", async () => {
+  //   comments.value = memesStore.comments;
+  //   id.value = parseInt(route.query.id as string);
+  //   const response = await axios.get(
+  //     `${API_URL}meme/getCommentsById?id=${id.value}`
+  //   );
+  //   comments.value = response.data;
+  // });
+
+  watch(ref(route.query), async (newQuery, oldQuery) => {
+    if (newQuery != oldQuery) {
+      id.value = parseInt(route.query.id as string);
+      console.log("id esss:", id.value);
+      const response = await axios.get(
+        `${API_URL}meme/getCommentsById?id=${id.value}`
+      );
+      comments.value = response.data;
+    }
+  });
+
+  onBeforeMount(async () => {
+    if (memesStore.comments) {
+      comments.value = memesStore.comments;
+    }
+    id.value = parseInt(route.query.id as string);
     const response = await axios.get(
-      `${API_URL}meme/getCommentsById?id=${id}`
-      // `http://localhost:4246/v1/meme/getCommentsById?id=${id}`
+      `${API_URL}meme/getCommentsById?id=${id.value}`
     );
     comments.value = response.data;
+    //localStorage.setItem("comments", JSON.stringify(comments.value));
   });
 </script>

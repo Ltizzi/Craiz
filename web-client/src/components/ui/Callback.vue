@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen items-center justify-center bg-gray-800">
-    <div class="mx-auto h-2/4 w-2/3 bg-gray-50 p-10">
+  <div class="flex h-screen items-center bg-gray-800">
+    <div class="mx-auto h-2/4 w-2/3 rounded-xl bg-gray-50 p-10">
       <div v-if="!isUserDataLoaded">
         <h1>Autenticando con google..</h1>
       </div>
@@ -9,34 +9,34 @@
           Welcome {{ user.nickname }}, you are signed in with Google. Now, we
           need you to fullfil this form to complete your profile
         </p>
-        <form class="mx-24 my-5 flex flex-col items-center justify-center">
-          <div class="my-2 flex w-1/3 flex-col justify-center">
+        <form class="mx-auto my-5 flex flex-col items-center text-center">
+          <div class="my-2 flex flex-col">
             <label for="nickname">Pick a nickname:</label>
             <input
               type="text"
               id="nickname"
               v-model="nickname"
               :placeholder="user.nickname"
-              class="border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
+              class="w-40 rounded-xl border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
             />
           </div>
-          <div class="my-2 flex w-1/3 flex-col justify-center">
+          <div class="my-2 flex flex-col justify-center">
             <label for="username">Pick the username:</label>
             <input
               type="text"
               id="username"
               v-model="username"
               placeholder="@example123"
-              class="border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
+              class="w-40 rounded-xl border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
             />
           </div>
-          <div class="my-2 flex w-1/3 flex-col justify-center">
+          <div class="my-2 flex flex-col justify-center">
             <label for="birthday">Pick your birthday:</label>
             <input
               type="date"
               id="birthday"
               v-model="birthday"
-              class="border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
+              class="w-40 rounded-xl border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
             />
           </div>
           <button

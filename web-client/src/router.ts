@@ -3,6 +3,7 @@ import CallbackVue from "./components/ui/Callback.vue";
 import MemeList from "./components/layout/MemeList.vue";
 import Home from "./views/Home.vue";
 import TheMeme from "./views/TheMeme.vue";
+import AppVue from "./App.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,10 +14,9 @@ const router = createRouter({
       children: [
         { path: "", component: MemeList },
         { path: "meme", component: TheMeme },
+        { path: "/callback", component: CallbackVue },
       ],
     },
-
-    { path: "/callback", component: CallbackVue },
   ],
 });
 

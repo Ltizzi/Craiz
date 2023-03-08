@@ -21,6 +21,7 @@
   import { spring } from "motion";
 
   import { API_URL } from "@/main";
+  import axios from "axios";
 
   const userStore = useUserStore();
   let userIsSignedIn = ref(userStore.isSignedIn);
@@ -30,8 +31,14 @@
     //window.location.href = "http://localhost:4246/v1/auth/google";
   };
 
-  const handleSignOutClick = () => {
-    userStore.logout();
+  const handleSignOutClick = async () => {
+    const response = await axios.get(`${API_URL}logout`, {
+      withCredentials: true,
+    });
+    console.log(response);
+    if ((response.status = 200)) {
+      userStore.logout();
+    }
   };
 
   watch(

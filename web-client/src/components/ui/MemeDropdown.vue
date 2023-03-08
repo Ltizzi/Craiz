@@ -32,7 +32,7 @@
 </template>
 <script setup lang="ts">
   import { onMounted, ref } from "vue";
-  import BaseButton from "./BaseButton.vue";
+  import BaseButton from "../common/BaseButton.vue";
   import { useUserStore } from "@/store";
   import { useMemesStore } from "@/store/memes";
   import axios from "axios";
@@ -71,9 +71,15 @@
         { withCredentials: true }
       );
       console.log(response.data);
-      await memeStore.fetchMemesWoC();
-      EventBus.emit("reloadMemes");
-      showDropdown.value = !showDropdown.value;
+      if (meme.isComment) {
+        await memeStore.fetchCommentsById(meme.parentMeme);
+        EventBus.emit("reloadComments");
+        showDropdown.value = !showDropdown.value;
+      } else {
+        await memeStore.fetchMemesWoC();
+        EventBus.emit("reloadMemes");
+        showDropdown.value = !showDropdown.value;
+      }
     } catch (err) {
       console.log(err);
     }
