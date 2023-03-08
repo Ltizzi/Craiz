@@ -11,6 +11,8 @@ export const useMemesStore = defineStore("memes", {
     memes: [],
     memesWoC: [],
     memeById: {},
+    parentMeme: {},
+    comments: [],
     meme: {},
     id: 0,
   }),
@@ -20,9 +22,19 @@ export const useMemesStore = defineStore("memes", {
       const response = await axios.get(`${API_URL}meme/byId?id=${id}`);
       this.memeById = response.data as Meme;
     },
+    async fetchParentMeme(id: number) {
+      const response = await axios.get(`${API_URL}meme/byId?id=${id}`);
+      this.parentMeme = response.data as Meme;
+    },
     async fetchAllMemes() {
       const response = await axios.get(`${API_URL}meme/`);
       this.memes = response.data;
+    },
+    async fetchCommentsById(id: number) {
+      const response = await axios.get(
+        `${API_URL}meme/getCommentsById?id=${id}`
+      );
+      this.comments = response.data;
     },
     async fetchMemesWoC() {
       const response = await axios.get(`${API_URL}meme/allWoC`);
@@ -31,6 +43,9 @@ export const useMemesStore = defineStore("memes", {
     setMeme(meme: Meme) {
       this.meme = meme;
       this.id = meme.memeId;
+    },
+    clearParentMeme() {
+      this.parentMeme = {};
     },
   },
 });

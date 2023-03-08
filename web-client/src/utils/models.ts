@@ -10,6 +10,7 @@ export interface Meme {
   createdAt: Date;
   imgUrl: string;
   isComment: Boolean;
+  parentMeme: number;
   likedBy: Array<number>;
   softDeleted: Boolean;
   tags: Array<string>;

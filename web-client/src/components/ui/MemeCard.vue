@@ -26,11 +26,13 @@
         <div class="flex w-7/12 flex-row justify-between lg:w-7/12">
           <LikeButton :memeId="props.data.memeId" :userId="userId"></LikeButton>
           <LoopButton :memeId="props.data.memeId" :userId="userId"></LoopButton>
+
           <CommentIcon
             :commentCounter="props.data.comments.length"
             @click="openMeme(props.data)"
             class="hover:cursor-pointer"
           ></CommentIcon>
+
           <ShareDropdown></ShareDropdown>
         </div>
 
@@ -56,11 +58,12 @@
   import LikeButton from "../common/LikeButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import LoopButton from "../common/LoopButton.vue";
-  import MemeDropdown from "../common/MemeDropdown.vue";
-  import ShareDropdown from "../common/ShareDropdown.vue";
+  import MemeDropdown from "./MemeDropdown.vue";
+  import ShareDropdown from "./ShareDropdown.vue";
   import axios from "axios";
   import { Meme } from "@/utils/models";
   import { API_URL } from "@/main";
+  import EventBus from "@/utils/EventBus";
 
   const memesStore = useMemesStore();
   const userStore = useUserStore();
@@ -82,9 +85,11 @@
   let id = 0;
   let lowerCaseTags = ref<string[]>([]);
 
-  function openMeme(meme: Meme) {
+  async function openMeme(meme: Meme) {
     memesStore.setMeme(meme);
+    console.log("//////********/*******/*/*/**");
     console.log(meme);
+    EventBus.emit("reloadComments");
     router.push(`/meme?id=${meme.memeId}`); //props.data.memeId
   }
 
@@ -103,8 +108,8 @@
 
     lowerCaseTags.value = props.data.tags;
     isLoaded.value = true;
-    console.log("la id del meme es:");
-    console.log(props.data.memeId);
+    // console.log("la id del meme es:");
+    // console.log(props.data.memeId);
     memesStore.fetchMemeById(props.data.memeId);
     id = memesStore.id;
   });

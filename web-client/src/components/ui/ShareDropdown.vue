@@ -29,7 +29,7 @@
 </template>
 <script setup lang="ts">
   import { ref } from "vue";
-  import BaseButton from "./BaseButton.vue";
+  import BaseButton from "../common/BaseButton.vue";
 
   let showDropdown = ref(false);
 
