@@ -107,8 +107,8 @@ async function saveMeme(meme) {
   user.memes.push(newMemeId);
   const usedTags = newMeme.tags;
   if (usedTags) {
-    for (let i = 0; i < usedTags.length(); i++) {
-      user.tag.push(usedTags[i]);
+    for (let i = 0; i < usedTags.length; i++) {
+      user.tags.push(usedTags[i]);
     }
     usedTags.forEach((tag) => {
       tagIncrementalCounter(tag);

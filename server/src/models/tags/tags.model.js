@@ -49,7 +49,7 @@ async function saveTag(tag) {
   });
 }
 
-async function updatedTa(tag) {
+async function updateTag(tag) {
   tag.updatedAt = Date.now();
   return await tagsRepo.findOneAndUpdate({ tagId: tag.tagId }, tag, {
     upsert: true,
@@ -71,13 +71,13 @@ async function findTag(filter) {
 async function tagIncrementalCounter(tagName) {
   const tag = await findTag({ name: tagName });
   tag.counter += 1;
-  return await updatedTag(tag);
+  return await updateTag(tag);
 }
 
 async function tagDecrementalCounter(tagName) {
   const tag = await findTag({ name: tagName });
   tag.counter -= 1;
-  return await updatedTag(tag);
+  return await updateTag(tag);
 }
 
 module.exports = {
@@ -87,7 +87,7 @@ module.exports = {
   getLastTagId,
   saveTag,
   deleteTag,
-  updatedTa,
+  updateTag,
   tagIncrementalCounter,
   tagDecrementalCounter,
 };

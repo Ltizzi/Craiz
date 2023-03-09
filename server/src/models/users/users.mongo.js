@@ -58,7 +58,7 @@ const usersSchema = new mongoose.Schema({
   ],
   tags: [
     {
-      type: Number,
+      type: String,
       ref: "Tag",
       required: false,
     },

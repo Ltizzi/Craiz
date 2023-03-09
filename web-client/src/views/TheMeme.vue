@@ -39,6 +39,13 @@
     goHome.value = true;
   });
 
+  EventBus.on("reloadMemes", async (e: any) => {
+    await memesStore.fetchMemeById(e.id);
+    meme.value = memesStore.memeById;
+    await memesStore.fetchCommentsById(e.id);
+    comments.value = memesStore.comments;
+  });
+
   watch(
     () => route.params,
     async (params, preParams) => {
@@ -68,7 +75,7 @@
       memesStore.setMeme(meme.value);
     }
 
-    if (!meme.value) {
+    if (!meme.value || route.query.id != meme.value.memeId) {
       memeId = route.query.id;
 
       const response = await axios.get(
