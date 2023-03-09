@@ -28,7 +28,7 @@
           <LoopButton :memeId="props.data.memeId" :userId="userId"></LoopButton>
 
           <CommentIcon
-            :commentCounter="props.data.comments.length"
+            :commentCounter="props.data.commentsCounter"
             @click="openMeme(props.data)"
             class="hover:cursor-pointer"
           ></CommentIcon>

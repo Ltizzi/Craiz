@@ -58,7 +58,7 @@ const usersSchema = new mongoose.Schema({
   ],
   tags: [
     {
-      type: Number,
+      type: String,
       ref: "Tag",
       required: false,
     },
@@ -76,12 +76,20 @@ const usersSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  followersCounter: {
+    type: Number,
+    default: 0,
+  },
   follows: [
     {
       type: Number,
       ref: "User",
     },
   ],
+  followsCounter: {
+    type: Number,
+    default: 0,
+  },
   likeCounter: {
     type: Number,
     required: false,

@@ -1,4 +1,5 @@
 const memesRepo = require("./memes.mongo");
+
 const {
   tagIncrementalCounter,
   tagDecrementalCounter,
@@ -104,6 +105,15 @@ async function saveMeme(meme) {
     }
   );
   user.memes.push(newMemeId);
+  const usedTags = newMeme.tags;
+  if (usedTags) {
+    for (let i = 0; i < usedTags.length; i++) {
+      user.tags.push(usedTags[i]);
+    }
+    usedTags.forEach((tag) => {
+      tagIncrementalCounter(tag);
+    });
+  }
   await updateUser(user);
   return savedMeme;
 }
@@ -117,6 +127,7 @@ async function addCommentToMeme(memeId, comment) {
   comment.parentMeme = memeId;
   const uploadedComment = await saveMeme(comment);
   meme.comments.push(comment.memeId);
+  meme.commentsCounter += 1;
   await updateMeme(meme);
   return uploadedComment;
 }
@@ -145,6 +156,11 @@ async function deleteMeme(memeId, userId) {
   meme.softDeleted = true;
   meme.updatedAt = Date.now();
   user.memes = user.memes.filter((mm) => mm != memeId);
+  if (meme.isComment) {
+    const parentMeme = await findMeme({ memeId: meme.parentMeme });
+    parentMeme.commentsCounter -= 1;
+    await updateMeme(parentMeme);
+  }
   const softDeleted = await updateMeme(meme);
   await updateUser(user);
 }

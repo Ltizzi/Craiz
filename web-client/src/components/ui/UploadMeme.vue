@@ -81,6 +81,10 @@
 
   let parentMemeId = ref();
 
+  EventBus.on("newComment", () => {
+    isComment.value = true;
+  });
+
   function handleFileInput(event: any) {
     const file = event.target.files[0];
     fileToUpload = file;
@@ -149,7 +153,7 @@
       );
       if (res.status == 201) {
         await memeStore.fetchCommentsById(parentMemeId.value);
-        EventBus.emit("reloadComments");
+        EventBus.emit("reloadComments", { id: parentMemeId.value });
         EventBus.emit("closeModal");
         emits("closeModal");
       } else {
@@ -163,6 +167,7 @@
       if (res.status == 201) {
         await memeStore.fetchMemesWoC();
         EventBus.emit("reloadMemes");
+
         emits("closeModal");
       } else {
         console.log("error al subir la imagen");
