@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import axios from "axios";
-  import { onBeforeMount, ref, watch } from "vue";
+  import { onBeforeMount, onMounted, ref, watch } from "vue";
   import MemeCard from "../ui/MemeCard.vue";
   import { useMemesStore } from "@/store/memes";
   import EventBus from "@/utils/EventBus";
@@ -36,6 +36,9 @@
   const route = useRoute();
 
   const props = defineProps({
+    comments: {
+      type: Array,
+    },
     memeId: {
       type: Number,
     },
@@ -43,27 +46,28 @@
 
   let id = ref(props.memeId);
 
-  let comments = ref([]);
+  let comments = ref(props.comments);
 
-  // EventBus.on("reloadComments", async () => {
-  //   comments.value = memesStore.comments;
-  //   id.value = parseInt(route.query.id as string);
-  //   const response = await axios.get(
-  //     `${API_URL}meme/getCommentsById?id=${id.value}`
-  //   );
-  //   comments.value = response.data;
-  // });
+  EventBus.on("reloadComments", async (e: any) => {
+    console.log("asdasdasd", e.id);
+    console.log(e);
 
-  watch(ref(route.query), async (newQuery, oldQuery) => {
-    if (newQuery != oldQuery) {
-      id.value = parseInt(route.query.id as string);
-      console.log("id esss:", id.value);
-      const response = await axios.get(
-        `${API_URL}meme/getCommentsById?id=${id.value}`
-      );
-      comments.value = response.data;
-    }
+    const response = await axios.get(
+      `${API_URL}meme/getCommentsById?id=${e.id}`
+    );
+    console.log(response.data);
+    comments.value = response.data;
+
+    // comments.value = memesStore.comments;
+    // id.value = parseInt(route.query.id as string);
   });
+
+  // watch(id, async (newId, oldId) => {
+  //   if (newId != oldId) {
+  //     memesStore.fetchCommentsById(newId as number);
+  //     comments.value = memesStore.comments;
+  //   }
+  // });
 
   onBeforeMount(async () => {
     if (memesStore.comments) {
@@ -74,6 +78,5 @@
       `${API_URL}meme/getCommentsById?id=${id.value}`
     );
     comments.value = response.data;
-    //localStorage.setItem("comments", JSON.stringify(comments.value));
   });
 </script>
