@@ -49,7 +49,7 @@ async function saveTag(tag) {
   });
 }
 
-async function updatedTag(tag) {
+async function updatedTa(tag) {
   tag.updatedAt = Date.now();
   return await tagsRepo.findOneAndUpdate({ tagId: tag.tagId }, tag, {
     upsert: true,
@@ -87,7 +87,7 @@ module.exports = {
   getLastTagId,
   saveTag,
   deleteTag,
-  updatedTag,
+  updatedTa,
   tagIncrementalCounter,
   tagDecrementalCounter,
 };

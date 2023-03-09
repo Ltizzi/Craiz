@@ -2,7 +2,7 @@ const {
   getAllTags,
   getTagById,
   saveTag,
-  updatedTag,
+  updateTag,
   deleteTag,
 } = require("../../models/tags/tags.model");
 
@@ -43,7 +43,7 @@ async function httpUpdateTag(req, res) {
   // tag.updatedAt = Date.now();
   try {
     const tag = req.body;
-    const newTag = await updatedTag(tag);
+    const newTag = await updateTag(tag);
     return res.status(200).json(tag);
   } catch (err) {
     return res.status(400).json({ error: err.message });
