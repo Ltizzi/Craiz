@@ -82,14 +82,16 @@
     };
   }>();
   const isLoaded = ref(false);
-  let id = 0;
+  let id = ref();
   let lowerCaseTags = ref<string[]>([]);
 
   async function openMeme(meme: Meme) {
     memesStore.setMeme(meme);
     console.log("//////********/*******/*/*/**");
     console.log(meme);
-    EventBus.emit("reloadComments");
+    id.value = meme.memeId;
+    await memesStore.fetchCommentsById(id.value);
+    EventBus.emit("reloadComments", { id: meme.memeId });
     router.push(`/meme?id=${meme.memeId}`); //props.data.memeId
   }
 
@@ -111,6 +113,7 @@
     // console.log("la id del meme es:");
     // console.log(props.data.memeId);
     memesStore.fetchMemeById(props.data.memeId);
-    id = memesStore.id;
+    id.value = memesStore.id;
+    memesStore.fetchCommentsById(id.value);
   });
 </script>

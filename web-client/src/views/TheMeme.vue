@@ -3,7 +3,11 @@
     <div class="mx-auto flex flex-col justify-center">
       <MemeCard :data="meme" class="mx-auto"></MemeCard>
       <PostCommentButton :memeId="meme.memeId" />
-      <CommentsView class="mx-auto" :memeId="meme.memeId"></CommentsView>
+      <CommentsView
+        class="mx-auto"
+        :comments="comments"
+        :memeId="meme.memeId"
+      ></CommentsView>
     </div>
   </div>
 </template>
@@ -23,6 +27,7 @@
   const route = useRoute();
 
   let meme = ref();
+  let comments = ref([]);
   let memeId: any;
 
   const goHome = ref(false);
@@ -44,11 +49,9 @@
         meme.value = memesStore.meme;
         memeId = meme.value.memeId;
         localStorage.setItem("meme", JSON.stringify(meme.value));
-        // router.push(`meme?id=${id}`);
         router.push({ path: "/meme", query: { id: memeId } });
-        // await memesStore.fetchCommentsById(memeId);
-        //localStorage.setItem("comments", JSON.stringify(memesStore.comments));
-        EventBus.emit("reloadComments");
+        memesStore.fetchCommentsById(memeId);
+        //  EventBus.emit("reloadComments");
       }
     }
   );
