@@ -21,30 +21,8 @@ const { sessionStore } = require("./services/mongo");
 const { getUserByGoogleId } = require("./models/users/users.model");
 const { Session } = require("express-session");
 
-// moved to security.js and called back as setupPassport() method
-// const { Strategy } = require("passport-google-oauth20");
-
 require("dotenv").config();
 
-//moved to security.js and called back as setupPassport() method
-// passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
-
-// passport.serializeUser((user, done) => {
-//   const sessionData = {
-//     id: user.id,
-//     name: user._json.name,
-//     picture: user._json.picture,
-//     email: user._json.email,
-//   };
-//   done(null, sessionData);
-// });
-
-// passport.deserializeUser((obj, done) => {
-//   console.log(obj);
-//   done(null, obj);
-// });
-
-//call for passport initial configuration (strategy and user serialization and deserialization)
 setupPassport();
 
 const app = express();
@@ -74,17 +52,6 @@ app.use(passport.session());
 app.use(morgan("combined"));
 
 app.use(express.json());
-
-//static
-// app.use(express.static(path.join(__dirname, "..", "public")));
-
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-// });
-
-// app.get("/home", (req, res) => {
-//   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-// });
 
 app.use("/v1", apiRouter);
 
@@ -130,6 +97,18 @@ app.get("/success", async (req, res) => {
 
 app.get("/failure", (req, res) => {
   res.redirect("http://localhost:5173/home?loggedIn=false");
+});
+
+app.get("/v1/logout", checkLoggedIn, (req, res) => {
+  try {
+    console.log("Deslogueando...");
+    req.logout((err) => {
+      console.log(err);
+    });
+    return res.status(200).json({ status: "ok" });
+  } catch (err) {
+    return res.status(400).json(err.message);
+  }
 });
 
 module.exports = app;

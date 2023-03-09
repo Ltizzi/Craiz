@@ -42,6 +42,7 @@ async function getAllCommentsFromAMemeById(meme_id, skip, limit) {
       },
       { _id: 0, __v: 0 }
     )
+    .sort({ memeId: -1 })
     .skip(skip)
     .limit(limit);
   return comments;
@@ -108,7 +109,7 @@ async function saveMeme(meme) {
 }
 
 async function addCommentToMeme(memeId, comment) {
-  const meme = await findMeme({ memeID: memeId });
+  const meme = await findMeme({ memeId: memeId });
   if (!meme) {
     throw new Error("Parent meme not found!");
   }
