@@ -38,6 +38,7 @@
     await memeStore.fetchMemesWoC();
     memes.value = memeStore.memesWoC;
     isLoaded.value = true;
+    localStorage.clear();
   });
 </script>
 <style lang=""></style>

@@ -42,6 +42,7 @@ async function getAllCommentsFromAMemeById(meme_id, skip, limit) {
       },
       { _id: 0, __v: 0 }
     )
+    .sort({ memeId: -1 })
     .skip(skip)
     .limit(limit);
   return comments;
@@ -108,7 +109,7 @@ async function saveMeme(meme) {
 }
 
 async function addCommentToMeme(memeId, comment) {
-  const meme = await findMeme({ memeID: memeId });
+  const meme = await findMeme({ memeId: memeId });
   if (!meme) {
     throw new Error("Parent meme not found!");
   }
@@ -131,12 +132,19 @@ async function updateMeme(meme) {
   });
 }
 
-async function deleteMeme(id) {
-  const meme = await findMeme({ memeId: id });
+async function deleteMeme(memeId, userId) {
+  const meme = await findMeme({ memeId: memeId });
   const user = await getUserById(meme.uploader);
+  console.log("****");
+  console.log("user:", user.userId);
+  userId = parseInt(userId);
+  console.log("id del user logueado:", userId);
+  if (user.userId !== userId) {
+    throw new Error("you can't delete other people memes!");
+  }
   meme.softDeleted = true;
   meme.updatedAt = Date.now();
-  user.memes = user.memes.filter((mm) => mm != id);
+  user.memes = user.memes.filter((mm) => mm != memeId);
   const softDeleted = await updateMeme(meme);
   await updateUser(user);
 }

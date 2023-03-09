@@ -49,7 +49,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref, inject } from "vue";
+  import { onBeforeMount, ref } from "vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import { useUserStore } from "@/store";
@@ -59,8 +59,8 @@
   import EventBus from "@/utils/EventBus";
 
   import axios from "axios";
-  import router from "@/router";
   import { API_URL } from "@/main";
+  import { Meme } from "@/utils/models";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
@@ -76,6 +76,10 @@
 
   const memeImage = ref();
   let fileToUpload: any;
+
+  let isComment = ref(false);
+
+  let parentMemeId = ref();
 
   function handleFileInput(event: any) {
     const file = event.target.files[0];
@@ -114,9 +118,7 @@
   async function uploadMeme() {
     //prepara imagen para ser subida a la ThumbSnap
     const formData = new FormData();
-    console.log(fileToUpload);
     formData.append("file", fileToUpload);
-    console.log(formData);
     const response = await axios.post(`${API_URL}utils/uploadImg`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -125,29 +127,59 @@
     });
 
     const selTags = selectedTagsToStringArray();
-    const memeData = {
+
+    let memeData = {
       uploader: userStore.userId,
       imgUrl: response.data.url,
       tags: selTags,
       isComment: false,
+      parentMeme: null,
     };
 
-    const res = await axios.post(`${API_URL}meme/new`, memeData, {
-      withCredentials: true,
-    });
-    if (res.status == 201) {
-      await memeStore.fetchMemesWoC();
-      EventBus.emit("reloadMemes");
-      emits("closeModal");
+    if (isComment.value == true) {
+      //post a new comment
+      memeData.isComment = true;
+      memeData.parentMeme = parentMemeId.value;
+      const res = await axios.post(
+        `${API_URL}meme/comment?id=${parentMemeId.value}`,
+        memeData,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status == 201) {
+        await memeStore.fetchCommentsById(parentMemeId.value);
+        EventBus.emit("reloadComments");
+        EventBus.emit("closeModal");
+        emits("closeModal");
+      } else {
+        console.log("error al subir la imagen");
+      }
     } else {
-      console.log("error al subir la imagen");
+      //post a new meme
+      const res = await axios.post(`${API_URL}meme/new`, memeData, {
+        withCredentials: true,
+      });
+      if (res.status == 201) {
+        await memeStore.fetchMemesWoC();
+        EventBus.emit("reloadMemes");
+        emits("closeModal");
+      } else {
+        console.log("error al subir la imagen");
+      }
     }
   }
 
   onBeforeMount(async () => {
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
-    console.log(tags.value);
+    let parentMeme = memeStore.parentMeme as Meme;
+    if (parentMeme.memeId !== undefined) {
+      isComment.value = true;
+      parentMemeId.value = parentMeme.memeId;
+      console.log("is comment:", isComment.value);
+      console.log("parent id:", parentMemeId.value);
+    }
   });
 </script>
 <style>

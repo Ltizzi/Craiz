@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
   import { ref } from "vue";
-
   interface BaseDialogProps {
     isActive: boolean;
   }
