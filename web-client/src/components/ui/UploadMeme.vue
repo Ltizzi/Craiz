@@ -182,8 +182,8 @@
     if (parentMeme.memeId !== undefined) {
       isComment.value = true;
       parentMemeId.value = parentMeme.memeId;
-      console.log("is comment:", isComment.value);
-      console.log("parent id:", parentMemeId.value);
+      // console.log("is comment:", isComment.value);
+      // console.log("parent id:", parentMemeId.value);
     }
   });
 </script>
