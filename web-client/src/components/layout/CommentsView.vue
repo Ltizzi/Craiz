@@ -57,17 +57,7 @@
     );
     console.log(response.data);
     comments.value = response.data;
-
-    // comments.value = memesStore.comments;
-    // id.value = parseInt(route.query.id as string);
   });
-
-  // watch(id, async (newId, oldId) => {
-  //   if (newId != oldId) {
-  //     memesStore.fetchCommentsById(newId as number);
-  //     comments.value = memesStore.comments;
-  //   }
-  // });
 
   onBeforeMount(async () => {
     if (memesStore.comments) {
