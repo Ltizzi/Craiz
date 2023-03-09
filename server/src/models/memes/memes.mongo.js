@@ -47,6 +47,12 @@ const memesSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  commentsCounter: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
+
   isLooped: {
     type: Boolean,
     required: false,
@@ -60,6 +66,11 @@ const memesSchema = new mongoose.Schema({
   looperId: {
     type: Number,
     ref: "User",
+    required: false,
+  },
+  loopCounter: {
+    type: Number,
+    default: 0,
     required: false,
   },
   template: {
