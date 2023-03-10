@@ -33,10 +33,43 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  banner: {
+    type: String,
+    required: false,
+  },
+  about: {
+    type: String,
+    required: false,
+  },
+  twitter: {
+    type: String,
+    required: false,
+  },
+  facebook: {
+    type: String,
+    required: false,
+  },
+  instagram: {
+    type: String,
+    required: false,
+  },
+  youtube: {
+    type: String,
+    required: false,
+  },
+  twitch: {
+    type: String,
+    required: false,
+  },
+  siteUrl: {
+    type: String,
+    required: false,
+  },
   birthday: {
     type: Date,
     required: false,
   },
+
   isAdmin: {
     type: Boolean,
     required: true,
