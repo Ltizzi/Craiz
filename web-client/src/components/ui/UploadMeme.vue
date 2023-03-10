@@ -1,14 +1,16 @@
 <template lang="">
-  <div class="w-full">
-    <h1 class="py-2 text-center text-2xl font-bold">Upload new meme</h1>
+  <div class="w-full items-center">
+    <h1 class="py-2 text-center text-xl font-bold lg:text-2xl">
+      Upload new meme
+    </h1>
 
     <img
       :src="memeImage"
       v-if="memeImage"
       ref="meme"
-      class="mx-auto h-96 w-4/5 object-contain"
+      class="lg:4/5 mx-auto h-96 w-4/5 object-contain"
     />
-    <div v-else class="my-2 h-72 w-full bg-gray-200"></div>
+    <div v-else class="my-2 mx-auto h-72 w-4/5 bg-gray-200 lg:w-full"></div>
     <div
       v-if="selectedTags"
       class="flew-row flex w-96 flex-wrap justify-evenly"
@@ -21,14 +23,21 @@
         >{{ tag.name }}</BaseTag
       >
     </div>
-    <h3 class="mt-3 mb-2 text-lg font-bold">
+    <h3 class="ml-10 mt-3 mb-2 text-base font-bold lg:text-lg">
       Pick a image file from your local storage:
     </h3>
-    <input type="file" ref="fileInput" @change="handleFileInput" class="my-3" />
+    <input
+      type="file"
+      ref="fileInput"
+      @change="handleFileInput"
+      class="my-3 ml-10"
+    />
 
     <div class="flex flex-col justify-center">
-      <h2 class="mt-3 mb-2 text-lg font-bold">Pick meme tags:</h2>
-      <div class="flew-row flex w-96 flex-wrap justify-evenly">
+      <h2 class="mt-3 mb-2 ml-10 text-base font-bold lg:text-lg">
+        Pick meme tags:
+      </h2>
+      <div class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2">
         <BaseTag
           v-for="tag in tags"
           :key="tag.tagId"
@@ -42,7 +51,7 @@
     <div class="flex flex-row justify-evenly">
       <BaseButton
         @click="uploadMeme"
-        class="rounded-lg bg-green-500 py-1 px-3 text-lg font-bold text-white"
+        class="rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
         >Subir Meme</BaseButton
       >
     </div>
