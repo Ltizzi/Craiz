@@ -10,6 +10,9 @@ const {
   httpGetAllMemesByTag,
   httpGetAllMemesByTemplate,
   httpGetAllMemesByUser,
+  httpGetUserMemesWoC,
+  httpGetUserComments,
+  httpGetUserLikedMemes,
   httpSaveMeme,
   httpUpdateMeme,
   httpDeleteMeme,
@@ -27,6 +30,9 @@ memesRouter.get("/byId", httpGetMemeById);
 memesRouter.get("/byTag", httpGetAllMemesByTag);
 memesRouter.get("/byTemplate", httpGetAllMemesByTemplate);
 memesRouter.get("/byUser", httpGetAllMemesByUser);
+memesRouter.get("/byUserWoC", httpGetUserMemesWoC);
+memesRouter.get("/byUserComments", httpGetUserComments);
+memesRouter.get("/byUserLikedMemes", httpGetUserLikedMemes);
 memesRouter.post("/new", checkLoggedIn, httpSaveMeme);
 memesRouter.post("/comment", checkLoggedIn, httpAddCommentToMeme);
 memesRouter.post("/like", checkLoggedIn, httpLikeMeme);
