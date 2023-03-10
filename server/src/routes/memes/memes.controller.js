@@ -6,6 +6,9 @@ const {
   getMemeById,
   getMemesByTag,
   getMemesByUser,
+  getUserMemesWithoutComments,
+  getUserComments,
+  getUserLikedMemes,
   getMemesByTemplate,
   saveMeme,
   deleteMeme,
@@ -105,6 +108,41 @@ async function httpGetAllMemesByUser(req, res) {
   }
 }
 
+async function httpGetUserMemesWoC(req, res) {
+  try {
+    const userId = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getUserMemesWithoutComments(userId, skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(404).json({ err: err.message });
+  }
+}
+
+async function httpGetUserComments(req, res) {
+  try {
+    const userId = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getUserComments(userId, skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(404).json({ err: err.message });
+  }
+}
+
+async function httpGetUserLikedMemes(req, res) {
+  try {
+    const userId = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getUserLikedMemes(userId, skip, limit);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(404).json({ err: err.mesage });
+  }
+}
+
 async function httpSaveMeme(req, res) {
   try {
     const meme = req.body;
@@ -180,6 +218,9 @@ module.exports = {
   httpGetAllMemesByTag,
   httpGetAllMemesByTemplate,
   httpGetAllMemesByUser,
+  httpGetUserMemesWoC,
+  httpGetUserComments,
+  httpGetUserLikedMemes,
   httpSaveMeme,
   httpUpdateMeme,
   httpDeleteMeme,

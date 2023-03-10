@@ -33,6 +33,36 @@ async function getAllMemesWithoutComments(skip, limit) {
     .limit(limit);
 }
 
+async function getUserMemesWithoutComments(userId, skip, limit) {
+  return await memesRepo
+    .find(
+      { uploader: userId, softDeleted: false, isComment: false },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ memeId: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getUserComments(userId, skip, limit) {
+  return await memesRepo
+    .find(
+      { uploader: userId, softDeleted: false, isComment: true },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ memeId: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getUserLikedMemes(userId, skip, limit) {
+  return await memesRepo
+    .find({ likedBy: userId, softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ memeId: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
 async function getAllCommentsFromAMemeById(meme_id, skip, limit) {
   const meme = await getMemeById(meme_id);
   let comments = await memesRepo
@@ -212,6 +242,9 @@ module.exports = {
   getMemeById,
   getMemesByTag,
   getMemesByUser,
+  getUserMemesWithoutComments,
+  getUserComments,
+  getUserLikedMemes,
   getMemesByTemplate,
   getLastMemeId,
   saveMeme,
