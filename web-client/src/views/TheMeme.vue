@@ -1,7 +1,7 @@
 <template lang="">
   <div class="relative flex w-full flex-col items-center justify-center">
     <button
-      class="fixed top-3/4 right-1/3 left-2/3 z-10 w-10 animate-bounce rounded-full bg-green-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping"
+      class="fixed right-12 top-3/4 w-10 animate-bounce rounded-full bg-green-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3 lg:left-2/3"
       @click="scrollToParent"
       v-show="parentOutOfView"
     >
@@ -12,7 +12,7 @@
     </button>
 
     <button
-      class="fixed top-3/4 right-2/3 z-10 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping"
+      class="fixed left-16 top-3/4 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3 lg:left-2/3"
       v-if="isComment"
       @click="backToParent"
     >

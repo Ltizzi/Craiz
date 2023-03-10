@@ -1,15 +1,17 @@
 <template lang="">
   <BaseDialog :is-active="showModal" v-if="showModal" @closeModal="modalSwitch">
-    <div class="flex flex-col justify-center px-7 py-5">
-      <h1 class="text-center text-3xl font-bold">What do you want to do?</h1>
+    <div class="flex flex-col justify-center py-2 px-2 sm:px-7 sm:py-5">
+      <h1 class="text-center text-xl font-bold lg:text-3xl">
+        What do you want to do?
+      </h1>
       <div class="flex flex-row justify-around py-3">
         <BaseButton
-          class="mr-5 rounded-lg bg-purple-500 py-1 px-3 text-lg font-bold text-white"
+          class="mr-5 rounded-lg bg-purple-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
           @click="turnShowUpload"
           >Upload meme</BaseButton
         >
         <BaseButton
-          class="rounded-lg bg-green-500 py-1 px-3 text-lg font-bold text-white"
+          class="rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
           @click="turnShowCreate"
           >Create new meme</BaseButton
         >

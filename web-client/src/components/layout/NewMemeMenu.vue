@@ -10,9 +10,12 @@
       :is-active="showModal"
       v-if="showModal"
       @closeModal="modalSwitch"
+      class="z-50"
     >
       <div class="flex flex-col justify-center px-7 py-5">
-        <h1 class="text-center text-3xl font-bold">What do you want to do?</h1>
+        <h1 class="text-center text-xs font-bold lg:text-3xl">
+          What do you want to do?
+        </h1>
         <div class="flex flex-row justify-around py-3">
           <BaseButton
             class="mr-5 rounded-lg bg-purple-500 py-1 px-3 text-lg font-bold text-white"
