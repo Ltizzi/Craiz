@@ -42,7 +42,7 @@
 
   function goHome() {
     EventBus.emit("goHome");
-    router.replace({
+    router.push({
       path: "/",
       params: {},
     });
