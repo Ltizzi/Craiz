@@ -15,6 +15,13 @@
       Inicio
     </h1>
 
+    <h1
+      class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start"
+      @click="goProfile"
+    >
+      Perfil
+    </h1>
+
     <SignInButton></SignInButton>
     <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
@@ -27,7 +34,10 @@
   import router from "@/router";
   import { useRoute } from "vue-router";
   import EventBus from "@/utils/EventBus";
+  import { useUserStore } from "@/store";
+  import { User } from "@/utils/models";
 
+  const userStore = useUserStore();
   const route = useRoute();
 
   function goHome() {
@@ -36,6 +46,13 @@
       path: "/",
       params: {},
     });
+  }
+
+  function goProfile() {
+    const user = userStore.user as User;
+    EventBus.emit("loadUserMemes", user.userId);
+    console.log(user);
+    router.push(`${user.username}`);
   }
 </script>
 <style lang=""></style>

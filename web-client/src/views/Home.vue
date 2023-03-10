@@ -6,8 +6,9 @@
       <div class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-64">
         <LateralMenu></LateralMenu>
       </div>
+      <!-- items-center justify-center -->
       <div
-        class="flex w-10/12 flex-col items-center justify-center rounded-sm border-2 border-stone-500 bg-gray-50 sm:w-10/12 md:w-9/12 lg:w-7/12"
+        class="flex w-10/12 flex-col rounded-sm border-2 border-stone-500 bg-gray-50 sm:w-10/12 md:w-9/12 lg:w-7/12"
       >
         <RouterView></RouterView>
       </div>

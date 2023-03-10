@@ -21,17 +21,34 @@ export interface Meme {
 
 export interface User {
   userId: number;
-  nickname: string;
-  username: string;
-  avatar: string;
-  email: string;
-  friends: Array<number>;
   googleId: number;
+  username: string;
+  name: string;
+  nickname: string;
+  email: string;
+  avatar: string;
+  banner: string;
+  about: string;
+  twitter: string;
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  twitch: string;
+  siteUrl: string;
+
+  friends: Array<number>;
+  followers: Array<number>;
+  followersCounter: number;
+  follows: Array<number>;
+  followsCounter: number;
+  likeCounter: number;
+  searchEntries: Array<String>;
   isAdmin: Boolean;
   likedMemes: Array<number>;
   memes: Array<number>;
   softDeleted: Boolean;
   tags: Array<string>;
   birthday: Date;
+  createdAt: Date;
   updatedAt: Date;
 }

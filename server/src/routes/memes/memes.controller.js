@@ -137,6 +137,7 @@ async function httpGetUserLikedMemes(req, res) {
     const userId = req.query.id;
     const { skip, limit } = getPagination(req.query);
     const memes = await getUserLikedMemes(userId, skip, limit);
+    return res.status(200).json(memes);
   } catch (err) {
     console.log(err.message);
     return res.status(404).json({ err: err.mesage });

@@ -23,6 +23,31 @@
     memes.value = memeStore.memesWoC;
   });
 
+  EventBus.on("loadUserMemes", async (id) => {
+    console.log(id);
+    const response = await axios.get(`${API_URL}meme/byUserWoC?id=${id}`);
+    memes.value = response.data;
+  });
+
+  EventBus.on("loadUserComments", async (id) => {
+    console.log(id);
+    const response = await axios.get(`${API_URL}meme/byUserComments?id=${id}`);
+    memes.value = response.data;
+  });
+
+  EventBus.on("loadUserLikedMemes", async (id) => {
+    console.log(id);
+    const response = await axios.get(
+      `${API_URL}meme/byUserLikedMemes?id=${id}`
+    );
+    memes.value = response.data;
+  });
+
+  EventBus.on("loadTL", async () => {
+    await memeStore.fetchMemesWoC();
+    memes.value = memeStore.memesWoC;
+  });
+
   onBeforeMount(async () => {
     await memeStore.fetchMemesWoC();
     memes.value = memeStore.memesWoC;
