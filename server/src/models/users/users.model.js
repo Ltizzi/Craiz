@@ -41,6 +41,20 @@ async function getUserByEmail(email) {
   });
 }
 
+async function getUserByUsername(username) {
+  return await findUser({
+    username: username,
+    softDeleted: false,
+  });
+}
+
+async function getUserByNickname(nickname) {
+  return await findUser({
+    nickname: nickname,
+    softDeleted: false,
+  });
+}
+
 async function getLastUserId() {
   const lastUser = await usersRepo.findOne().sort("-userId");
   if (!lastUser) {
@@ -75,29 +89,35 @@ async function updateUser(user) {
   });
 }
 
-async function addFriendToUser(user, friend) {
-  // const user = await findUser({ userId: userId });
-  // const friend = await findUser({ userId: friendId });
-
-  let alreadyFriend = user.friends.filter((fr) => fr == friend.userId);
-  console.log(alreadyFriend);
-  if (alreadyFriend.length > 0) {
-    throw new Error("Friend already added");
+async function handleFollows(userId, userToFollowId) {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error("User doesn't exists");
   }
-  console.log("friend user: " + friend.userId);
-  user.friends.push(friend.userId);
-  return await updateUser(user);
-}
-
-async function removeFriendFromUser(user, friend) {
-  let userFriends = user.friends;
-  const foundFriend = userFriends.filter((fr) => {
-    fr == friend.friendId;
-  });
-  if (foundFriend) {
-    user.friends = userFriends.filter((fr) => fr != friend.userId);
-    return await updateUser(user);
-  } else return res.json({ error: "friend not found" });
+  const userToFollow = await getUserById(userToFollowId);
+  if (!userToFollow) {
+    throw new Error("User to follow doesn't exists");
+  }
+  const followedUser = user.follows.filter(
+    (followedUsr) => followedUsr == userToFollowId
+  );
+  if (followedUser.length == 0) {
+    userToFollow.followers.push(user.userId);
+    userToFollow.followersCounter += 1;
+    user.follows.push(userToFollow.userId);
+    await updateUser(userToFollow);
+    await updateUser(user);
+    return { res: "followed" };
+  } else {
+    userToFollow.followers = userToFollow.followers.filter(
+      (usr) => usr != user.userId
+    );
+    userToFollow.followersCounter -= 1;
+    user.follows = user.follows.filter((usr) => usr != userToFollow.userId);
+    await updateUser(userToFollow);
+    await updateUser(user);
+    return { res: "unfollowed" };
+  }
 }
 
 async function deleteUser(id) {
@@ -123,10 +143,11 @@ module.exports = {
   getUserById,
   getUserByEmail,
   getUserByGoogleId,
+  getUserByNickname,
+  getUserByUsername,
   getLastUserId,
   saveUser,
   deleteUser,
   updateUser,
-  addFriendToUser,
-  removeFriendFromUser,
+  handleFollows,
 };
