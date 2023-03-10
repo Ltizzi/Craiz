@@ -172,19 +172,21 @@ async function likeMeme(memeId, userId) {
   }
   const user = await getUserById(userId);
   if (!user) {
-    throw new Error("User doesn0t exists");
+    throw new Error("User doesn't exists");
   }
   const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
   console.log(likedMeme);
   if (likedMeme.length == 0) {
     meme.likedBy.push(user.userId);
     user.likedMemes.push(meme.memeId);
+    user.likeCounter += 1;
     await updateMeme(meme);
     await updateUser(user);
     return { ok: "liked meme" };
   } else {
     meme.likedBy = meme.likedBy.filter((usr) => usr != userId);
     user.likedMemes = user.likedMemes.filter((mm) => mm != memeId);
+    user.likeCounter -= 1;
     await updateMeme(meme);
     await updateUser(user);
     return { ok: "unliked meme" };

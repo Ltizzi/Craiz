@@ -2,11 +2,12 @@ const {
   getAllUsers,
   getSoftDeletedUsers,
   getUserById,
+  getUserByNickname,
+  getUserByUsername,
   saveUser,
   updateUser,
   deleteUser,
-  addFriendToUser,
-  removeFriendFromUser,
+  handleFollows,
 } = require("../../models/users/users.model");
 
 const { getPagination } = require("../../services/query");
@@ -41,6 +42,28 @@ async function httpGetUserById(req, res) {
   try {
     const userId = req.query.id;
     const user = await getUserById(userId);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetUserByUsername(req, res) {
+  try {
+    const username = req.query.username;
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetUserByNickname(req, res) {
+  try {
+    const nickname = req.query.nickname;
+    const user = await getUserByNickname(nickname);
     if (!user) return res.status(404).json({ error: "User not found!" });
     return res.status(200).json(user);
   } catch (err) {
@@ -97,51 +120,14 @@ async function httpDeleteUser(req, res) {
   }
 }
 
-async function httpAddFriendToUser(req, res) {
-  const userId = req.query.id;
-  const friendId = req.query.friendId;
+async function httpHandleFollows(req, res) {
+  const userId = req.query.userId;
+  const userToFollowId = req.query.userToFollowId;
   try {
-    const user = await getUserById(userId);
-    const friend = await getUserById(friendId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found!" });
-    }
-    if (!friend) {
-      return res.status(404).json({ error: "Invalid user Id" });
-    }
-    await addFriendToUser(user, friend);
-    return res.status(200).json({
-      user: userId,
-      friend: friendId,
-      message: "Friend added to user",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-}
-
-async function httpRemoveFriendFromUser(req, res) {
-  const userId = req.query.id;
-  const friendId = req.query.friendId;
-  try {
-    const user = await getUserById(userId);
-    const friend = await getUserById(friendId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found!" });
-    }
-    if (!friend) {
-      return res.status(404).json({ error: "Invalid user Id" });
-    }
-    await removeFriendFromUser(user, friend);
-    return res.status(200).json({
-      user: userId,
-      friend: friendId,
-      message: "Friend removed from user",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    const followHandled = await handleFollows(userId, userToFollowId);
+    return res.status(200).json(followHandled);
+  } catch (err) {
+    return res.status(400).json(err.message);
   }
 }
 
@@ -149,9 +135,10 @@ module.exports = {
   httpGetAllUsers,
   httpGetSoftDeletedUsers,
   httpGetUserById,
+  httpGetUserByUsername,
+  httpGetUserByNickname,
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,
-  httpAddFriendToUser,
-  httpRemoveFriendFromUser,
+  httpHandleFollows,
 };

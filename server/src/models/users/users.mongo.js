@@ -63,13 +63,6 @@ const usersSchema = new mongoose.Schema({
       required: false,
     },
   ],
-  friends: [
-    {
-      type: Number,
-      ref: "User",
-      required: false,
-    },
-  ],
   followers: [
     {
       type: Number,

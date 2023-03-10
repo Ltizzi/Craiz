@@ -4,11 +4,12 @@ const {
   httpGetAllUsers,
   httpGetSoftDeletedUsers,
   httpGetUserById,
+  httpGetUserByUsername,
+  httpGetUserByNickname,
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,
-  httpAddFriendToUser,
-  httpRemoveFriendFromUser,
+  httpHandleFollows,
 } = require("./users.controller");
 
 const usersRouter = express.Router();
@@ -16,11 +17,11 @@ const usersRouter = express.Router();
 usersRouter.get("/all", httpGetAllUsers);
 usersRouter.get("/softDeleted", httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);
+usersRouter.get("/byUsername", httpGetUserByUsername);
+usersRouter.get("/byNickname", httpGetUserByNickname);
 usersRouter.post("/new", httpSaveUser);
 usersRouter.patch("/update", checkLoggedIn, httpUpdateUser);
 usersRouter.delete("/delete", checkLoggedIn, httpDeleteUser);
-
-usersRouter.patch("/update/friends/add", httpAddFriendToUser);
-usersRouter.patch("/update/friends/remove", httpRemoveFriendFromUser);
+usersRouter.patch("/handleFollows", checkLoggedIn, httpHandleFollows);
 
 module.exports = usersRouter;
