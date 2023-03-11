@@ -14,7 +14,18 @@
       />
       <BaseButton
         class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        v-if="isOwnProfile"
         >Editar Perfil</BaseButton
+      >
+      <BaseButton
+        class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        v-if="!isOwnProfile && !following"
+        >Seguir</BaseButton
+      >
+      <BaseButton
+        class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        v-if="!isOwnProfile && following"
+        >Dejar de seguir</BaseButton
       >
     </div>
     <div class="mt-16 ml-2 flex flex-col justify-start">
@@ -31,6 +42,9 @@
   import ProfileHeaderTop from "../ui/ProfileHeaderTop.vue";
   import BaseButton from "../common/BaseButton.vue";
   import { User } from "@/utils/models";
+  import { useUserStore } from "@/store";
+
+  const userStore = useUserStore();
 
   const props = defineProps({
     user: {
@@ -38,6 +52,22 @@
     },
   });
 
-  onBeforeMount(async () => {});
+  const isOwnProfile = ref(false);
+
+  const following = ref();
+
+  onBeforeMount(async () => {
+    const loggedUser = userStore.user as User;
+    const profileUser = props.user as User;
+    if (loggedUser.userId == profileUser.userId) isOwnProfile.value = true;
+    if (!isOwnProfile.value) {
+      const loggedUserFollows = loggedUser.follows.includes(profileUser.userId);
+      if (loggedUserFollows) following.value = false;
+
+      // .filter(
+      //   (usr) => profileUser.userId
+      // );
+    }
+  });
 </script>
 <style lang=""></style>
