@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="items-left container fixed mt-24 flex w-60 flex-col sm:ml-2 sm:w-2/5 md:mx-3 lg:ml-8"
+    class="items-left container fixed mt-24 flex w-60 flex-col sm:ml-2 sm:w-2/5 md:mx-3 lg:ml-8 lg:w-fit"
   >
     <img
       src="/assets/img/logo.png"
@@ -42,6 +42,7 @@
 
   function goHome() {
     EventBus.emit("goHome");
+    EventBus.emit("loadTL");
     router.push({
       path: "/",
       params: {},

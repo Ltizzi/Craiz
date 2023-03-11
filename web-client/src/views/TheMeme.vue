@@ -1,7 +1,10 @@
 <template lang="">
-  <div class="relative flex w-full flex-col items-center justify-center">
+  <div
+    class="relative flex w-full flex-col items-center justify-center"
+    v-if="isLoaded"
+  >
     <button
-      class="fixed right-12 top-3/4 w-10 animate-bounce rounded-full bg-green-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3 lg:left-2/3"
+      class="fixed right-12 top-3/4 z-50 w-10 animate-bounce rounded-full bg-green-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3"
       @click="scrollToParent"
       v-show="parentOutOfView"
     >
@@ -12,7 +15,7 @@
     </button>
 
     <button
-      class="fixed left-16 top-3/4 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3 lg:left-2/3"
+      class="fixed left-16 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/3"
       v-if="isComment"
       @click="backToParent"
     >
@@ -69,13 +72,17 @@
   let comments = ref([]);
   let memeId: any;
 
+  const isLoaded = ref(false);
+
   //recarga los comentarios y el meme
 
   EventBus.on("reloadMemes", async (e: any) => {
+    isLoaded.value = false;
     await memesStore.fetchMemeById(e.id);
     meme.value = memesStore.memeById;
     await memesStore.fetchCommentsById(e.id);
     comments.value = memesStore.comments;
+    isLoaded.value = true;
   });
 
   //vigila la difierencia de la ruta
@@ -90,6 +97,7 @@
         }
       }
       if (params != preParams) {
+        isLoaded.value = false;
         meme.value = memesStore.meme;
         memeId = meme.value.memeId;
         localStorage.setItem("meme", JSON.stringify(meme.value));
@@ -100,6 +108,7 @@
         } else {
           isComment.value = false;
         }
+        isLoaded.value = true;
       }
     }
   );
@@ -130,6 +139,7 @@
       meme.value = JSON.parse(memeString);
       memeId = meme.value.memeId;
       memesStore.setMeme(meme.value);
+      isLoaded.value = true;
     }
 
     if (!meme.value || route.query.id != meme.value.memeId) {
@@ -146,6 +156,7 @@
       } else {
         isComment.value = false;
       }
+      isLoaded.value = true;
     }
   });
 
@@ -162,14 +173,22 @@
 
   function handleScroll() {
     const elementPosition = parentRef.value?.getBoundingClientRect() as DOMRect;
+    console.log(elementPosition);
     if (elementPosition.top < 0) {
       parentOutOfView.value = true;
     } else parentOutOfView.value = false;
   }
 
-  onMounted(() => {
+  EventBus.on("isLoaded", () => {
     window.addEventListener("scroll", handleScroll);
     parentRef.value = document.getElementById("parent");
+    console.log(parentRef.value);
   });
+
+  // onMounted(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   parentRef.value = document.getElementById("parent");
+  //   console.log(parentRef.value);
+  // });
 </script>
 <style lang=""></style>
