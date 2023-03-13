@@ -1,13 +1,21 @@
 <template lang="">
   <div
     class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
+    v-if="isLoaded"
   >
     <div class="flex flex-row justify-between">
       <div class="xs:w-10 container flex flex-row lg:my-1">
         <img :src="uploader.avatar" alt="" class="mr-2 w-10 sm:w-10 md:w-12" />
-        <h3 class="lg:text-2x2 ml-1 pt-0.5 font-bold sm:text-xl lg:mt-3">
-          {{ uploader.nickname }}
-        </h3>
+        <router-link
+          :to="{ name: 'TheProfile', params: { username: uploader.username } }"
+        >
+          <h3
+            class="lg:text-2x2 ml-1 pt-0.5 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
+          >
+            {{ uploader.nickname }}
+          </h3>
+        </router-link>
+
         <h4 class="pt-1 pl-2 text-lg italic sm:text-base lg:mt-3 lg:text-lg">
           @{{ uploader.username }}
         </h4>
@@ -61,7 +69,7 @@
   import MemeDropdown from "./MemeDropdown.vue";
   import ShareDropdown from "./ShareDropdown.vue";
   import axios from "axios";
-  import { Meme } from "@/utils/models";
+  import { Meme, User } from "@/utils/models";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
 
@@ -110,10 +118,13 @@
 
     lowerCaseTags.value = props.data.tags;
     isLoaded.value = true;
+    EventBus.emit("isLoaded");
     // console.log("la id del meme es:");
     // console.log(props.data.memeId);
     memesStore.fetchMemeById(props.data.memeId);
-    id.value = memesStore.id;
-    memesStore.fetchCommentsById(id.value);
+    if (memesStore.id) {
+      id.value = memesStore.id;
+      memesStore.fetchCommentsById(id.value);
+    }
   });
 </script>

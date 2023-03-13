@@ -10,6 +10,7 @@ export const useUserStore = defineStore("user", {
     isSignedIn: false,
     user: {},
     userId: 5,
+    profileUser: {},
   }),
   // plugins: [createPersistPlugin()],
   actions: {
@@ -18,6 +19,11 @@ export const useUserStore = defineStore("user", {
         this.user = user as User;
         this.isSignedIn = true;
         this.userId = user.userId;
+      }
+    },
+    setProfileUser(user: User) {
+      if (user) {
+        this.profileUser = user;
       }
     },
     async fetchUser(id: number) {
