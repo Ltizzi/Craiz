@@ -89,7 +89,9 @@
   watch(
     () => route.params,
     async (params, preParams) => {
-      if (goHome.value || goBack.value) {
+      console.log("****PARAMS***");
+      console.log(params);
+      if (goHome.value || goBack.value || params.username) {
         //por esto es necesaria, la ruta cambiaba pero se activaba el el watcher
         params = preParams;
         if (goBack.value) {
@@ -173,7 +175,6 @@
 
   function handleScroll() {
     const elementPosition = parentRef.value?.getBoundingClientRect() as DOMRect;
-    console.log(elementPosition);
     if (elementPosition.top < 0) {
       parentOutOfView.value = true;
     } else parentOutOfView.value = false;
@@ -182,7 +183,6 @@
   EventBus.on("isLoaded", () => {
     window.addEventListener("scroll", handleScroll);
     parentRef.value = document.getElementById("parent");
-    console.log(parentRef.value);
   });
 
   // onMounted(() => {
