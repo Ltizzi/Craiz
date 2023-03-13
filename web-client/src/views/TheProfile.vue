@@ -13,7 +13,7 @@
   import MemeList from "@/components/layout/MemeList.vue";
   import { API_URL } from "@/main";
   import axios from "axios";
-  import { onBeforeMount, onMounted, ref } from "vue";
+  import { onBeforeMount, onMounted, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useUserStore } from "@/store";
   import EventBus from "@/utils/EventBus";
@@ -24,22 +24,6 @@
   const isLoaded = ref(false);
 
   let user = ref();
-
-  // onBeforeMount(async () => {
-  //   const username = route.params.username;
-  //   console.log(username);
-  //   try {
-  //     const response = await axios.get(
-  //       `${API_URL}user/byUsername?username=${username}`
-  //     );
-  //     userStore.setProfileUser(response.data);
-  //     user.value = userStore.profileUser;
-  //     isLoaded.value = true;
-  //     EventBus.emit("loadUserMemes", user.value.userId);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // });
 
   onMounted(async () => {
     const username = route.params.username;
@@ -57,5 +41,21 @@
       console.log(err);
     }
   });
+
+  // onBeforeMount(async () => {
+  //   const username = route.params.username;
+  //   console.log(username);
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_URL}user/byUsername?username=${username}`
+  //     );
+  //     userStore.setProfileUser(response.data);
+  //     user.value = userStore.profileUser;
+  //     isLoaded.value = true;
+  //     EventBus.emit("loadUserMemes", user.value.userId);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // });
 </script>
 <style lang=""></style>

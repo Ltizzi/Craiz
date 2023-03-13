@@ -15,6 +15,7 @@
   import EventBus from "@/utils/EventBus";
   import { useRoute } from "vue-router";
   import { useUserStore } from "@/store";
+  import { User } from "@/utils/models";
 
   let memes: any = ref([]);
   const isLoaded = ref(false);
@@ -79,8 +80,10 @@
       memes.value = memeStore.memesWoC;
       isLoaded.value = true;
     } else {
-      const id = userStore.userId;
-      const response = await axios.get(`${API_URL}meme/byUserWoC?id=${id}`);
+      const user = userStore.profileUser as User;
+      const response = await axios.get(
+        `${API_URL}meme/byUserWoC?id=${user.userId}`
+      );
       memes.value = response.data;
       isLoaded.value = true;
     }
