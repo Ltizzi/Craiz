@@ -3,7 +3,7 @@
     class="mt-5 flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
   >
     <div
-      class="rounded-2xl px-4 py-2 text-white hover:cursor-pointer hover:bg-slate-500 hover:text-white active:text-gray-100"
+      class="rounded-2xl px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white"
       @click="loadUserMemes"
     >
       <h1 class="">Memes</h1>

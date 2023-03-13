@@ -105,6 +105,7 @@ async function handleFollows(userId, userToFollowId) {
     userToFollow.followers.push(user.userId);
     userToFollow.followersCounter += 1;
     user.follows.push(userToFollow.userId);
+    user.followsCounter += 1;
     await updateUser(userToFollow);
     await updateUser(user);
     return { res: "followed" };
@@ -112,8 +113,9 @@ async function handleFollows(userId, userToFollowId) {
     userToFollow.followers = userToFollow.followers.filter(
       (usr) => usr != user.userId
     );
-    userToFollow.followersCounter -= 1;
+    if (userToFollow.followersCounter > 0) userToFollow.followersCounter -= 1;
     user.follows = user.follows.filter((usr) => usr != userToFollow.userId);
+    if (userToFollow.followersCounter > 0) user.followsCounter -= 1;
     await updateUser(userToFollow);
     await updateUser(user);
     return { res: "unfollowed" };
