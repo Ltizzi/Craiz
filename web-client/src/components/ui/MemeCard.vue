@@ -69,7 +69,7 @@
   import MemeDropdown from "./MemeDropdown.vue";
   import ShareDropdown from "./ShareDropdown.vue";
   import axios from "axios";
-  import { Meme } from "@/utils/models";
+  import { Meme, User } from "@/utils/models";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
 
