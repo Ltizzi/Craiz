@@ -47,13 +47,14 @@
   import MemeCard from "@/components/ui/MemeCard.vue";
   import CommentsView from "@/components/layout/CommentsView.vue";
   import PostCommentButton from "@/components/ui/PostCommentButton.vue";
-  import { onBeforeMount, onMounted, ref, watch } from "vue";
+  import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
   import axios from "axios";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
   import router from "@/router";
+  import { Meme } from "@/utils/models";
 
   const memesStore = useMemesStore();
   const route = useRoute();
@@ -68,7 +69,7 @@
 
   //memes y coments
 
-  let meme = ref();
+  let meme: any = reactive({});
   let comments = ref([]);
   let memeId: any;
 
@@ -79,7 +80,7 @@
   EventBus.on("reloadMemes", async (e: any) => {
     isLoaded.value = false;
     await memesStore.fetchMemeById(e.id);
-    meme.value = memesStore.memeById;
+    meme = memesStore.memeById;
     await memesStore.fetchCommentsById(e.id);
     comments.value = memesStore.comments;
     isLoaded.value = true;
@@ -91,21 +92,25 @@
     async (params, preParams) => {
       console.log("****PARAMS***");
       console.log(params);
-      if (goHome.value || goBack.value || params.username) {
+      if (goHome.value || goBack.value || params.username || params.id) {
         //por esto es necesaria, la ruta cambiaba pero se activaba el el watcher
         params = preParams;
         if (goBack.value) {
+          memeId = route.query.id;
+          await memesStore.fetchParentMeme(memeId);
+          meme = memesStore.parentMeme;
+          localStorage.setItem("meme", JSON.stringify(meme));
           location.reload();
         }
       }
       if (params != preParams) {
         isLoaded.value = false;
-        meme.value = memesStore.meme;
-        memeId = meme.value.memeId;
-        localStorage.setItem("meme", JSON.stringify(meme.value));
+        meme = memesStore.meme;
+        memeId = meme.memeId;
+        localStorage.setItem("meme", JSON.stringify(meme));
         router.push({ path: "/meme", query: { id: memeId } });
-        memesStore.fetchCommentsById(memeId);
-        if (meme.value.isComment) {
+        await memesStore.fetchCommentsById(memeId);
+        if (meme.isComment) {
           isComment.value = true;
         } else {
           isComment.value = false;
@@ -120,14 +125,16 @@
   let goBack = ref(false);
   let isComment = ref(false);
 
-  function backToParent() {
-    console.log(meme.value.parentMeme);
+  async function backToParent() {
     goBack.value = true;
-    router.push({ path: "/meme", query: { id: meme.value.parentMeme } });
+    router.push({
+      path: "/meme",
+      query: { id: meme.parentMeme },
+    });
   }
 
   onMounted(() => {
-    if (meme.value.isComment) {
+    if (meme.isComment) {
       isComment.value = true;
     } else {
       isComment.value = false;
@@ -138,22 +145,22 @@
   onBeforeMount(async () => {
     let memeString = localStorage.getItem("meme");
     if (memeString) {
-      meme.value = JSON.parse(memeString);
-      memeId = meme.value.memeId;
-      memesStore.setMeme(meme.value);
+      meme = JSON.parse(memeString);
+      memeId = meme.memeId;
+      memesStore.setMeme(meme);
       isLoaded.value = true;
     }
 
-    if (!meme.value || route.query.id != meme.value.memeId) {
+    if (!meme || route.query.id != meme.memeId || route.query.id) {
       memeId = route.query.id;
 
       const response = await axios.get(`${API_URL}meme/byId?id=${memeId}`);
 
-      meme.value = response.data;
-      memesStore.setMeme(meme.value);
-      localStorage.setItem("meme", JSON.stringify(meme.value));
-      localStorage.setItem("parentId", meme.value.memeId);
-      if (meme.value.isComment) {
+      meme = response.data;
+      memesStore.setMeme(meme);
+      localStorage.setItem("meme", JSON.stringify(meme));
+      localStorage.setItem("parentId", meme.memeId);
+      if (meme.isComment) {
         isComment.value = true;
       } else {
         isComment.value = false;
