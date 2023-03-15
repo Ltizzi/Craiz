@@ -93,14 +93,18 @@
   const isLoaded = ref(false);
   let id = ref();
   let lowerCaseTags = ref<string[]>([]);
+  // let memeToProps = ref();
 
   async function openMeme(meme: Meme) {
     memesStore.setMeme(meme);
+    // memeToProps.value = meme;
     console.log("//////********/*******/*/*/**");
     console.log(meme);
     id.value = meme.memeId;
     await memesStore.fetchCommentsById(id.value);
+    EventBus.emit("reloadMemes", id.value);
     EventBus.emit("reloadComments", { id: meme.memeId });
+    console.log("la id del comment es: ", meme.memeId);
     router.push(`/meme?id=${meme.memeId}`); //props.data.memeId
   }
 
