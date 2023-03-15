@@ -3,21 +3,21 @@
     class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
     v-if="isLoaded"
   >
-    <div class="flex flex-row justify-between">
-      <div class="xs:w-10 container flex flex-row lg:my-1">
+    <div class="flex flex-row items-center justify-between">
+      <div class="container flex flex-row items-center py-1 lg:my-1">
         <img :src="uploader.avatar" alt="" class="mr-2 w-10 sm:w-10 md:w-12" />
         <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
         > -->
         <h3
-          class="lg:text-2x2 ml-1 pt-0.5 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
+          class="lg:text-2x2 ml-1 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
           @click="goProfile"
         >
           {{ uploader.nickname }}
         </h3>
         <!-- </router-link> -->
 
-        <h4 class="pt-1 pl-2 text-lg italic sm:text-base lg:mt-3 lg:text-lg">
+        <h4 class="pl-2 text-sm italic sm:text-base lg:mt-3 lg:text-lg">
           @{{ uploader.username }}
         </h4>
       </div>
@@ -73,9 +73,11 @@
   import { Meme, User } from "@/utils/models";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
+  import { useRoute } from "vue-router";
 
   const memesStore = useMemesStore();
   const userStore = useUserStore();
+  const route = useRoute();
 
   let userId = userStore.userId;
   const uploader: any = ref({});
@@ -91,21 +93,27 @@
     };
   }>();
   const isLoaded = ref(false);
+
   let id = ref();
   let lowerCaseTags = ref<string[]>([]);
   // let memeToProps = ref();
 
   async function openMeme(meme: Meme) {
-    memesStore.setMeme(meme);
-    // memeToProps.value = meme;
-    console.log("//////********/*******/*/*/**");
-    console.log(meme);
-    id.value = meme.memeId;
-    await memesStore.fetchCommentsById(id.value);
-    EventBus.emit("reloadMemes", id.value);
-    EventBus.emit("reloadComments", { id: meme.memeId });
-    console.log("la id del comment es: ", meme.memeId);
-    router.push(`/meme?id=${meme.memeId}`); //props.data.memeId
+    let rutaId = Number(route.query.id);
+    if (meme.memeId != rutaId) {
+      isLoaded.value = false;
+      memesStore.setMeme(meme);
+      // memeToProps.value = meme;
+      console.log("//////********/*******/*/*/**");
+      console.log(meme);
+      id.value = meme.memeId;
+      await memesStore.fetchCommentsById(id.value);
+      EventBus.emit("reloadMemes", id.value);
+      EventBus.emit("reloadComments", { id: meme.memeId });
+      console.log("la id del comment es: ", meme.memeId);
+      router.push(`/meme?id=${meme.memeId}`); //props.data.memeId
+      isLoaded.value = true;
+    }
   }
 
   async function openDropdown() {

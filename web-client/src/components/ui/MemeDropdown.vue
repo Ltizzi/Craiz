@@ -1,18 +1,27 @@
 <template lang="">
   <div class="relative inline-block">
-    <BaseButton @click="showDropdownMenu">
+    <button @click.stop="showDropdownMenu">
       <font-awesome-icon icon="fa-solid fa-ellipsis" class="text-2xl" />
-    </BaseButton>
+    </button>
     <div
-      class="absolute z-10 block w-48 rounded-2xl bg-slate-600 text-white shadow-lg shadow-slate-800"
+      class="absolute -left-52 z-10 block w-60 rounded-2xl bg-slate-600 text-white shadow-lg shadow-slate-800"
       v-if="showDropdown"
+      ref="dropdown"
     >
       <ul class="m-2 p-2">
         <li
           class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
-          v-if="!userIsOwner"
+          v-if="!userIsOwner && !following"
+          @click="handleFollows"
         >
-          Seguir a @{{ user.username }}
+          Seguir a @{{ memeOwner.username }}
+        </li>
+        <li
+          class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
+          v-if="!userIsOwner && following"
+          @click="handleFollows"
+        >
+          Dejar de seguir a @{{ memeOwner.username }}
         </li>
         <li
           class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
@@ -31,8 +40,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, ref } from "vue";
-  import BaseButton from "../common/BaseButton.vue";
+  import { onMounted, onUnmounted, ref } from "vue";
   import { useUserStore } from "@/store";
   import { useMemesStore } from "@/store/memes";
   import axios from "axios";
@@ -40,7 +48,6 @@
   import { Meme, User } from "@/utils/models";
   import EventBus from "@/utils/EventBus";
 
-  let showDropdown = ref(false);
   let userIsOwner = ref(false);
 
   let props = defineProps({
@@ -51,17 +58,14 @@
   });
 
   const user = ref();
+  const memeOwner = ref();
 
   const userStore = useUserStore();
   const memeStore = useMemesStore();
 
-  function showDropdownMenu() {
-    showDropdown.value = !showDropdown.value;
-  }
-
   async function deleteMeme() {
     const meme = memeStore.memeById as Meme;
-    const user = userStore.user as User;
+    const user = userStore.userById as User;
     console.log("***---***");
     console.log("meme: ", meme.memeId);
     console.log("user: ", user.userId);
@@ -85,13 +89,62 @@
     }
   }
   onMounted(async () => {
-    await memeStore.fetchMemeById(props.memeId);
-    const meme = memeStore.memeById as Meme;
+    document.addEventListener("click", handleClickOutside);
+    const response = await axios.get(`${API_URL}meme/byId?id=${props.memeId}`);
+    const meme = response.data;
+    const fetchUserResponse = await axios.get(
+      `${API_URL}user/byId?id=${meme.uploader}`
+    );
+    memeOwner.value = fetchUserResponse.data;
     user.value = userStore.user;
 
     if (meme.uploader == user.value.userId) {
       userIsOwner.value = true;
     }
+    if (user.value.follows.includes(memeOwner.value.userId))
+      following.value = true;
+    else following.value = false;
+  });
+
+  //following handler
+  const following = ref();
+
+  async function handleFollows() {
+    const response = await axios.patch(
+      `${API_URL}user/handleFollows?userId=${user.value.userId}&userToFollowId=${memeOwner.value.userId}`,
+      null,
+      { withCredentials: true }
+    );
+    if (response.data.res == "followed") {
+      following.value = true;
+    }
+    if (response.data.res == "unfollowed") {
+      following.value = false;
+    }
+  }
+
+  //open-close dropdown
+
+  const dropdown = ref<HTMLElement | null>(null);
+
+  let showDropdown = ref(false);
+
+  function showDropdownMenu() {
+    console.log("asdasd");
+    showDropdown.value = !showDropdown.value;
+  }
+
+  function handleClickOutside(event: MouseEvent) {
+    if (
+      dropdown.value &&
+      !dropdown.value.contains(event.target as HTMLElement)
+    ) {
+      showDropdown.value = !showDropdown.value;
+    }
+  }
+
+  onUnmounted(() => {
+    document.removeEventListener("click", handleClickOutside);
   });
 </script>
 <style lang=""></style>

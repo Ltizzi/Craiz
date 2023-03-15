@@ -41,12 +41,16 @@
       ></CommentsView>
     </div>
   </div>
+  <div class="mx-auto my-auto flex items-center justify-center" v-else>
+    <BaseSpinner />
+  </div>
 </template>
 <script setup lang="ts">
   import BaseButton from "@/components/common/BaseButton.vue";
   import MemeCard from "@/components/ui/MemeCard.vue";
   import CommentsView from "@/components/layout/CommentsView.vue";
   import PostCommentButton from "@/components/ui/PostCommentButton.vue";
+  import BaseSpinner from "@/components/common/BaseSpinner.vue";
   import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
@@ -96,10 +100,12 @@
         //por esto es necesaria, la ruta cambiaba pero se activaba el el watcher
         params = preParams;
         if (goBack.value) {
+          isLoaded.value = false;
           memeId = route.query.id;
           await memesStore.fetchParentMeme(memeId);
           meme = memesStore.parentMeme;
           localStorage.setItem("meme", JSON.stringify(meme));
+          isLoaded.value = true;
           location.reload();
         }
       }
@@ -116,6 +122,7 @@
           isComment.value = false;
         }
         isLoaded.value = true;
+        location.reload();
       }
     }
   );
@@ -133,25 +140,30 @@
     });
   }
 
-  onMounted(() => {
-    if (meme.isComment) {
-      isComment.value = true;
-    } else {
-      isComment.value = false;
-    }
-  });
+  // onMounted(() => {
+  //   if (meme.isComment) {
+  //     isComment.value = true;
+  //   } else {
+  //     isComment.value = false;
+  //   }
+  // });
 
   //carga la data de memes y comments y las guarda en local
-  onBeforeMount(async () => {
+  onMounted(async () => {
     let memeString = localStorage.getItem("meme");
     if (memeString) {
-      meme = JSON.parse(memeString);
-      memeId = meme.memeId;
-      memesStore.setMeme(meme);
-      isLoaded.value = true;
+      let preMeme = JSON.parse(memeString);
+      let preMemeId = meme.memeId;
+      if (preMemeId == route.query.id) {
+        meme = preMeme;
+        memeId = preMemeId;
+        memesStore.setMeme(meme);
+        isLoaded.value = true;
+      }
     }
 
-    if (!meme || route.query.id != meme.memeId || route.query.id) {
+    if (!meme || route.query.id) {
+      //route.query.id != meme.memeId ||
       memeId = route.query.id;
 
       const response = await axios.get(`${API_URL}meme/byId?id=${memeId}`);

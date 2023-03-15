@@ -9,6 +9,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     isSignedIn: false,
     user: {},
+    userById: {},
     userId: 5,
     profileUser: {},
   }),
@@ -30,6 +31,10 @@ export const useUserStore = defineStore("user", {
       const response = await axios.get(`${API_URL}user/byId?id=${id}`);
       this.user = response.data as User;
       this.userId = response.data.userId;
+    },
+    async fetchUserById(id: number) {
+      const response = await axios.get(`${API_URL}user/byId?id=${id}`);
+      this.userById = response.data as User;
     },
     async refreshProfileUser(id: number) {
       const response = await axios.get(`${API_URL}user/byId?id=${id}`);
