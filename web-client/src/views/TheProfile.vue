@@ -25,6 +25,19 @@
 
   let user = ref();
 
+  EventBus.on("reloadProfileInfo", (userInfo) => {
+    user.value = userInfo;
+  });
+
+  watch(
+    () => route.params,
+    (params, oldParams) => {
+      if (params != oldParams) {
+        location.reload();
+      }
+    }
+  );
+
   onMounted(async () => {
     const username = route.params.username;
     console.log(username);

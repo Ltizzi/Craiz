@@ -61,6 +61,7 @@
   import { useUserStore } from "@/store";
   import axios from "axios";
   import { API_URL } from "@/main";
+  import EventBus from "@/utils/EventBus";
 
   const userStore = useUserStore();
 
@@ -96,6 +97,12 @@
       updateUsers();
     }
   }
+
+  EventBus.on("reloadProfileInfo", (user: any) => {
+    if (user == loggedUser.value) {
+      isOwnProfile.value = true;
+    }
+  });
 
   async function updateUsers() {
     const id = userStore.userId;
