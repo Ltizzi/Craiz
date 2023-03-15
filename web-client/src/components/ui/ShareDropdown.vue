@@ -1,11 +1,12 @@
 <template lang="">
   <div class="relative inline-block">
-    <BaseButton @click="showDropdownMenu" class="mt-3">
+    <BaseButton @click.stop="showDropdownMenu" class="mt-3">
       <font-awesome-icon icon="fa-solid fa-share-nodes" />
     </BaseButton>
     <div
       class="absolute z-10 block w-48 rounded-2xl bg-slate-600 text-white shadow-lg shadow-slate-800"
       v-if="showDropdown"
+      ref="dropdown"
     >
       <ul class="m-2 p-2">
         <li
@@ -28,13 +29,31 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { onMounted, onUnmounted, ref } from "vue";
   import BaseButton from "../common/BaseButton.vue";
 
+  onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+  });
+
   let showDropdown = ref(false);
+  const dropdown = ref<HTMLElement | null>(null);
 
   function showDropdownMenu() {
     showDropdown.value = !showDropdown.value;
   }
+
+  function handleClickOutside(event: MouseEvent) {
+    if (
+      dropdown.value &&
+      !dropdown.value.contains(event.target as HTMLElement)
+    ) {
+      showDropdown.value = !showDropdown.value;
+    }
+  }
+
+  onUnmounted(() => {
+    document.removeEventListener("click", handleClickOutside);
+  });
 </script>
 <style lang=""></style>

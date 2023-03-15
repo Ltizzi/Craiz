@@ -32,13 +32,13 @@
   import NewMemeMenu from "./NewMemeMenu.vue";
   import CreateMemeButton from "../ui/CreateMemeButton.vue";
   import router from "@/router";
-  import { useRoute } from "vue-router";
+  // import { useRoute } from "vue-router";
   import EventBus from "@/utils/EventBus";
   import { useUserStore } from "@/store";
   import { User } from "@/utils/models";
 
   const userStore = useUserStore();
-  const route = useRoute();
+  // const route = useRoute();
 
   function goHome() {
     EventBus.emit("goHome");

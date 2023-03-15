@@ -2,13 +2,17 @@
   <div v-if="isLoaded" class="flex w-full flex-col items-center justify-center">
     <MemeCard v-for="meme in memes" :key="meme.memeId" :data="meme"></MemeCard>
   </div>
-  <div v-else>
-    <p>Cargando memes...</p>
+  <div
+    v-else
+    class="mx-auto my-auto flex items-center justify-center lg:h-full"
+  >
+    <BaseSpinner />
   </div>
 </template>
 <script setup lang="ts">
   import axios from "axios";
-  import { onMounted, ref, onBeforeMount } from "vue";
+  import { onMounted, ref } from "vue";
+  import BaseSpinner from "../common/BaseSpinner.vue";
   import MemeCard from "../ui/MemeCard.vue";
   import { API_URL } from "@/main";
   import { useMemesStore } from "@/store/memes";
