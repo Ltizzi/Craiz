@@ -29,6 +29,11 @@ export const useUserStore = defineStore("user", {
     async fetchUser(id: number) {
       const response = await axios.get(`${API_URL}user/byId?id=${id}`);
       this.user = response.data as User;
+      this.userId = response.data.userId;
+    },
+    async refreshProfileUser(id: number) {
+      const response = await axios.get(`${API_URL}user/byId?id=${id}`);
+      this.profileUser = response.data as User;
     },
     logout() {
       this.user = {};

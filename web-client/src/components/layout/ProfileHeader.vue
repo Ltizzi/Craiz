@@ -54,7 +54,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, onMounted, ref } from "vue";
   import ProfileHeaderTop from "../ui/ProfileHeaderTop.vue";
   import BaseButton from "../common/BaseButton.vue";
   import { User } from "@/utils/models";
@@ -74,6 +74,9 @@
 
   const following = ref();
 
+  const loggedUser = ref(userStore.user);
+  const profileUser = ref(props.user);
+
   async function handleFollows() {
     const user = userStore.user as User;
     const profileUser = props.user as User;
@@ -85,25 +88,39 @@
     if (response.data.res == "followed") {
       console.log("usuario seguido");
       if (props.user) props.user.followersCounter += 1;
+      updateUsers();
     }
     if (response.data.res == "unfollowed") {
       console.log("se dejó de seguir a usuario");
       if (props.user) props.user.followersCounter -= 1;
+      updateUsers();
+    }
+  }
+
+  async function updateUsers() {
+    const id = userStore.userId;
+    await userStore.fetchUser(id);
+    if (props.user) await userStore.refreshProfileUser(props.user.userId);
+    loggedUser.value = userStore.user;
+    profileUser.value = userStore.profileUser;
+    handleUsers(loggedUser.value as User, profileUser.value as User);
+  }
+
+  function handleUsers(logUser: User, profUser: User) {
+    if (logUser.userId == profUser.userId) isOwnProfile.value = true;
+    if (!isOwnProfile.value) {
+      const loggedUserFollows = logUser.follows.includes(profUser.userId);
+      if (loggedUserFollows) following.value = true;
+      else following.value = false;
     }
   }
 
   onBeforeMount(async () => {
-    const loggedUser = userStore.user as User;
-    const profileUser = props.user as User;
-    if (loggedUser.userId == profileUser.userId) isOwnProfile.value = true;
-    if (!isOwnProfile.value) {
-      const loggedUserFollows = loggedUser.follows.includes(profileUser.userId);
-      if (loggedUserFollows) following.value = false;
+    handleUsers(loggedUser.value as User, profileUser.value as User);
+  });
 
-      // .filter(
-      //   (usr) => profileUser.userId
-      // );
-    }
+  onMounted(async () => {
+    handleUsers(loggedUser.value as User, profileUser.value as User);
   });
 </script>
 <style lang=""></style>
