@@ -52,6 +52,7 @@
   function goProfile() {
     const user = userStore.user as User;
     EventBus.emit("loadUserMemes", user.userId);
+    EventBus.emit("reloadProfileInfo", user);
     console.log(user);
     router.push(`${user.username}`);
   }

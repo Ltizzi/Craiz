@@ -6,15 +6,16 @@
     <div class="flex flex-row justify-between">
       <div class="xs:w-10 container flex flex-row lg:my-1">
         <img :src="uploader.avatar" alt="" class="mr-2 w-10 sm:w-10 md:w-12" />
-        <router-link
+        <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
+        > -->
+        <h3
+          class="lg:text-2x2 ml-1 pt-0.5 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
+          @click="goProfile"
         >
-          <h3
-            class="lg:text-2x2 ml-1 pt-0.5 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
-          >
-            {{ uploader.nickname }}
-          </h3>
-        </router-link>
+          {{ uploader.nickname }}
+        </h3>
+        <!-- </router-link> -->
 
         <h4 class="pt-1 pl-2 text-lg italic sm:text-base lg:mt-3 lg:text-lg">
           @{{ uploader.username }}
@@ -77,7 +78,7 @@
   const userStore = useUserStore();
 
   let userId = userStore.userId;
-  const uploader = ref({});
+  const uploader: any = ref({});
   const props = defineProps<{
     data: {
       memeId: number;
@@ -105,6 +106,10 @@
 
   async function openDropdown() {
     await memesStore.fetchMemeById(props.data.memeId);
+  }
+
+  function goProfile() {
+    router.replace(`/${uploader.value.username}`);
   }
 
   onBeforeMount(async () => {
