@@ -13,6 +13,11 @@ import {
   faShareNodes,
   faCircleChevronUp,
   faCircleChevronLeft,
+  faMagnifyingGlass,
+  faBell,
+  faUser,
+  faRightToBracket,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
@@ -26,7 +31,12 @@ library.add(
   faArrowsRotate,
   faShareNodes,
   faCircleChevronUp,
-  faCircleChevronLeft
+  faCircleChevronLeft,
+  faMagnifyingGlass,
+  faBell,
+  faUser,
+  faRightToBracket,
+  faRightFromBracket
 );
 
 const app = createApp(App);

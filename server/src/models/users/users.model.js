@@ -98,13 +98,16 @@ async function handleFollows(userId, userToFollowId) {
   if (!userToFollow) {
     throw new Error("User to follow doesn't exists");
   }
-  const followedUser = user.follows.filter(
-    (followedUsr) => followedUsr == userToFollowId
-  );
-  if (followedUser.length == 0) {
+  // const followedUser = user.follows.filter(
+  //   (followedUsr) => followedUsr == userToFollowId
+  // );
+  const followedUser = user.follows.includes(userToFollowId);
+  // if (followedUser.length == 0) {
+  if (!followedUser) {
     userToFollow.followers.push(user.userId);
     userToFollow.followersCounter += 1;
     user.follows.push(userToFollow.userId);
+    user.followsCounter += 1;
     await updateUser(userToFollow);
     await updateUser(user);
     return { res: "followed" };
@@ -112,8 +115,9 @@ async function handleFollows(userId, userToFollowId) {
     userToFollow.followers = userToFollow.followers.filter(
       (usr) => usr != user.userId
     );
-    userToFollow.followersCounter -= 1;
+    if (userToFollow.followersCounter > 0) userToFollow.followersCounter -= 1;
     user.follows = user.follows.filter((usr) => usr != userToFollow.userId);
+    if (user.followsCounter > 0) user.followsCounter -= 1;
     await updateUser(userToFollow);
     await updateUser(user);
     return { res: "unfollowed" };

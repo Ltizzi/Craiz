@@ -94,7 +94,7 @@
   onMounted(async () => {
     const response = await axios.get(
       `${API_URL}auth/logincheck`,
-      //"http://localhost:4246/v1/auth/logincheck",
+
       { withCredentials: true }
     );
 

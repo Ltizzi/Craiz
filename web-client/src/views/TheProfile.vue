@@ -1,16 +1,23 @@
 <template lang="">
-  <div class="" v-if="isLoaded">
+  <div class="w-full" v-if="isLoaded">
     <ProfileHeader :user="user" />
     <ProfileTabNav :id="user.userId" />
     <keep-alive>
       <MemeList />
     </keep-alive>
   </div>
+  <div
+    class="mx-auto my-auto flex items-center justify-center"
+    v-if="!isLoaded"
+  >
+    <BaseSpinner />
+  </div>
 </template>
 <script setup lang="ts">
   import ProfileHeader from "@/components/layout/ProfileHeader.vue";
   import ProfileTabNav from "../components/ui/ProfileTabNav.vue";
   import MemeList from "@/components/layout/MemeList.vue";
+  import BaseSpinner from "@/components/common/BaseSpinner.vue";
   import { API_URL } from "@/main";
   import axios from "axios";
   import { onBeforeMount, onMounted, ref, watch } from "vue";
@@ -24,6 +31,19 @@
   const isLoaded = ref(false);
 
   let user = ref();
+
+  EventBus.on("reloadProfileInfo", (userInfo) => {
+    user.value = userInfo;
+  });
+
+  watch(
+    () => route.params,
+    (params, oldParams) => {
+      if (params != oldParams) {
+        location.reload();
+      }
+    }
+  );
 
   onMounted(async () => {
     const username = route.params.username;
