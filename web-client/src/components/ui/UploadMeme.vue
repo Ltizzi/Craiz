@@ -96,6 +96,7 @@
 
   function handleFileInput(event: any) {
     const file = event.target.files[0];
+    console.log(file);
     fileToUpload = file;
     const reader = new FileReader();
     reader.onload = (event) => {
