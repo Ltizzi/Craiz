@@ -12,6 +12,7 @@ export const useUserStore = defineStore("user", {
     userById: {},
     userId: 5,
     profileUser: {},
+    isGuest: false,
   }),
   // plugins: [createPersistPlugin()],
   actions: {
@@ -39,6 +40,9 @@ export const useUserStore = defineStore("user", {
     async refreshProfileUser(id: number) {
       const response = await axios.get(`${API_URL}user/byId?id=${id}`);
       this.profileUser = response.data as User;
+    },
+    setGuest() {
+      this.isGuest = true;
     },
     logout() {
       this.user = {};

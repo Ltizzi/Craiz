@@ -1,17 +1,19 @@
 <template>
   <div class="flex h-screen items-center bg-gray-800">
-    <div class="mx-auto h-2/4 w-2/3 rounded-xl bg-gray-50 p-10">
+    <div class="mx-auto h-fit w-2/3 rounded-xl bg-gray-50 p-10">
       <div v-if="!isUserDataLoaded">
         <h1>Autenticando con google..</h1>
       </div>
-      <div v-else>
+      <div v-else class="flex flex-col justify-center">
+        <img src="/assets/img/banner.png" alt="" class="w-full" />
         <p class="text-center text-xl font-semibold">
-          Welcome {{ user.nickname }}, you are signed in with Google. Now, we
-          need you to fullfil this form to complete your profile
+          Bienvenido {{ user.nickname }}, el logueo mediante Google fue un
+          éxito, pero vamos a necesitar que agregues información adicional para
+          tu perfil
         </p>
-        <form class="mx-auto my-5 flex flex-col items-center text-center">
-          <div class="my-2 flex flex-col">
-            <label for="nickname">Pick a nickname:</label>
+        <form class="my-5 flex flex-col items-center text-center">
+          <div class="my-2 flex flex-col justify-center">
+            <label for="nickname">Tu apodo:</label>
             <input
               type="text"
               id="nickname"
@@ -20,18 +22,18 @@
               class="w-40 rounded-xl border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
             />
           </div>
-          <div class="my-2 flex flex-col justify-center">
-            <label for="username">Pick the username:</label>
+          <div class="my-2 mx-auto flex flex-col">
+            <label for="username">Nombre de usuario:</label>
             <input
               type="text"
               id="username"
               v-model="username"
-              placeholder="@example123"
+              placeholder="example123"
               class="w-40 rounded-xl border-2 border-gray-300 py-2 px-5 focus:border-gray-900"
             />
           </div>
           <div class="my-2 flex flex-col justify-center">
-            <label for="birthday">Pick your birthday:</label>
+            <label for="birthday">Fecha de nacimiento:</label>
             <input
               type="date"
               id="birthday"
@@ -43,7 +45,7 @@
             @click="handleSubmit"
             class="mt-2 rounded-xl bg-blue-500 px-5 py-2 font-bold text-white"
           >
-            Update Profile
+            Actualizar Perfil
           </button>
         </form>
       </div>
