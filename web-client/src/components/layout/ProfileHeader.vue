@@ -15,8 +15,10 @@
       <BaseButton
         class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
         v-if="isOwnProfile"
+        @click="modalSwitch"
         >Editar Perfil</BaseButton
       >
+      <EditProfileModal v-if="showModal" />
       <BaseButton
         class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
         v-if="!isOwnProfile && !following"
@@ -57,6 +59,7 @@
   import { onBeforeMount, onMounted, ref } from "vue";
   import ProfileHeaderTop from "../ui/ProfileHeaderTop.vue";
   import BaseButton from "../common/BaseButton.vue";
+  import EditProfileModal from "../ui/EditProfileModal.vue";
   import { User } from "@/utils/models";
   import { useUserStore } from "@/store";
   import axios from "axios";
@@ -129,5 +132,17 @@
   onMounted(async () => {
     handleUsers(loggedUser.value as User, profileUser.value as User);
   });
+
+  //Edit profile Modal
+
+  const showModal = ref(false);
+
+  EventBus.on("closeModal", () => {
+    showModal.value = true;
+  });
+
+  function modalSwitch() {
+    showModal.value = true;
+  }
 </script>
 <style lang=""></style>

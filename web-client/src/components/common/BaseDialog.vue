@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <div
-      class="fixed top-0 left-0 z-0 flex h-screen w-screen items-center justify-center"
+      class="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center"
       :class="{ 'is-active': isActive }"
     >
       <div

@@ -1,0 +1,182 @@
+<template lang="">
+  <BaseDialog
+    class="absolute z-10 flex flex-col justify-center rounded-3xl py-5 px-2"
+  >
+    <form
+      class="my-5 mx-2 flex flex-col justify-center gap-2 text-lg text-gray-800"
+    >
+      <div class="flex flex-col justify-start gap-1">
+        <label for="name">Nombre:</label>
+        <input
+          type="text"
+          v-model="name"
+          placeholder="José Perez"
+          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
+        />
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="nickname">Apodo:</label>
+        <input
+          type="text"
+          v-model="nickname"
+          placeholder="Josesito"
+          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
+        />
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="username">Nombre de Usuario:</label>
+        <input
+          type="text"
+          v-model="username"
+          placeholder="@Pepeuwu"
+          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
+        />
+      </div>
+      <div class="flex flex-col justify-start">
+        <img
+          :src="avatarPic"
+          ref="avatar"
+          class="mx-auto w-10 rounded-full"
+          v-if="avatarPic"
+        />
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="avatar">Avatar:</label>
+        <input type="file" @change="handleFileInput('avatar')" />
+      </div>
+      <div class="flex flex-col justify-start">
+        <img
+          :src="bannerPic"
+          ref="banner"
+          class="mx-auto w-20"
+          v-if="bannerPic"
+        />
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="banner">Banner</label>
+        <input type="file" @change="handleFileInput('banner')" />
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="about">Sobre mí:</label>
+        <textarea
+          name="about"
+          id=""
+          cols="30"
+          rows="5"
+          v-model="about"
+          placeholder="Breve descripción"
+        ></textarea>
+      </div>
+      <div class="flex flex-col justify-start">
+        <label for="birthday">Fecha de nacimiento:</label>
+        <input type="date" name="birthday" v-model="birthday" />
+      </div>
+      <button
+        @click="handleSubmit"
+        class="rounded-2xl bg-green-600 py-2 px-4 text-white"
+      >
+        Actualizar Perfil
+      </button>
+    </form>
+  </BaseDialog>
+</template>
+<script setup lang="ts">
+  import BaseDialog from "../common/BaseDialog.vue";
+  import { useUserStore } from "@/store";
+  import { onMounted, reactive, ref } from "vue";
+  import { User } from "@/utils/models";
+  import axios from "axios";
+  import { API_URL } from "@/main";
+  import EventBus from "@/utils/EventBus";
+
+  const userStore = useUserStore();
+
+  const name = ref("");
+  const nickname = ref("");
+  const username = ref("");
+  const about = ref("");
+  const avatar = ref();
+  const avatarPic = ref();
+  const banner = ref();
+  const bannerPic = ref();
+
+  let user: any = reactive({});
+
+  function handleFileInput(tipo: string, event: any) {
+    const file = event.target.files[0];
+    if (!file) {
+      console.error("Select a file!");
+      return;
+    }
+    if (tipo == "avatar") {
+      avatar.value = file;
+    }
+    if (tipo == "banner") {
+      banner.value = file;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target && tipo == "avatar") {
+        avatarPic.value = event.target.result;
+      }
+      if (event.target && tipo == "banner") {
+        bannerPic.value = event.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function handleSubmit() {
+    const formData = new FormData();
+    formData.append("file", avatar.value);
+    console.log(formData);
+    // const avatarRes = await axios.post(`${API_URL}utils/uploadImg`, formData, {
+    //   headers: { "Content-Type": "multipart/form-data" },
+    //   withCredentials: true,
+    // });
+    // console.log(avatarRes.data.url);
+    // let avatarUrl = avatarRes.data.url;
+
+    // const formData2 = new FormData();
+    // formData2.append("file", banner.value);
+    // const bannerRes = await axios.post(`${API_URL}utils/uploadImg`, formData2, {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    //   withCredentials: true,
+    // });
+    // console.log(bannerRes.data.url);
+    // let bannerUrl = bannerRes.data.url;
+
+    const updatedUser = {
+      userId: user.userId,
+      email: user.email,
+      name: name.value,
+      nickname: nickname.value,
+      username: username.value,
+      //   avatar: avatarUrl,
+      //   banner: bannerUrl,
+      about: about.value,
+    };
+    // const response = await axios.patch(`${API_URL}user/update`, updatedUser, {
+    //   withCredentials: true,
+    // });
+    // console.log(response);
+    // userStore.setUser(response.data.user);
+    // if (response.status == 201) {
+    //   EventBus.emit("closeModal");
+    // } else console.log(response.data);
+  }
+
+  onMounted(async () => {
+    const response = await axios.get(
+      `${API_URL}auth/logincheck`,
+
+      { withCredentials: true }
+    );
+
+    user = response.data.user;
+    document.removeEventListener("click");
+  });
+</script>
+<style lang=""></style>
