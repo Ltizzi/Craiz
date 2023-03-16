@@ -38,7 +38,7 @@
       >
     </div>
     <div class="mt-16 ml-2 flex flex-col justify-start">
-      <h1 class="text-xl font-extrabold text-gray-700">
+      <h1 class="text-2xl font-extrabold text-gray-700">
         {{ props.user.nickname }}
       </h1>
       <h3 class="text-lg italic text-gray-600">@{{ props.user.username }}</h3>
