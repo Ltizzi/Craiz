@@ -4,7 +4,7 @@
   </div>
   <CreateMemeMobileButton v-if="state.isMobile && !state.isProfile" />
   <div
-    v-else
+    v-if="!isLoaded"
     class="mx-auto my-auto flex items-center justify-center lg:h-full"
   >
     <BaseSpinner />
