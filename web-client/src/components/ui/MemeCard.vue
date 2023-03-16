@@ -5,7 +5,11 @@
   >
     <div class="flex flex-row items-center justify-between">
       <div class="container flex flex-row items-center py-1 lg:my-1">
-        <img :src="uploader.avatar" alt="" class="mr-2 w-10 sm:w-10 md:w-12" />
+        <img
+          :src="uploader.avatar"
+          alt=""
+          class="mr-2 h-10 w-10 rounded-full object-cover md:h-12 md:w-12"
+        />
         <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
         > -->
