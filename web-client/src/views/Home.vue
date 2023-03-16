@@ -31,22 +31,34 @@
   import MobileNav from "../components/ui/MobileNav.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
-  import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
+  import {
+    onBeforeMount,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    watch,
+  } from "vue";
   import axios from "axios";
   import { API_URL } from "@/main";
+  import router from "@/router";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
 
   onMounted(async () => {
-    const response = await axios.get(
-      `${API_URL}auth/logincheck`,
-      //"http://localhost:4246/v1/auth/logincheck",
-      { withCredentials: true }
-    );
-    console.log(response.data.user);
-    userStore.setUser(response.data.user);
-    tagStore.fetchTags;
+    // const response = await axios.get(
+    //   `${API_URL}auth/logincheck`,
+    //   //"http://localhost:4246/v1/auth/logincheck",
+    //   { withCredentials: true }
+    // );
+    // if (!response.data.user) {
+    //   isLogged.value = false;
+    // } else {
+    //   userStore.setUser(response.data.user);
+    //   tagStore.fetchTags;
+    //   isGuest.value = true;
+    // }
     window.addEventListener("resize", handleWindowSize);
     const width = window.innerWidth;
     if (width < 768) {
@@ -66,5 +78,32 @@
 
   onUnmounted(() => {
     window.removeEventListener("resize", handleWindowSize);
+  });
+
+  //first time entering / guest handler
+
+  const isGuest = ref(false);
+  const isLogged = ref(false);
+
+  onBeforeMount(async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}auth/logincheck`,
+        //"http://localhost:4246/v1/auth/logincheck",
+        { withCredentials: true }
+      );
+      userStore.setUser(response.data.user);
+      tagStore.fetchTags;
+    } catch (err) {
+      console.log(err);
+      isLogged.value = false;
+      console.log("no logueado");
+      isGuest.value = userStore.isGuest;
+      if (isGuest.value) {
+        isLogged.value = true;
+      } else {
+        router.push("/landing");
+      }
+    }
   });
 </script>

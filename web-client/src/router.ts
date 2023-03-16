@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 import TheMeme from "./views/TheMeme.vue";
 import AppVue from "./App.vue";
 import TheProfile from "./views/TheProfile.vue";
+import LandingPageVue from "./components/layout/LandingPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -19,6 +20,7 @@ const router = createRouter({
         { path: "/callback", component: CallbackVue },
       ],
     },
+    { path: "/landing", component: LandingPageVue },
   ],
 });
 

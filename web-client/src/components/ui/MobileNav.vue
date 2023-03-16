@@ -28,7 +28,7 @@
       </li>
       <li
         class="text-green-500 transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-green-400"
-        v-if="!userIsSignedIn"
+        v-if="userIsSignedIn"
         @click="handleSignInClick"
       >
         <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
@@ -73,11 +73,13 @@
   }
 
   async function handleSignOutClick() {
-    const response = await axios.get(`${API_URL}logut`, {
+    const response = await axios.get(`${API_URL}logout`, {
       withCredentials: true,
     });
     if (response.status == 200) {
       userStore.logout();
     }
+    router.push("/");
+    location.reload();
   }
 </script>

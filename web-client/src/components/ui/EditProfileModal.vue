@@ -2,7 +2,7 @@
   <BaseDialog
     class="absolute z-10 flex flex-col justify-center rounded-3xl py-5 px-2"
   >
-    <form
+    <div
       class="my-5 mx-2 flex flex-col justify-center gap-2 text-lg text-gray-800"
     >
       <div class="flex flex-col justify-start gap-1">
@@ -35,26 +35,20 @@
       <div class="flex flex-col justify-start">
         <img
           :src="avatarPic"
-          ref="avatar"
           class="mx-auto w-10 rounded-full"
           v-if="avatarPic"
         />
       </div>
       <div class="flex flex-col justify-start">
         <label for="avatar">Avatar:</label>
-        <input type="file" @change="handleFileInput('avatar')" />
+        <input type="file" @change="handleFileInput('avatar', $event)" />
       </div>
       <div class="flex flex-col justify-start">
-        <img
-          :src="bannerPic"
-          ref="banner"
-          class="mx-auto w-20"
-          v-if="bannerPic"
-        />
+        <img :src="bannerPic" class="mx-auto w-20" v-if="bannerPic" />
       </div>
       <div class="flex flex-col justify-start">
         <label for="banner">Banner</label>
-        <input type="file" @change="handleFileInput('banner')" />
+        <input type="file" @change="handleFileInput('banner', $event)" />
       </div>
       <div class="flex flex-col justify-start">
         <label for="about">Sobre mí:</label>
@@ -77,7 +71,7 @@
       >
         Actualizar Perfil
       </button>
-    </form>
+    </div>
   </BaseDialog>
 </template>
 <script setup lang="ts">
@@ -95,9 +89,9 @@
   const nickname = ref("");
   const username = ref("");
   const about = ref("");
-  const avatar = ref();
+  let avatar: any;
   const avatarPic = ref();
-  const banner = ref();
+  let banner: any;
   const bannerPic = ref();
 
   let user: any = reactive({});
@@ -108,18 +102,18 @@
       console.error("Select a file!");
       return;
     }
-    if (tipo == "avatar") {
-      avatar.value = file;
+    if (tipo === "avatar") {
+      avatar = file;
     }
-    if (tipo == "banner") {
-      banner.value = file;
+    if (tipo === "banner") {
+      banner = file;
     }
     const reader = new FileReader();
     reader.onload = (event) => {
-      if (event.target && tipo == "avatar") {
+      if (event.target && tipo === "avatar") {
         avatarPic.value = event.target.result;
       }
-      if (event.target && tipo == "banner") {
+      if (event.target && tipo === "banner") {
         bannerPic.value = event.target.result;
       }
     };
@@ -128,25 +122,26 @@
 
   async function handleSubmit() {
     const formData = new FormData();
-    formData.append("file", avatar.value);
+    console.log(avatar);
+    formData.append("file", avatar);
     console.log(formData);
-    // const avatarRes = await axios.post(`${API_URL}utils/uploadImg`, formData, {
-    //   headers: { "Content-Type": "multipart/form-data" },
-    //   withCredentials: true,
-    // });
-    // console.log(avatarRes.data.url);
-    // let avatarUrl = avatarRes.data.url;
+    const avatarRes = await axios.post(`${API_URL}utils/uploadImg`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    });
+    console.log(avatarRes.data.url);
+    let avatarUrl = avatarRes.data.url;
 
-    // const formData2 = new FormData();
-    // formData2.append("file", banner.value);
-    // const bannerRes = await axios.post(`${API_URL}utils/uploadImg`, formData2, {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    //   withCredentials: true,
-    // });
-    // console.log(bannerRes.data.url);
-    // let bannerUrl = bannerRes.data.url;
+    const formData2 = new FormData();
+    formData2.append("file", banner);
+    const bannerRes = await axios.post(`${API_URL}utils/uploadImg`, formData2, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+    console.log(bannerRes.data.url);
+    let bannerUrl = bannerRes.data.url;
 
     const updatedUser = {
       userId: user.userId,
@@ -154,18 +149,18 @@
       name: name.value,
       nickname: nickname.value,
       username: username.value,
-      //   avatar: avatarUrl,
-      //   banner: bannerUrl,
+      avatar: avatarUrl,
+      banner: bannerUrl,
       about: about.value,
     };
-    // const response = await axios.patch(`${API_URL}user/update`, updatedUser, {
-    //   withCredentials: true,
-    // });
-    // console.log(response);
-    // userStore.setUser(response.data.user);
-    // if (response.status == 201) {
-    //   EventBus.emit("closeModal");
-    // } else console.log(response.data);
+    const response = await axios.patch(`${API_URL}user/update`, updatedUser, {
+      withCredentials: true,
+    });
+    console.log(response);
+    userStore.setUser(response.data.user);
+    if (response.status == 201) {
+      EventBus.emit("closeModal");
+    } else console.log(response.data);
   }
 
   onMounted(async () => {
@@ -176,7 +171,6 @@
     );
 
     user = response.data.user;
-    document.removeEventListener("click");
   });
 </script>
 <style lang=""></style>
