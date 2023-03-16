@@ -18,6 +18,7 @@ import {
   faUser,
   faRightToBracket,
   faRightFromBracket,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
@@ -36,7 +37,8 @@ library.add(
   faBell,
   faUser,
   faRightToBracket,
-  faRightFromBracket
+  faRightFromBracket,
+  faPlus
 );
 
 const app = createApp(App);
