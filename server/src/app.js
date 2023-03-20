@@ -98,7 +98,7 @@ app.get("/success", async (req, res) => {
       res.redirect(`https://craze-test.web.app/callback`);
     } else {
       console.log(user.username);
-      res.redirect("https://craze-test.web.app/");
+      res.redirect("https://craze-test.web.app");
     }
   });
 });

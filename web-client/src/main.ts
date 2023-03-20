@@ -3,7 +3,6 @@ import App from "./App.vue";
 import { createPinia } from "pinia";
 import router from "./router";
 import axios from "axios";
-
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
