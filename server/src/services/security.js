@@ -55,7 +55,11 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
   if (!alreadyUser) {
     await saveUser(user);
   }
-  done(null, profile);
+  const sendUser = {
+    email: user.email,
+    googleId: user.googleId,
+  };
+  done(null, sendUser);
 }
 
 //  moved from app.js and exported as setupPassport() method
@@ -67,12 +71,15 @@ function setupPassport() {
     console.log("serialize, user:");
     console.log(user);
     const sessionData = {
-      id: user.id,
+      googleId: user.googleId,
+      email: user.email,
     };
     done(null, sessionData);
   });
 
   passport.deserializeUser((obj, done) => {
+    console.log("deserializando..");
+    console.log(obj);
     done(null, obj);
   });
 }
