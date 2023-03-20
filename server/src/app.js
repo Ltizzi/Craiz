@@ -49,7 +49,7 @@ app.use(
     store: sessionStore,
     cookie: {
       sameSite: "none",
-      secure: "auto",
+      secure: true,
     },
   })
 );
