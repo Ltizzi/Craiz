@@ -15,10 +15,10 @@ const AUTH_OPTIONS = {
   callbackURL: "/v1/auth/google/callback",
   clientID: config.CLIENT_ID,
   clientSecret: config.CLIENT_SECRET,
-  cookie: {
-    sameSite: "none",
-    secure: true,
-  },
+  // cookie: {
+  //   sameSite: "none",
+  //   secure: true,
+  // },
 };
 
 function checkLoggedIn(req, res, next) {
