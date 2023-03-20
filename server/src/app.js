@@ -47,6 +47,10 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
+    cookie: {
+      sameSite: "none",
+      secure: "auto",
+    },
   })
 );
 
