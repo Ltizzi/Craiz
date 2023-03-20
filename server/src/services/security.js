@@ -64,6 +64,8 @@ function setupPassport() {
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
+    console.log("serialize, user:");
+    console.log(user);
     const sessionData = {
       id: user.id,
     };
