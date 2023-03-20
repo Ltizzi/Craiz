@@ -48,9 +48,7 @@ const pinia = createPinia();
 app.use(router);
 app.use(pinia);
 
-const instance = axios.create();
-
-instance.interceptors.request.use((config) => {
+axios.interceptors.request.use((config) => {
   config.headers["Access-Control-Allow-Origin"] = "https://craze-test.web.app";
   config.headers["Access-Control-Allow-Methods"] =
     "GET, POST, PUT, DELETE, OPTIONS";
