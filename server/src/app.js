@@ -31,7 +31,11 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://accounts.google.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://craze-test.web.app/",
+      "https://accounts.google.com",
+    ],
     //   exposedHeaders: ["set-cookie"],
     credentials: true,
   })
@@ -87,16 +91,16 @@ app.get("/success", async (req, res) => {
     }
 
     if (!user.username) {
-      res.redirect(`http://localhost:5173/callback`);
+      res.redirect(`https://craze-test.web.app/callback`);
     } else {
       console.log(user.username);
-      res.redirect("http://localhost:5173");
+      res.redirect("https://craze-test.web.app/");
     }
   });
 });
 
 app.get("/failure", (req, res) => {
-  res.redirect("http://localhost:5173/home?loggedIn=false");
+  res.redirect("https://craze-test.web.app/logfail");
 });
 
 app.get("/v1/logout", checkLoggedIn, (req, res) => {

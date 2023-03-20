@@ -22,7 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
-export const API_URL = "http://localhost:4246/v1/";
+export const API_URL = "https://crazeapi.onrender.com/v1/";
 
 library.add(
   faHeart,
