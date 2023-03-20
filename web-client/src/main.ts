@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
 import router from "./router";
+import axios from "axios";
 
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -46,6 +47,17 @@ const pinia = createPinia();
 
 app.use(router);
 app.use(pinia);
+
+const instance = axios.create();
+
+instance.interceptors.request.use((config) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+  config.headers["Access-Control-Allow-Methods"] =
+    "GET, POST, PUT, DELETE, OPTIONS";
+  config.headers["Access-Control-Allow-Headers"] =
+    "Origin, Content-Type, Accept, Authorization";
+  return config;
+});
 
 //app.provide("authStore", useAuthStore());
 app.component("font-awesome-icon", FontAwesomeIcon);
