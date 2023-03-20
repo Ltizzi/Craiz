@@ -51,11 +51,11 @@ app.use(pinia);
 const instance = axios.create();
 
 instance.interceptors.request.use((config) => {
-  config.headers["Access-Control-Allow-Origin"] = "*";
+  config.headers["Access-Control-Allow-Origin"] = "https://craze-test.web.app";
   config.headers["Access-Control-Allow-Methods"] =
     "GET, POST, PUT, DELETE, OPTIONS";
   config.headers["Access-Control-Allow-Headers"] =
-    "Origin, Content-Type, Accept, Authorization";
+    "Origin, Content-Type, Accept, Authorization, set-cookie";
   return config;
 });
 

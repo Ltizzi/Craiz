@@ -90,7 +90,15 @@
       const response = await axios.get(
         `${API_URL}auth/logincheck`,
         //"http://localhost:4246/v1/auth/logincheck",
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers":
+              "Origin, Content-Type, Accept, Authorization, set-cookie",
+          },
+        }
       );
       userStore.setUser(response.data.user);
       tagStore.fetchTags;

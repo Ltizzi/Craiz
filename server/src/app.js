@@ -33,7 +33,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://craze-test.web.app/",
+      "https://craze-test.web.app",
       "https://accounts.google.com",
     ],
     //   exposedHeaders: ["set-cookie"],
