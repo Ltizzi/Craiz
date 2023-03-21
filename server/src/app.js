@@ -88,11 +88,11 @@ app.get(
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   try {
+    const user = await getUserByGoogleId(req.user.googleId);
+    return res.status(200).json({ user: user });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
-  const user = await getUserByGoogleId(req.user.googleId);
-  return res.status(200).json({ user: user });
 });
 
 app.get("/success", checkLoggedIn, async (req, res) => {
