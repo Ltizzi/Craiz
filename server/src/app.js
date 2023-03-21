@@ -51,6 +51,7 @@ app.use(
       sameSite: "none",
       secure: true,
       rolling: true,
+      proxy: true,
     },
   })
 );
