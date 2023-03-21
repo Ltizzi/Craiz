@@ -23,8 +23,6 @@ const { Session } = require("express-session");
 
 require("dotenv").config();
 
-setupPassport();
-
 const app = express();
 
 //app.use(helmet());
@@ -41,6 +39,8 @@ app.use(
   })
 );
 
+setupPassport();
+
 app.use(
   session({
     secret: [config.SECRET_KEY_1, config.SECRET_KEY_2],
@@ -48,8 +48,9 @@ app.use(
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-      sameSite: "none",
-      secure: true,
+      // sameSite: "none",
+      // secure: true,
+      rolling: true,
     },
   })
 );

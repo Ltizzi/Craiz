@@ -16,8 +16,9 @@ const AUTH_OPTIONS = {
   clientID: config.CLIENT_ID,
   clientSecret: config.CLIENT_SECRET,
   // cookie: {
-  //   sameSite: "none",
-  //   secure: true,
+  //   // sameSite: "none",
+  //   // secure: true,
+  //   proxy: false,
   // },
 };
 
