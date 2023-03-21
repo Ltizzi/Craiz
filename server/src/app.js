@@ -89,22 +89,26 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
 });
 
 app.get("/success", async (req, res) => {
-  console.log("Current user is:....", req.user);
-  const user = await getUserByGoogleId(req.user.id);
+  try {
+    console.log("Current user is:....", req.user);
+    const user = await getUserByGoogleId(req.user.id);
 
-  // // Call the login function from Passport
-  req.login(req.user, (err) => {
-    if (err) {
-      console.log(err);
-    }
+    // // Call the login function from Passport
+    req.login(req.user, (err) => {
+      if (err) {
+        console.log(err);
+      }
 
-    if (!user.username) {
-      res.redirect(`https://craze-test.web.app/callback`);
-    } else {
-      console.log(user.username);
-      res.redirect("https://craze-test.web.app");
-    }
-  });
+      if (!user.username) {
+        res.redirect(`https://craze-test.web.app/callback`);
+      } else {
+        console.log(user.username);
+        res.redirect("https://craze-test.web.app");
+      }
+    });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 app.get("/failure", (req, res) => {
