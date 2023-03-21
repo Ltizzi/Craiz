@@ -50,6 +50,7 @@ app.use(
     cookie: {
       sameSite: "none",
       secure: true,
+      domain: ".web.app",
     },
   })
 );
