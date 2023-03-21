@@ -1,7 +1,7 @@
 {
-  "name": "craiz-api",
-  "version": "1.0.0",
-  "description": "first api for craiz",
+  "name": "craze-api",
+  "version": "0.1.0",
+  "description": "first production api for Craze",
   "main": "src/server.js ",
   "scripts": {
     "start": "node src/server.js",
@@ -11,10 +11,19 @@
   "author": "ltizzi",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.3.2",
+    "connect-mongodb-session": "^3.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "morgan": "^1.10.0"
+    "express-session": "^1.17.3",
+    "form-data": "^4.0.0",
+    "helmet": "^6.0.1",
+    "mongoose": "^6.9.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

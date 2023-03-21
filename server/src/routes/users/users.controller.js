@@ -1,0 +1,144 @@
+const {
+  getAllUsers,
+  getSoftDeletedUsers,
+  getUserById,
+  getUserByNickname,
+  getUserByUsername,
+  saveUser,
+  updateUser,
+  deleteUser,
+  handleFollows,
+} = require("../../models/users/users.model");
+
+const { getPagination } = require("../../services/query");
+
+const {
+  notNullUserValidator,
+  userHasBirthdayAndValidateIt,
+} = require("../../services/validators");
+
+async function httpGetAllUsers(req, res) {
+  try {
+    console.log(req.query);
+    const { skip, limit } = getPagination(req.query);
+    const users = await getAllUsers(skip, limit);
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetSoftDeletedUsers(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const softDeletedUsers = await getSoftDeletedUsers(skip, limit);
+    return res.status(200).json(softDeletedUsers);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetUserById(req, res) {
+  try {
+    const userId = req.query.id;
+    const user = await getUserById(userId);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetUserByUsername(req, res) {
+  try {
+    const username = req.query.username;
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetUserByNickname(req, res) {
+  try {
+    const nickname = req.query.nickname;
+    const user = await getUserByNickname(nickname);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpSaveUser(req, res) {
+  var newUser = req.body;
+
+  notNullUserValidator(newUser);
+  newUser = userHasBirthdayAndValidateIt(newUser);
+
+  newUser.createdAt = Date.now();
+  try {
+    await saveUser(newUser);
+    return res.status(201).json(newUser);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpUpdateUser(req, res) {
+  try {
+    var user = req.body;
+    notNullUserValidator(user);
+    user = userHasBirthdayAndValidateIt(user);
+    user.updatedAt = Date.now();
+    await updateUser(user);
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpDeleteUser(req, res) {
+  const userId = req.query.id;
+  const existUser = await getUserById(userId);
+  if (!existUser) {
+    return res.status(404).json({
+      error: "User not found",
+    });
+  }
+  const deleted = await deleteUser(userId);
+  if (!deleted) {
+    return res.status(400).json({
+      error: "Can't delete user",
+    });
+  }
+  if (deleted) {
+    return res.status(200).json({
+      ok: "User deleted",
+    });
+  }
+}
+
+async function httpHandleFollows(req, res) {
+  const userId = req.query.userId;
+  const userToFollowId = req.query.userToFollowId;
+  try {
+    const followHandled = await handleFollows(userId, userToFollowId);
+    return res.status(200).json(followHandled);
+  } catch (err) {
+    return res.status(400).json(err.message);
+  }
+}
+
+module.exports = {
+  httpGetAllUsers,
+  httpGetSoftDeletedUsers,
+  httpGetUserById,
+  httpGetUserByUsername,
+  httpGetUserByNickname,
+  httpSaveUser,
+  httpUpdateUser,
+  httpDeleteUser,
+  httpHandleFollows,
+};
