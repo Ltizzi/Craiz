@@ -76,7 +76,11 @@ app.get(
     successRedirect: "/success",
     session: true,
   }),
-  (req, res) => {}
+  (req, res) => {
+    req.login(req.passport.email, (err) => {
+      if (err) return next(err);
+    });
+  }
 );
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
