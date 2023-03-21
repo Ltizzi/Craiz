@@ -50,7 +50,6 @@ app.use(
     cookie: {
       sameSite: "none",
       secure: true,
-      domain: ".web.app",
     },
   })
 );
@@ -93,7 +92,7 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   return res.status(200).json({ user: user });
 });
 
-app.get("/success", async (req, res) => {
+app.get("/success", checkLoggedIn, async (req, res) => {
   try {
     console.log("Current user is:....", req.user);
     const user = await getUserByGoogleId(req.user.googleId);
