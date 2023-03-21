@@ -48,8 +48,8 @@ app.use(
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-      // sameSite: "none",
-      // secure: true,
+      sameSite: "none",
+      secure: true,
       rolling: true,
     },
   })
