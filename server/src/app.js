@@ -91,7 +91,7 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
 app.get("/success", async (req, res) => {
   try {
     console.log("Current user is:....", req.user);
-    const user = await getUserByGoogleId(req.user.id);
+    const user = await getUserByGoogleId(req.user.googleId);
 
     // // Call the login function from Passport
     req.login(req.user, (err) => {
