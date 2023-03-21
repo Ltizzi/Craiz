@@ -27,6 +27,8 @@ setupPassport();
 
 const app = express();
 
+//production
+//app.set("trust proxy", 1);
 app.use(helmet());
 
 app.use(
@@ -78,7 +80,7 @@ app.get(
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   try {
-    const user = await getUserByGoogleId(req.user.id);
+    const user = await getUserByGoogleId(req.user.googleId);
     return res.status(200).json({ user: user });
   } catch (err) {
     return res.status(400).json({ error: err.message });
@@ -87,7 +89,7 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
 
 app.get("/success", async (req, res) => {
   console.log("Current user is:....", req.user);
-  const user = await getUserByGoogleId(req.user.id);
+  const user = await getUserByGoogleId(req.user.googleId);
 
   // // Call the login function from Passport
   req.login(req.user, (err) => {
