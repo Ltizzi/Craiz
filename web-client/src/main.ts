@@ -51,8 +51,8 @@ axios.interceptors.request.use((config) => {
   config.headers["Access-Control-Allow-Origin"] = "https://craze-test.web.app";
   config.headers["Access-Control-Allow-Methods"] =
     "GET, POST, PUT, DELETE, OPTIONS";
-  config.headers["Access-Control-Allow-Headers"] =
-    "Origin, Content-Type, Accept, Authorization, set-cookie, cookie";
+  // config.headers["Access-Control-Allow-Headers"] =
+  //   "Origin, Content-Type, Accept, Authorization, set-cookie, cookie";
   return config;
 });
 

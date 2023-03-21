@@ -27,7 +27,7 @@ setupPassport();
 
 const app = express();
 
-app.use(helmet());
+//app.use(helmet());
 
 app.use(
   cors({
