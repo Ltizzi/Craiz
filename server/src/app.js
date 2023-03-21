@@ -43,6 +43,11 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
+    cookie: {
+      sameSite: "none",
+      secure: true,
+      proxy: true,
+    },
   })
 );
 
@@ -72,8 +77,12 @@ app.get(
 );
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
-  const user = await getUserByGoogleId(req.user.id);
-  return res.status(200).json({ user: user });
+  try {
+    const user = await getUserByGoogleId(req.user.id);
+    return res.status(200).json({ user: user });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 app.get("/success", async (req, res) => {
