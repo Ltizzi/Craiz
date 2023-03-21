@@ -12,6 +12,7 @@ const FREEIMG = {
 };
 
 async function httpUploadImage(req, res) {
+  console.log(req.file.path);
   const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
 
   const fileData = await readFileAsBlob(filePath);

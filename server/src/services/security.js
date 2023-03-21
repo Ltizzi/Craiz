@@ -75,7 +75,7 @@ function setupPassport() {
       googleId: user.googleId,
       email: user.email,
     };
-    done(null, sessionData);
+    done(null, user);
   });
 
   passport.deserializeUser((obj, done) => {
