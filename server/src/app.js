@@ -25,7 +25,8 @@ require("dotenv").config();
 
 const app = express();
 
-//app.use(helmet());
+app.set("trust proxy", 1);
+app.use(helmet());
 
 app.use(
   cors({
