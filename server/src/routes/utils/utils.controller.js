@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
+const FormData = require("form-data");
 require("dotenv").config();
 
 const app = express();
@@ -14,7 +15,8 @@ const FREEIMG = {
 async function httpUploadImage(req, res) {
   const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
 
-  const fileData = await readFileAsBlob(filePath);
+  // const fileData = await readFileAsBlob(filePath);
+  const fileData = fs.createReadStream(filePath);
 
   let imageData = new FormData();
   imageData.append("key", FREEIMG.KEY);
@@ -40,18 +42,18 @@ async function httpUploadImage(req, res) {
   }
 }
 
-async function readFileAsBlob(filePath) {
-  return await new Promise((resolve, reject) => {
-    fs.readFile(filePath, (error, data) => {
-      if (error) {
-        reject(error);
-      } else {
-        const blob = new Blob([data], { type: "image/jpeg" });
-        resolve(blob);
-      }
-    });
-  });
-}
+// async function readFileAsBlob(filePath) {
+//   return await new Promise((resolve, reject) => {
+//     fs.readFile(filePath, (error, data) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         const blob = new Blob([data], { type: "image/jpeg" });
+//         resolve(blob);
+//       }
+//     });
+//   });
+// }
 
 module.exports = {
   httpUploadImage,

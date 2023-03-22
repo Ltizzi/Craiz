@@ -1,7 +1,9 @@
 <template lang="">
-  <div class="flex h-screen w-screen items-center justify-center bg-slate-900">
+  <div
+    class="back z-0 flex h-screen w-screen items-center justify-center bg-slate-900"
+  >
     <div
-      class="relative my-auto h-5/6 w-full items-center bg-violet-900 lg:w-10/12 lg:px-5"
+      class="relative z-10 my-auto h-5/6 w-full items-center bg-violet-900 lg:w-10/12 lg:px-5"
     >
       <img
         src="/assets/img/collage.jpg"
@@ -43,6 +45,7 @@
   import router from "@/router";
   import EventBus from "@/utils/EventBus";
   import { useUserStore } from "@/store";
+  import { onMounted } from "vue";
 
   const userStore = useUserStore();
 
@@ -54,5 +57,22 @@
     userStore.setGuest();
     router.push("/");
   }
+
+  //background effect
+
+  onMounted(() => {
+    const el = document.querySelector(".back") as HTMLElement;
+
+    if (el) {
+      el.addEventListener("mousemove", (e) => {
+        el.style.backgroundPositionX = -e.offsetX / 10 + "px";
+        el.style.backgroundPositionY = -e.offsetY / 10 + "px";
+      });
+    }
+  });
 </script>
-<style lang=""></style>
+<style scoped>
+  .back {
+    background: url("./assets/img/pattern.png");
+  }
+</style>

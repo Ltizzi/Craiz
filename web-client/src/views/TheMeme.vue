@@ -97,7 +97,7 @@
       console.log("****PARAMS***");
       console.log(params);
       if (goHome.value || goBack.value || params.username || params.id) {
-        //por esto es necesaria, la ruta cambiaba pero se activaba el el watcher
+        //por esto es necesaria, la ruta cambiaba pero se activaba en el watcher
         params = preParams;
         if (goBack.value) {
           isLoaded.value = false;
