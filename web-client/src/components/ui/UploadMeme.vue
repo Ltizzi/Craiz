@@ -48,17 +48,30 @@
         >
       </div>
     </div>
-    <div class="flex flex-row justify-evenly">
+    <div class="flex flex-row items-center justify-center">
       <BaseButton
         @click="uploadMeme"
-        class="rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
-        >Subir Meme</BaseButton
-      >
+        class="relative rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
+        >Subir Meme
+      </BaseButton>
+
+      <BaseSpinner class="absolute right-28" v-if="isUploading" />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-check"
+        class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
+        v-show="uploadComplete"
+      />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-xmark"
+        class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
+        v-show="uploadFailed"
+      />
     </div>
   </div>
 </template>
 <script setup lang="ts">
   import { onBeforeMount, ref } from "vue";
+  import BaseSpinner from "../common/BaseSpinner.vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
   import { useUserStore } from "@/store";
@@ -129,7 +142,15 @@
     return names;
   }
 
+  //spinner and complete/fail icons and handle upload
+
+  const isUploading = ref(false);
+  const uploadComplete = ref(false);
+  const uploadFailed = ref(false);
+
   async function uploadMeme() {
+    isUploading.value = true;
+
     //prepara imagen para ser subida a la ThumbSnap
     const formData = new FormData();
     formData.append("file", fileToUpload);
@@ -162,11 +183,16 @@
         }
       );
       if (res.status == 201) {
+        isUploading.value = false;
+        uploadComplete.value = true;
         await memeStore.fetchCommentsById(parentMemeId.value);
-        EventBus.emit("reloadComments", { id: parentMemeId.value });
-        EventBus.emit("closeModal");
-        emits("closeModal");
+        setTimeout(() => {
+          EventBus.emit("reloadComments", { id: parentMemeId.value });
+          emits("closeModal");
+        }, 1000);
       } else {
+        isUploading.value = false;
+        uploadFailed.value = true;
         console.log("error al subir la imagen");
       }
     } else {
@@ -175,17 +201,25 @@
         withCredentials: true,
       });
       if (res.status == 201) {
+        isUploading.value = false;
+        uploadComplete.value = true;
         await memeStore.fetchMemesWoC();
-        EventBus.emit("reloadMemes");
-
-        emits("closeModal");
+        setTimeout(() => {
+          EventBus.emit("reloadMemes");
+          emits("closeModal");
+        }, 1000);
       } else {
+        isUploading.value = false;
+        uploadFailed.value = true;
         console.log("error al subir la imagen");
       }
     }
   }
 
   onBeforeMount(async () => {
+    uploadComplete.value = false;
+    uploadFailed.value = false;
+    isUploading.value = false;
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
     let parentMeme = memeStore.parentMeme as Meme;
