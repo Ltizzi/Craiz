@@ -19,10 +19,10 @@
         Todos los memes en un sólo lugar al mismo tiempo
       </h1>
       <div
-        class="absolute right-8 bottom-36 flex w-28 flex-col gap-2 text-sm md:text-lg lg:bottom-32 lg:right-1/4 lg:-mr-40 lg:flex-row"
+        class="absolute right-8 bottom-36 flex w-28 flex-col gap-2 text-sm md:w-fit md:text-lg lg:bottom-32 lg:right-1/4 lg:-mr-40 lg:flex-row"
       >
         <button
-          class="rounded-lg bg-green-600 py-1 px-2 font-bold text-white md:rounded-3xl md:py-1 md:px-3 lg:py-2 lg:px-4 lg:text-xl"
+          class="rounded-lg bg-green-600 py-1 px-2 font-bold text-white md:rounded-3xl md:py-1 md:px-3 lg:rounded-3xl lg:py-2 lg:px-4"
           @click="handleSignInClick"
         >
           Loguear con Google
