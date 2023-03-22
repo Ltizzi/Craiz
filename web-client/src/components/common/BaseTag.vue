@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="rounded-lg px-2 py-0.5 text-sm font-bold text-white hover:cursor-pointer sm:text-base lg:text-base"
+    class="rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
     @click="openTag(tag.link)"
   >
     <slot></slot>

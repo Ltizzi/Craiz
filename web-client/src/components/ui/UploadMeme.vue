@@ -1,6 +1,6 @@
 <template lang="">
   <div class="w-full items-center">
-    <h1 class="py-2 text-center text-xl font-bold lg:text-2xl">
+    <h1 class="py-1 text-center text-xl font-bold lg:text-2xl">
       Upload new meme
     </h1>
 
@@ -8,7 +8,7 @@
       :src="memeImage"
       v-if="memeImage"
       ref="meme"
-      class="lg:4/5 mx-auto h-96 w-4/5 object-contain"
+      class="lg:4/5 mx-auto h-72 w-4/5 object-contain md:h-96 lg:h-96"
     />
     <div v-else class="my-2 mx-auto h-72 w-4/5 bg-gray-200 lg:w-full"></div>
     <div
@@ -18,23 +18,23 @@
       <BaseTag
         v-for="tag in selectedTags"
         :key="tag.tagId"
-        class="mb-1 mt-1"
+        class="mb-0.5 mt-0.5"
         :class="tag.name"
         >{{ tag.name }}</BaseTag
       >
     </div>
-    <h3 class="ml-10 mt-3 mb-2 text-base font-bold lg:text-lg">
+    <h3 class="mt-1 mb-1 text-center text-base font-bold lg:text-lg">
       Pick a image file from your local storage:
     </h3>
     <input
       type="file"
       ref="fileInput"
       @change="handleFileInput"
-      class="my-3 ml-10"
+      class="my-2 ml-10"
     />
 
-    <div class="flex flex-col justify-center">
-      <h2 class="mt-3 mb-2 ml-10 text-base font-bold lg:text-lg">
+    <div class="flex flex-col justify-center gap-0">
+      <h2 class="mt-2 mb-0.5 ml-10 text-base font-bold lg:text-lg">
         Pick meme tags:
       </h2>
       <div class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2">
