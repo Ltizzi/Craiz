@@ -187,11 +187,12 @@
   const showModal = ref(false);
 
   EventBus.on("closeModal", () => {
-    showModal.value = true;
+    showModal.value = false;
   });
 
   function modalSwitch() {
-    showModal.value = true;
+    showModal.value = !showModal.value;
+    EventBus.emit("openDialog");
   }
 </script>
 <style lang=""></style>
