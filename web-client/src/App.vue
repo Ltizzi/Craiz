@@ -1,5 +1,5 @@
 <template>
-  <RouterView class="caret-transparent"></RouterView>
+  <RouterView class="font-serif caret-transparent"></RouterView>
 </template>
 
 <script setup lang="ts"></script>

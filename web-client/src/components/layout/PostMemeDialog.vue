@@ -10,6 +10,8 @@
           @click="turnShowUpload"
           >Upload meme</BaseButton
         >
+        <!-- v-if="btnTurn"
+        v-else -->
         <BaseButton
           class="rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
           @click="turnShowCreate"
@@ -37,6 +39,8 @@
 
   let showUpload = ref(true);
 
+  let btnTurn = ref(false);
+
   EventBus.on("openDialogComment", () => {
     showModal.value = true;
   });
@@ -51,10 +55,12 @@
 
   function turnShowUpload() {
     showUpload.value = !showUpload.value;
+    btnTurn.value = !btnTurn.value;
   }
 
   function turnShowCreate() {
     showUpload.value = !showUpload.value;
+    btnTurn.value = !btnTurn.value;
   }
 
   function modalSwitch() {
