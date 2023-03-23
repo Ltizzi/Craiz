@@ -28,7 +28,7 @@ async function getAllSoftDeletedMemes(skip, limit) {
 async function getAllMemesWithoutComments(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false, isComment: false }, { _id: 0, __v: 0 })
-    .sort({ memeId: -1 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
