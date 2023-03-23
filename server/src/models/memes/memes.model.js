@@ -184,7 +184,7 @@ async function deleteMeme(memeId, userId) {
     throw new Error("you can't delete other people memes!");
   }
   meme.softDeleted = true;
-  meme.updatedAt = Date.now();
+  // meme.updatedAt = Date.now();
   user.memes = user.memes.filter((mm) => mm != memeId);
   if (meme.isComment) {
     const parentMeme = await findMeme({ memeId: meme.parentMeme });
@@ -193,6 +193,7 @@ async function deleteMeme(memeId, userId) {
   }
   const softDeleted = await updateMeme(meme);
   await updateUser(user);
+  return { ok: "meme deleted", meme: softDeleted };
 }
 
 async function likeMeme(memeId, userId) {
@@ -220,6 +221,41 @@ async function likeMeme(memeId, userId) {
     await updateMeme(meme);
     await updateUser(user);
     return { ok: "unliked meme" };
+  }
+}
+
+async function loopMeme(memeId, userId) {
+  const meme = await getMemeById(memeId);
+  if (!meme) {
+    throw new Error("Meme doesn't exists");
+  }
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error("User doesn't exists");
+  }
+  let looperMemeId = (await getLastMemeId()) + 1;
+  const alreadyLooped = user.memes.includes(looperMemeId);
+
+  //para memes  y no loopeados
+  if (!alreadyLooped) {
+    //add loop counter to original meme
+    meme.loopCounter += 1;
+    meme.loopersId.push(userId);
+    meme.loopersNicknames.push(user.nickname);
+    await updateMeme(meme);
+    user.memes.push(meme.memeId);
+    await updateUser(user);
+    return { ok: "looped Meme" };
+  } else {
+    meme.loopCounter -= 1;
+    meme.loopersId = meme.loopersId.filter((looperId) => looperId != userId);
+    meme.loopersNicknames = meme.loopersNicknames.filter(
+      (looperNick) => looperNick != user.nickname
+    );
+    await updateMeme(meme);
+    user.memes = user.memes.filter((meme) => meme != memeId);
+    await updateUser(user);
+    return { ok: "unlooped Meme" };
   }
 }
 
@@ -252,4 +288,5 @@ module.exports = {
   deleteMeme,
   addCommentToMeme,
   likeMeme,
+  loopMeme,
 };

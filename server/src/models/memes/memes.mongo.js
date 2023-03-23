@@ -53,21 +53,21 @@ const memesSchema = new mongoose.Schema({
     required: false,
   },
 
-  isLooped: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  loopMemeId: {
-    type: Number,
-    ref: "Meme",
-    required: false,
-  },
-  looperId: {
-    type: Number,
-    ref: "User",
-    required: false,
-  },
+  loopersId: [
+    {
+      type: Number,
+      ref: "User",
+      required: false,
+    },
+  ],
+
+  loopersNicknames: [
+    {
+      type: String,
+      ref: "User",
+      required: false,
+    },
+  ],
   loopCounter: {
     type: Number,
     default: 0,
