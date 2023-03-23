@@ -16,6 +16,17 @@
     <div
       :class="[
         'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        state.activeButton === 'loops'
+          ? 'border-b-2 border-gray-100 font-bold text-white'
+          : '',
+      ]"
+      @click="loadUserLoops"
+    >
+      <h1 class="">Loops</h1>
+    </div>
+    <div
+      :class="[
+        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
         state.activeButton === 'comments'
           ? 'border-b-2 border-gray-100 font-bold text-white'
           : '',
@@ -54,6 +65,11 @@
   function loadUserMemes() {
     state.activeButton = "memes";
     EventBus.emit("loadUserMemes", props.id);
+  }
+
+  function loadUserLoops() {
+    state.activeButton = "loops";
+    EventBus.emit("loadLoopedMemes", props.id);
   }
 
   function loadUserComments() {

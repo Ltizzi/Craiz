@@ -36,7 +36,11 @@ async function getAllMemesWithoutComments(skip, limit) {
 async function getUserMemesWithoutComments(userId, skip, limit) {
   return await memesRepo
     .find(
-      { uploader: userId, softDeleted: false, isComment: false },
+      {
+        uploader: userId,
+        softDeleted: false,
+        isComment: false,
+      },
       { _id: 0, __v: 0 }
     )
     .sort({ memeId: -1 })
@@ -51,6 +55,14 @@ async function getUserComments(userId, skip, limit) {
       { _id: 0, __v: 0 }
     )
     .sort({ memeId: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getUserLoopedMemes(userId, skip, limit) {
+  return await memesRepo
+    .find({ loopersId: userId, softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -233,8 +245,7 @@ async function loopMeme(memeId, userId) {
   if (!user) {
     throw new Error("User doesn't exists");
   }
-  let looperMemeId = (await getLastMemeId()) + 1;
-  const alreadyLooped = user.memes.includes(looperMemeId);
+  const alreadyLooped = user.memes.includes(memeId);
 
   //para memes  y no loopeados
   if (!alreadyLooped) {
@@ -280,6 +291,7 @@ module.exports = {
   getMemesByUser,
   getUserMemesWithoutComments,
   getUserComments,
+  getUserLoopedMemes,
   getUserLikedMemes,
   getMemesByTemplate,
   getLastMemeId,

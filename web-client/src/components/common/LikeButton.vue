@@ -3,14 +3,14 @@
     <BaseButton @click="handleButtonClick">
       <Font-awesome-icon icon="fa-solid fa-heart" />
     </BaseButton>
-    <p class="ml-2 pt-3">{{ likeCounter }}</p>
+    <p class="ml-2">{{ likeCounter }}</p>
   </div>
   <div class="flex flex-row bg-white" v-else>
     <BaseButton @click="handleButtonClick">
       <Font-awesome-icon icon="fa-regular fa-heart"
     /></BaseButton>
-    <p v-if="likeCounter" class="ml-2 pt-3">{{ likeCounter }}</p>
-    <p v-else class="ml-2 pt-3 opacity-0">{{ likeCounter }}</p>
+    <p v-if="likeCounter" class="ml-2">{{ likeCounter }}</p>
+    <p v-else class="ml-2 opacity-0">{{ likeCounter }}</p>
   </div>
 </template>
 
