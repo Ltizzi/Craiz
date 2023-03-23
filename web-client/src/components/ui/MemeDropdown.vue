@@ -64,9 +64,9 @@
   const memeStore = useMemesStore();
 
   async function deleteMeme() {
+    await memeStore.fetchMemeById(props.memeId);
     const meme = memeStore.memeById as Meme;
-    const user = userStore.userById as User;
-    console.log("***---***");
+    const user = userStore.user as User;
     console.log("meme: ", meme.memeId);
     console.log("user: ", user.userId);
     try {
