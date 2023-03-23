@@ -11,7 +11,7 @@
       </div>
       <!-- items-center justify-center -->
       <div
-        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-7/12"
+        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-3/5"
       >
         <keep-alive>
           <RouterView></RouterView>
