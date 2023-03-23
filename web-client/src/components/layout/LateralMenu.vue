@@ -20,19 +20,21 @@
       </h1>
     </div>
 
-    <div
-      class="flex h-12 items-center rounded-2xl hover:cursor-pointer hover:bg-slate-600"
-    >
-      <h1
-        class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start"
+    <router-link to="/search">
+      <div
+        class="flex h-12 items-center rounded-2xl hover:cursor-pointer hover:bg-slate-600"
       >
-        <font-awesome-icon
-          icon="fa-solid fa-magnifying-glass"
-          class="mr-2 mb-1"
-        />
-        Buscar
-      </h1>
-    </div>
+        <h1
+          class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-magnifying-glass"
+            class="mr-2 mb-1"
+          />
+          Buscar
+        </h1>
+      </div>
+    </router-link>
 
     <div
       class="flex h-12 items-center rounded-2xl hover:cursor-pointer hover:bg-slate-600"
@@ -57,9 +59,9 @@
       </h1>
     </div>
 
-    <SignInButton></SignInButton>
     <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
+    <SignInButton class="mt-80"></SignInButton>
   </div>
 </template>
 <script setup lang="ts">
