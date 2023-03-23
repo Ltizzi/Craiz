@@ -64,29 +64,29 @@
   const memeStore = useMemesStore();
 
   async function deleteMeme() {
+    await memeStore.fetchMemeById(props.memeId);
     const meme = memeStore.memeById as Meme;
     const user = userStore.user as User;
-    console.log("***---***");
-    console.log("meme: ", props.memeId);
+    console.log("meme: ", meme.memeId);
     console.log("user: ", user.userId);
-    // try {
-    //   const response = await axios.delete(
-    //     `${API_URL}meme/delete?memeId=${meme.memeId}&userId=${user.userId}`,
-    //     { withCredentials: true }
-    //   );
-    //   console.log(response.data);
-    //   if (meme.isComment) {
-    //     await memeStore.fetchCommentsById(meme.parentMeme);
-    //     EventBus.emit("reloadComments");
-    //     showDropdown.value = !showDropdown.value;
-    //   } else {
-    //     await memeStore.fetchMemesWoC();
-    //     EventBus.emit("reloadMemes");
-    //     showDropdown.value = !showDropdown.value;
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await axios.delete(
+        `${API_URL}meme/delete?memeId=${meme.memeId}&userId=${user.userId}`,
+        { withCredentials: true }
+      );
+      console.log(response.data);
+      if (meme.isComment) {
+        await memeStore.fetchCommentsById(meme.parentMeme);
+        EventBus.emit("reloadComments");
+        showDropdown.value = !showDropdown.value;
+      } else {
+        await memeStore.fetchMemesWoC();
+        EventBus.emit("reloadMemes");
+        showDropdown.value = !showDropdown.value;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
   onMounted(async () => {
     document.addEventListener("click", handleClickOutside);
