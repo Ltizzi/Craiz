@@ -18,6 +18,7 @@ const {
   httpDeleteMeme,
   httpAddCommentToMeme,
   httpLikeMeme,
+  httpLoopMeme,
 } = require("./memes.controller");
 
 const memesRouter = express.Router();
@@ -36,6 +37,7 @@ memesRouter.get("/byUserLikedMemes", httpGetUserLikedMemes);
 memesRouter.post("/new", checkLoggedIn, httpSaveMeme);
 memesRouter.post("/comment", checkLoggedIn, httpAddCommentToMeme);
 memesRouter.post("/like", checkLoggedIn, httpLikeMeme);
+memesRouter.post("/loop", checkLoggedIn, httpLoopMeme);
 memesRouter.patch("/update", checkLoggedIn, httpUpdateMeme);
 memesRouter.delete("/delete", checkLoggedIn, httpDeleteMeme);
 

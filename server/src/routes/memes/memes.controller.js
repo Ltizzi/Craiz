@@ -15,6 +15,7 @@ const {
   updateMeme,
   addCommentToMeme,
   likeMeme,
+  loopMeme,
 } = require("../../models/memes/memes.model");
 
 const { getPagination } = require("../../services/query");
@@ -210,6 +211,17 @@ async function httpLikeMeme(req, res) {
   }
 }
 
+async function httpLoopMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const userId = req.query.userId;
+    const response = await loopMeme(memeId, userId);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 module.exports = {
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
@@ -227,4 +239,5 @@ module.exports = {
   httpDeleteMeme,
   httpAddCommentToMeme,
   httpLikeMeme,
+  httpLoopMeme,
 };
