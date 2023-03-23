@@ -46,6 +46,16 @@
     isLoaded.value = true;
   });
 
+  EventBus.on("loadLoopedMemes", async (id) => {
+    isLoaded.value = false;
+    console.log(id);
+    const response = await axios.get(
+      `${API_URL}meme/byUserLoopedMemes?id=${id}`
+    );
+    memes.value = response.data;
+    isLoaded.value = true;
+  });
+
   EventBus.on("loadUserComments", async (id) => {
     isLoaded.value = false;
     console.log(id);
@@ -73,6 +83,17 @@
   });
 
   onMounted(async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}auth/logincheck`,
+        //"http://localhost:4246/v1/auth/logincheck",
+        { withCredentials: true }
+      );
+      userStore.setUser(response.data.user);
+    } catch (err) {
+      console.log(err);
+    }
+
     if (Object.keys(route.params).length === 0) {
       await memeStore.fetchMemesWoC();
       memes.value = memeStore.memesWoC;
