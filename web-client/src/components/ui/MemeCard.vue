@@ -37,7 +37,11 @@
 
       <div class="flex h-12 flex-row justify-between">
         <div class="flex w-7/12 flex-row justify-between lg:w-7/12">
-          <LikeButton :memeId="props.data.memeId" :userId="userId"></LikeButton>
+          <LikeButton
+            :memeId="props.data.memeId"
+            :userId="userId"
+            :meme="props.data"
+          ></LikeButton>
           <LoopButton :memeId="props.data.memeId" :userId="userId"></LoopButton>
 
           <CommentIcon

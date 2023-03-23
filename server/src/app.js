@@ -45,11 +45,12 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: {
-      sameSite: "none",
-      secure: true,
-      proxy: true,
-    },
+    //production
+    // cookie: {
+    //   sameSite: "none",
+    //   secure: true,
+    //   proxy: true,
+    // },
   })
 );
 

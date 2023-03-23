@@ -43,9 +43,17 @@
       </h1>
       <h3 class="text-lg italic text-gray-600">@{{ props.user.username }}</h3>
       <p class="my-4 text-lg">{{ props.user.about }}</p>
-      <p>{{ props.user.birthday }}</p>
+      <div
+        class="flex flex-row items-start justify-start gap-1 text-lg"
+        v-show="birthdayWithFormat"
+      >
+        <p>Fecha de nacimiento:</p>
+        <p>{{ birthdayWithFormat }}</p>
+      </div>
       <p>{{ props.user.createdAt }}</p>
-      <div class="mt-2 flex flex-row items-center justify-around gap-10">
+      <div
+        class="mt-2 flex flex-row items-center justify-start gap-2 text-start"
+      >
         <div class="flex items-center gap-1">
           <span class="text-lg font-bold">{{ props.user.followsCounter }}</span>
           <p class="text-text-gray-500 italic">Siguiendo</p>
@@ -83,6 +91,8 @@
   const hasBanner = ref(false);
 
   const following = ref();
+
+  const birthdayWithFormat = ref();
 
   const loggedUser = ref(userStore.user);
   const profileUser = ref(props.user);
@@ -131,8 +141,41 @@
     }
   }
 
+  function handleDate(date: string) {
+    let months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    let firstSplit = date.split("T");
+    let dateSplited = firstSplit[0].split("-");
+    let birthday = {
+      day: dateSplited[2],
+      month: dateSplited[1],
+      year: dateSplited[0],
+    };
+    return (
+      birthday.day +
+      " de " +
+      months[parseInt(birthday.month) - 1] +
+      " de " +
+      birthday.year
+    );
+  }
+
   onBeforeMount(async () => {
     handleUsers(loggedUser.value as User, profileUser.value as User);
+    if (props.user && props.user.birthday)
+      birthdayWithFormat.value = handleDate(props.user.birthday);
   });
 
   onMounted(async () => {
@@ -144,11 +187,12 @@
   const showModal = ref(false);
 
   EventBus.on("closeModal", () => {
-    showModal.value = true;
+    showModal.value = false;
   });
 
   function modalSwitch() {
-    showModal.value = true;
+    showModal.value = !showModal.value;
+    EventBus.emit("openDialog");
   }
 </script>
 <style lang=""></style>

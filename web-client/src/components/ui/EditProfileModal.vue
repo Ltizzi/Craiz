@@ -1,6 +1,7 @@
 <template lang="">
   <BaseDialog
     class="absolute z-10 flex flex-col justify-center rounded-3xl py-5 px-2"
+    @closeModal="modalSwitch"
   >
     <div
       class="my-5 mx-2 flex flex-col justify-center gap-2 text-lg text-gray-800"
@@ -65,23 +66,38 @@
         <label for="birthday">Fecha de nacimiento:</label>
         <input type="date" name="birthday" v-model="birthday" />
       </div>
-      <button
-        @click="handleSubmit"
-        class="rounded-2xl bg-green-600 py-2 px-4 text-white"
-      >
-        Actualizar Perfil
-      </button>
+      <div class="flex justify-center">
+        <button
+          @click="handleSubmit"
+          class="relative rounded-2xl bg-green-600 py-2 px-4 text-white"
+        >
+          Actualizar Perfil
+        </button>
+        <BaseSpinner class="absolute z-10 ml-56" v-show="waitingResponse" />
+        <font-awesome-icon
+          icon="fa-solid fa-circle-check"
+          class="absolute z-10 mt-1 ml-56 rounded-full bg-green-600 p-1 text-2xl text-white"
+          v-show="responseOk"
+        />
+        <font-awesome-icon
+          icon="fa-solid fa-circle-xmark"
+          class="absolute z-10 mt-1 ml-56 rounded-full bg-red-600 p-1 text-2xl text-white"
+          v-show="responseFail"
+        />
+      </div>
     </div>
   </BaseDialog>
 </template>
 <script setup lang="ts">
   import BaseDialog from "../common/BaseDialog.vue";
+  import BaseSpinner from "../common/BaseSpinner.vue";
   import { useUserStore } from "@/store";
   import { onMounted, reactive, ref } from "vue";
   import { User } from "@/utils/models";
   import axios from "axios";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
+  import { emitKeypressEvents } from "readline";
 
   const userStore = useUserStore();
 
@@ -95,6 +111,21 @@
   const bannerPic = ref();
 
   let user: any = reactive({});
+
+  //modal
+
+  const emits = defineEmits({
+    closeModal: () => true,
+  });
+
+  function modalSwitch() {
+    EventBus.emit("closeModal");
+  }
+
+  //status/spinner
+  const waitingResponse = ref(false);
+  const responseOk = ref(false);
+  const responseFail = ref(false);
 
   function handleFileInput(tipo: string, event: any) {
     const file = event.target.files[0];
@@ -121,6 +152,7 @@
   }
 
   async function handleSubmit() {
+    waitingResponse.value = true;
     const formData = new FormData();
     console.log(avatar);
     formData.append("file", avatar);
@@ -158,9 +190,17 @@
     });
     console.log(response);
     userStore.setUser(response.data.user);
+    waitingResponse.value = false;
     if (response.status == 201) {
-      EventBus.emit("closeModal");
-    } else console.log(response.data);
+      responseOk.value = true;
+      setTimeout(() => {
+        EventBus.emit("closeModal");
+        emits("closeModal");
+      }, 1000);
+    } else {
+      responseFail.value = true;
+      console.log(response.data);
+    }
   }
 
   onMounted(async () => {

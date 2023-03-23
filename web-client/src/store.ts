@@ -10,7 +10,7 @@ export const useUserStore = defineStore("user", {
     isSignedIn: false,
     user: {},
     userById: {},
-    userId: 5,
+    userId: 0,
     profileUser: {},
     isGuest: false,
   }),
