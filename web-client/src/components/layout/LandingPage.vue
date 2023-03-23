@@ -12,11 +12,11 @@
       />
       <img
         src="/assets/img/logo.png"
-        class="absolute bottom-72 right-4 z-20 w-36 opacity-90 md:w-52 lg:top-32 lg:left-56 lg:w-1/4"
+        class="absolute bottom-72 right-4 z-20 w-36 opacity-90 md:w-52 lg:top-32 lg:left-44 lg:w-1/4"
         alt=""
       />
       <h1
-        class="absolute bottom-28 left-5 w-52 text-left font-serif text-5xl font-extrabold text-white opacity-95 md:left-14 lg:left-1/2 lg:top-1/4 lg:-ml-60 lg:w-3/6 lg:text-right lg:text-8xl"
+        class="absolute bottom-28 left-5 w-52 text-left font-merriweather text-5xl font-extrabold text-white opacity-95 md:left-14 lg:left-1/2 lg:top-1/4 lg:-ml-60 lg:w-3/6 lg:text-right lg:text-8xl"
       >
         Todos los memes en un sólo lugar al mismo tiempo
       </h1>
