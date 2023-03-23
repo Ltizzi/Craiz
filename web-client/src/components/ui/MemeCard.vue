@@ -1,8 +1,19 @@
 <template lang="">
   <div
-    class="container my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
+    class="container relative my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
     v-if="isLoaded"
   >
+    <div
+      v-if="isLoop"
+      class="absolute ml-12 flex flex-row gap-1 text-sm font-bold text-gray-400"
+    >
+      <font-awesome-icon
+        icon="fa-solid fa-arrows-rotate"
+        class="mt-1 text-xs text-black"
+      />
+      <h4 v-if="userIsLooper">Loopeaste este meme</h4>
+      <h4 v-else>{{ looper }} loopeo este meme</h4>
+    </div>
     <div class="flex flex-row items-center justify-between">
       <div class="container flex flex-row items-center py-1 lg:my-1">
         <img
@@ -13,8 +24,9 @@
         <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
         > -->
+
         <h3
-          class="lg:text-2x2 ml-1 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
+          class="lg:text-2x2 ml-2 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
           @click="goProfile"
         >
           {{ uploader.nickname }}
@@ -36,13 +48,20 @@
       <img :src="props.data.imgUrl" alt="" class="mx-auto w-fit rounded-3xl" />
 
       <div class="flex h-12 flex-row justify-between">
-        <div class="flex w-7/12 flex-row justify-between lg:w-7/12">
+        <div
+          class="flex w-7/12 flex-row items-center justify-between lg:w-7/12"
+        >
           <LikeButton
             :memeId="props.data.memeId"
             :userId="userId"
             :meme="props.data"
           ></LikeButton>
-          <LoopButton :memeId="props.data.memeId" :userId="userId"></LoopButton>
+          <LoopButton
+            :memeId="props.data.memeId"
+            :userId="userId"
+            :loopCounter="props.data.loopCounter"
+            :userIsLooper="userIsLooper"
+          ></LoopButton>
 
           <CommentIcon
             :commentCounter="props.data.commentsCounter"
@@ -67,7 +86,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, ref, watch } from "vue";
   import { useMemesStore } from "@/store/memes";
   import { useUserStore } from "@/store";
   import router from "@/router";
@@ -89,6 +108,12 @@
 
   let userId = userStore.userId;
   const uploader: any = ref({});
+
+  //loop dom values
+  const isLoop = ref(false);
+  const userIsLooper = ref(false);
+  const looper = ref("");
+
   const props = defineProps<{
     data: {
       memeId: number;
@@ -97,7 +122,10 @@
       imgUrl: string;
       tags: Array<string>;
       likedBy: Array<any>;
+      loopersId: Array<number>;
+      loopersNicknames: Array<string>;
       comments: Array<any>;
+      loopCounter: number;
     };
   }>();
   const isLoaded = ref(false);
@@ -132,6 +160,16 @@
     router.replace(`/${uploader.value.username}`);
   }
 
+  // watch(
+  //   () => props.data.loopersNicknames,
+  //   (newValue: any) => {
+  //     let user = userStore.profileUser as User;
+  //     if (newValue.includes(user.nickname)) {
+  //       userIsLooper.value = true;
+  //     }
+  //   }
+  // );
+
   onBeforeMount(async () => {
     const uploaderData = await axios.get(
       `${API_URL}user/byId?id=${props.data.uploader}`
@@ -142,6 +180,23 @@
     }
 
     lowerCaseTags.value = props.data.tags;
+
+    //loop dom values
+    let user = userStore.user as User;
+    let loopersNicknames = props.data.loopersNicknames;
+    if (user) {
+      if (loopersNicknames.includes(user.nickname)) {
+        userIsLooper.value = true;
+      }
+    }
+    if (props.data.loopersId.length > 0) {
+      isLoop.value = true;
+    }
+    if (isLoop.value) {
+      looper.value = loopersNicknames[loopersNicknames.length - 1];
+    }
+
+    //everything is OK, lets load the meme!
     isLoaded.value = true;
     EventBus.emit("isLoaded");
     // console.log("la id del meme es:");

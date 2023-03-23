@@ -54,6 +54,7 @@
   import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
+  import { useUserStore } from "@/store";
   import axios from "axios";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
@@ -61,6 +62,7 @@
   import { Meme } from "@/utils/models";
 
   const memesStore = useMemesStore();
+  const userStore = useUserStore();
   const route = useRoute();
 
   //evento necesario para ir al home
@@ -150,6 +152,17 @@
 
   //carga la data de memes y comments y las guarda en local
   onMounted(async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}auth/logincheck`,
+        //"http://localhost:4246/v1/auth/logincheck",
+        { withCredentials: true }
+      );
+      userStore.setUser(response.data.user);
+    } catch (err) {
+      console.log(err);
+    }
+
     let memeString = localStorage.getItem("meme");
     if (memeString) {
       let preMeme = JSON.parse(memeString);

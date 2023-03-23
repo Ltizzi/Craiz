@@ -11,7 +11,7 @@ export const useUserStore = defineStore("user", {
     user: {},
     userById: {},
     userId: 0,
-    profileUser: {},
+    profileUser: {} as User,
     isGuest: false,
   }),
   // plugins: [createPersistPlugin()],

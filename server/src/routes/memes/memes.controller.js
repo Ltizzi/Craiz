@@ -8,6 +8,7 @@ const {
   getMemesByUser,
   getUserMemesWithoutComments,
   getUserComments,
+  getUserLoopedMemes,
   getUserLikedMemes,
   getMemesByTemplate,
   saveMeme,
@@ -133,6 +134,18 @@ async function httpGetUserComments(req, res) {
   }
 }
 
+async function httpGetUserLoopedMemes(req, res) {
+  try {
+    const userId = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getUserLoopedMemes(userId, skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(404).json({ error: err.message });
+  }
+}
+
 async function httpGetUserLikedMemes(req, res) {
   try {
     const userId = req.query.id;
@@ -233,6 +246,7 @@ module.exports = {
   httpGetAllMemesByUser,
   httpGetUserMemesWoC,
   httpGetUserComments,
+  httpGetUserLoopedMemes,
   httpGetUserLikedMemes,
   httpSaveMeme,
   httpUpdateMeme,
