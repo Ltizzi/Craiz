@@ -22,6 +22,7 @@ import {
   faPlus,
   faCircleCheck,
   faCircleXmark,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
@@ -43,7 +44,8 @@ library.add(
   faRightFromBracket,
   faPlus,
   faCircleCheck,
-  faCircleXmark
+  faCircleXmark,
+  faHome
 );
 
 const app = createApp(App);
