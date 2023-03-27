@@ -8,9 +8,13 @@
       >
         <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
         <div class="flex flex-col gap-0">
-          <BaseTag :class="trend.name" :name="trend.name" class="text-center">{{
-            trend.name
-          }}</BaseTag>
+          <BaseTag
+            :class="trend.name"
+            :list="true"
+            :name="trend.name"
+            class="text-center"
+            >{{ trend.name }}</BaseTag
+          >
           <p>{{ trend.counter }} memes</p>
         </div>
       </li>

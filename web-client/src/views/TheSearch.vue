@@ -1,8 +1,8 @@
 <template lang="">
-  <div class="flex w-fit flex-col pt-24" v-if="isLoaded">
-    <SearchHeader class="w-2/5" />
-
-    <MemeList :searchedTag="searchedTag" />
+  <div class="flex flex-col pt-24 lg:w-fit" v-if="isLoaded">
+    <SearchHeader class="w-full lg:w-2/5" />
+    <div v-if="noSearch" class="mt-40 text-2xl">Busca tags o usuarios</div>
+    <MemeList :searchedTag="searchedTag" v-else />
   </div>
 </template>
 <script setup lang="ts">
@@ -20,7 +20,8 @@
   const isLoaded = ref(false);
 
   const searchedTag = ref();
-  const serachedUser = ref();
+  const searchedUser = ref();
+  const noSearch = ref(true);
 
   watch(
     () => route.params,
@@ -41,6 +42,7 @@
     const user = props.username;
 
     if (tag) {
+      noSearch.value = false;
       EventBus.emit("searchTag", tag);
       const response = await axios.get(`${API_URL}meme/byTag?tag=${tag}`);
       searchedTag.value = response.data;

@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="fixed top-0 left-1/4 z-50 ml-24 opacity-95">
+  <div class="fixed top-0 left-0 z-50 opacity-95 lg:left-1/4 lg:ml-24">
     <SearchBar />
     <TrendsNav />
   </div>

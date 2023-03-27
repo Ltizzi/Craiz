@@ -30,7 +30,14 @@ const router = createRouter({
           }),
         },
 
-        { path: "/trends", name: "TheTrends", component: TheTrendsVue },
+        {
+          path: "/trends",
+          name: "TheTrends",
+          component: TheTrendsVue,
+          props: (route) => ({
+            topusers: route.query.topusers,
+          }),
+        },
       ],
     },
     { path: "/landing", component: LandingPageVue },
