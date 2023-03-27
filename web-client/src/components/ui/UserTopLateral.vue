@@ -8,7 +8,8 @@
       <li
         v-for="(user, index) in users"
         :key="user.userId"
-        class="flex flex-row justify-start gap-2"
+        class="flex flex-row justify-start gap-2 hover:cursor-pointer"
+        @click="goProfile(user.username)"
       >
         <div class="flex flex-row items-center justify-start gap-1 text-start">
           <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
@@ -18,7 +19,9 @@
             class="h-10 w-10 rounded-full"
           />
           <div class="flex flex-col justify-start gap-0">
-            <h3 class="text-start text-base font-bold">{{ user.nickname }}</h3>
+            <h3 class="text-start text-base font-bold">
+              {{ user.nickname }}
+            </h3>
             <div class="flex flex-col gap-0">
               <p class="text-sm">@{{ user.username }} -</p>
               <p class="text-sm">{{ user.likeCounter }} likes</p>
@@ -39,10 +42,15 @@
   import axios from "axios";
   import { API_URL } from "@/main";
   import { onBeforeMount, ref } from "vue";
+  import router from "@/router";
 
   const loadTopUsers = ref(false);
   const isLoaded = ref(false);
   const users = ref();
+
+  function goProfile(username: string) {
+    router.push(`/${username}`);
+  }
 
   onBeforeMount(async () => {
     const response = await axios.get(`${API_URL}user/all?skip=0&limit=10`);
