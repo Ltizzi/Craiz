@@ -1,5 +1,13 @@
 <template lang="">
   <div
+    v-if="props.list"
+    class="rounded-lg px-2 py-0.5 text-base font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
+    @click="openTag(props.name)"
+  >
+    <slot></slot>
+  </div>
+  <div
+    v-else
     class="rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
     @click="openTag(props.name)"
   >
@@ -23,6 +31,10 @@
   const props = defineProps({
     name: {
       type: String,
+      required: false,
+    },
+    list: {
+      type: Boolean,
       required: false,
     },
   });

@@ -1,6 +1,6 @@
 <template lang="">
   <div class="flex w-full flex-col pt-24">
-    <TrendsHeader class="w-2/5" />
+    <TrendsHeader class="w-full lg:w-2/5" />
     <keep-alive>
       <TrendList class="mt-10" />
     </keep-alive>

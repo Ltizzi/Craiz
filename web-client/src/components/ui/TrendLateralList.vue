@@ -1,10 +1,10 @@
 <template lang="">
   <div
     v-if="isLoaded"
-    class="flex w-full flex-col justify-center rounded-3xl px-5 py-2"
+    class="flex w-full flex-col justify-center gap-1 rounded-3xl px-5 py-1"
   >
     <h2 class="mb-2 text-xl font-extrabold">Tendencias</h2>
-    <ul v-if="loadTrends" class="flex flex-col gap-2">
+    <ul v-if="loadTrends" class="flex flex-col gap-1">
       <li
         v-for="(trend, index) in trendTags"
         :key="trend.tagId"
@@ -19,6 +19,11 @@
         </div>
       </li>
     </ul>
+    <router-link to="/trends">
+      <h2 class="mb-2 text-base font-extrabold hover:cursor-pointer">
+        Ver más
+      </h2>
+    </router-link>
   </div>
   <div v-else>
     <BaseSpinner />

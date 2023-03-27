@@ -11,11 +11,21 @@
           @click="goHome"
         />
       </li>
-      <li
-        class="transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white"
-      >
-        <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-      </li>
+      <router-link to="/search">
+        <li
+          class="transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white"
+        >
+          <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+        </li>
+      </router-link>
+      <router-link to="/trends">
+        <li
+          class="transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white"
+        >
+          <font-awesome-icon icon="fa-solid fa-arrow-trend-up" />
+        </li>
+      </router-link>
+
       <li
         class="transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white"
       >
