@@ -20,17 +20,16 @@ const router = createRouter({
         { path: ":username", name: "TheProfile", component: TheProfile },
         { path: "meme", component: TheMeme },
         { path: "/callback", component: CallbackVue },
-        { path: "/search", component: TheSearchVue },
         {
-          path: "/search/search?tag=:tagname",
+          path: "/search",
           name: "TheSearch",
           component: TheSearchVue,
+          props: (route) => ({
+            tagname: route.query.tag,
+            username: route.query.user,
+          }),
         },
-        {
-          path: "/search/search?user:username",
-          name: "TheSearch",
-          component: TheSearchVue,
-        },
+
         { path: "/trends", name: "TheTrends", component: TheTrendsVue },
       ],
     },

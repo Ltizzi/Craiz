@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
   import router from "@/router";
+  import EventBus from "@/utils/EventBus";
 
   interface Tag {
     class: String;
@@ -27,7 +28,7 @@
   });
 
   function openTag(link: string) {
-    router.push(`/search/search?tag=${link}`);
+    router.push(`/search?tag=${link}`);
   }
 </script>
 <style>
