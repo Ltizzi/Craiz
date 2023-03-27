@@ -7,6 +7,7 @@ import AppVue from "./App.vue";
 import TheProfile from "./views/TheProfile.vue";
 import LandingPageVue from "./components/layout/LandingPage.vue";
 import TheSearchVue from "./views/TheSearch.vue";
+import TheTrendsVue from "./views/TheTrends.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,10 +22,16 @@ const router = createRouter({
         { path: "/callback", component: CallbackVue },
         { path: "/search", component: TheSearchVue },
         {
-          path: "/search/:tagname",
+          path: "/search/search?tag=:tagname",
           name: "TheSearch",
           component: TheSearchVue,
         },
+        {
+          path: "/search/search?user:username",
+          name: "TheSearch",
+          component: TheSearchVue,
+        },
+        { path: "/trends", name: "TheTrends", component: TheTrendsVue },
       ],
     },
     { path: "/landing", component: LandingPageVue },
