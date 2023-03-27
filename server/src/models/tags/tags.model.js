@@ -6,7 +6,7 @@ const DEFAULT_TAG_ID = 0;
 async function getAllTags(skip, limit) {
   return await tagsRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
-    .sort({ tagId: 1 })
+    .sort({ counter: -1 })
     .skip(skip)
     .limit(limit);
 }

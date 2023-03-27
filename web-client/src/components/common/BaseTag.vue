@@ -1,13 +1,14 @@
 <template lang="">
   <div
     class="rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
-    @click="openTag(tag.link)"
+    @click="openTag(props.name)"
   >
     <slot></slot>
   </div>
 </template>
 <script setup lang="ts">
-  // import { useRouter } from "vue-router";
+  import router from "@/router";
+
   interface Tag {
     class: String;
     link: String;
@@ -18,10 +19,15 @@
     link: "",
   };
 
+  const props = defineProps({
+    name: {
+      type: String,
+      required: false,
+    },
+  });
+
   function openTag(link: string) {
-    //TODO
-    // const router = useRouter();
-    // router.push(tag);
+    router.push(`/search/search?tag=${link}`);
   }
 </script>
 <style>
