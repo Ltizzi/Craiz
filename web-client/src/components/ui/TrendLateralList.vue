@@ -1,14 +1,14 @@
 <template lang="">
   <div
     v-if="isLoaded"
-    class="ml-4 flex w-full flex-col justify-center rounded-3xl py-2"
+    class="flex w-full flex-col justify-center rounded-3xl px-5 py-2"
   >
     <h2 class="mb-2 text-xl font-extrabold">Tendencias</h2>
     <ul v-if="loadTrends" class="flex flex-col gap-2">
       <li
         v-for="(trend, index) in trendTags"
         :key="trend.tagId"
-        class="flex flex-row justify-start gap-5"
+        class="flex flex-row justify-start gap-4"
       >
         <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
         <div class="flex flex-col gap-0">
