@@ -1,6 +1,6 @@
 <template lang="">
   <div class="fixed top-0 left-0 z-50 opacity-95 lg:left-1/4 lg:ml-24">
-    <SearchBar />
+    <SearchBar :back="true" />
     <TrendsNav />
   </div>
 </template>
