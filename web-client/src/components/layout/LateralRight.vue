@@ -1,7 +1,7 @@
 <template lang="">
   <div class="fixed flex w-52 flex-col gap-5">
     <div class="w-full">
-      <SearchBar class="-ml-10 w-64 bg-transparent" :back="false" />
+      <SearchBar class="ml-0 w-64 bg-transparent" :back="false" />
     </div>
     <TrendLateralList
       class="flex w-48 flex-col justify-center rounded-2xl bg-white"
