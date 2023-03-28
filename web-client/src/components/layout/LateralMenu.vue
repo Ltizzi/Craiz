@@ -12,7 +12,10 @@
       class="flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
     >
       <h1
-        class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl"
+        :class="[
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          state.activeButton === 'inicio' ? 'font-extrabold text-white' : '',
+        ]"
         @click="goHome"
       >
         <font-awesome-icon icon="fa-solid fa-house" class="mr-2 mb-1" />
@@ -23,9 +26,13 @@
     <router-link to="/search">
       <div
         class="flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goSearch"
       >
         <h1
-          class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl"
+          :class="[
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            state.activeButton === 'search' ? 'font-extrabold text-white' : '',
+          ]"
         >
           <font-awesome-icon
             icon="fa-solid fa-magnifying-glass"
@@ -39,9 +46,13 @@
     <router-link to="/trends">
       <div
         class="flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goTrends"
       >
         <h1
-          class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl"
+          :class="[
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            state.activeButton === 'trends' ? 'font-extrabold text-white' : '',
+          ]"
         >
           <font-awesome-icon
             icon="fa-solid fa-arrow-trend-up"
@@ -53,9 +64,15 @@
 
     <div
       class="flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      @click="goNotifications"
     >
       <h1
-        class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl"
+        :class="[
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          state.activeButton === 'notifications'
+            ? 'font-extrabold text-white'
+            : '',
+        ]"
       >
         <font-awesome-icon icon="fa-solid fa-bell" class="mr-2 mb-1" />
         Notificaciones
@@ -66,7 +83,10 @@
       class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
     >
       <h1
-        class="my-5 ml-1 text-lg font-bold text-white hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl"
+        :class="[
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
+        ]"
         @click="goProfile"
       >
         <font-awesome-icon icon="fa-solid fa-user" class="mr-2 mb-1" />
@@ -88,11 +108,17 @@
   import EventBus from "@/utils/EventBus";
   import { useUserStore } from "@/store";
   import { User } from "@/utils/models";
+  import { reactive } from "vue";
 
   const userStore = useUserStore();
   // const route = useRoute();
 
+  const state = reactive({
+    activeButton: "inicio",
+  });
+
   function goHome() {
+    state.activeButton = "inicio";
     EventBus.emit("goHome");
     EventBus.emit("loadTL");
     router.push({
@@ -101,7 +127,20 @@
     });
   }
 
+  function goSearch() {
+    state.activeButton = "search";
+  }
+
+  function goTrends() {
+    state.activeButton = "trends";
+  }
+
+  function goNotifications() {
+    state.activeButton = "notifications";
+  }
+
   function goProfile() {
+    state.activeButton = "profile";
     const user = userStore.user as User;
     EventBus.emit("loadUserMemes", user.userId);
     EventBus.emit("reloadProfileInfo", user);

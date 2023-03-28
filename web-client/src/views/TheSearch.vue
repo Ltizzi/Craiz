@@ -112,15 +112,18 @@
       const response = await axios.get(`${API_URL}meme/byTag?tag=${tag}`);
       searchedTag.value = response.data;
     }
-    const local = JSON.parse(localStorage.getItem("searchedMemes") as string);
-    if (local) {
+    if (localStorage.getItem("searchedMemes")) {
+      const local = JSON.parse(localStorage.getItem("searchedMemes") as string);
+
       noSearch.value = false;
       searchedTag.value = local;
     }
+
     isLoaded.value = true;
   });
 
   onUnmounted(() => {
     searchedTag.value = null;
+    localStorage.setItem("searchedMemes", "");
   });
 </script>
