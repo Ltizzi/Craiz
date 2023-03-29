@@ -1,6 +1,6 @@
 {
-  "name": "craiz-api",
-  "version": "1.0.0",
+  "name": "craze-api",
+  "version": "0.2.0",
   "description": "first api for craiz",
   "main": "src/server.js ",
   "scripts": {
