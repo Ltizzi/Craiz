@@ -96,7 +96,7 @@
 
     <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
-    <SignInButton class="mt-72"></SignInButton>
+    <SignInButton class="mt-52"></SignInButton>
   </div>
 </template>
 <script setup lang="ts">

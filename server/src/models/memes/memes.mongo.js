@@ -30,6 +30,11 @@ const memesSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  likeCounter: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
   isComment: {
     type: Boolean,
     required: true,

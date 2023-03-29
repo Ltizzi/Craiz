@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const { httpUploadImage } = require("./utils.controller");
+const { httpUploadImage, httpSearchValue } = require("./utils.controller");
 
 const utilsRouter = express.Router();
 
@@ -18,5 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 utilsRouter.post("/uploadImg", upload.single("file"), httpUploadImage);
+utilsRouter.get("/search", httpSearchValue);
 
 module.exports = utilsRouter;

@@ -1,6 +1,10 @@
 const usersRepo = require("./users.mongo");
 const memesRepo = require("../memes/memes.mongo");
-// const axios = require("axios");
+const {
+  saveNotification,
+  getFollowNotification,
+  removeNotification,
+} = require("../notifications/notifications.model");
 
 const DEFAULT_USER_ID = 0;
 
@@ -98,11 +102,21 @@ async function handleFollows(userId, userToFollowId) {
   if (!userToFollow) {
     throw new Error("User to follow doesn't exists");
   }
-  // const followedUser = user.follows.filter(
-  //   (followedUsr) => followedUsr == userToFollowId
-  // );
+
+  //notification preparation
+  // const userId = user.userId;
+  const fromUserId = user.userId;
+  //creo el objeto porque no estoy seguro si la query funciona solo con la Id en un array de objetos
+  // la solucion? PASARLE EL OBJETO DIRECTAMENTE AAAAA
+  const fromUser = {
+    userId: user.userId,
+    avatar: user.avatar,
+    nickname: user.nickname,
+    username: user.username,
+  };
+
   const followedUser = user.follows.includes(userToFollowId);
-  // if (followedUser.length == 0) {
+
   if (!followedUser) {
     userToFollow.followers.push(user.userId);
     userToFollow.followersCounter += 1;
@@ -110,6 +124,16 @@ async function handleFollows(userId, userToFollowId) {
     user.followsCounter += 1;
     await updateUser(userToFollow);
     await updateUser(user);
+
+    //noti
+    const notiRes = await saveNotification(
+      fromUserId,
+      userToFollowId,
+      "follow",
+      "_"
+    );
+    console.log(notiRes);
+
     return { res: "followed" };
   } else {
     userToFollow.followers = userToFollow.followers.filter(
@@ -120,6 +144,13 @@ async function handleFollows(userId, userToFollowId) {
     if (user.followsCounter > 0) user.followsCounter -= 1;
     await updateUser(userToFollow);
     await updateUser(user);
+
+    const noti = await getFollowNotification(userId, fromUser);
+    if (noti) {
+      const notiRes = await removeNotification(noti.notificationId);
+      console.log(notiRes);
+    }
+
     return { res: "unfollowed" };
   }
 }
@@ -141,6 +172,13 @@ async function findUser(filter) {
   return await usersRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
+async function findUsers(filter, skip, limit) {
+  return await usersRepo
+    .find(filter, { _id: 0, __v: 0 })
+    .skip(skip)
+    .limit(limit);
+}
+
 module.exports = {
   getAllUsers,
   getSoftDeletedUsers,
@@ -154,4 +192,5 @@ module.exports = {
   deleteUser,
   updateUser,
   handleFollows,
+  findUsers,
 };
