@@ -21,7 +21,7 @@ const notificationsSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  isNew: {
+  isNewN: {
     type: Boolean,
     default: true,
     required: true,

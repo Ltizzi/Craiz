@@ -105,14 +105,14 @@ async function handleFollows(userId, userToFollowId) {
 
   //notification preparation
   // const userId = user.userId;
-  const fromUserId = userToFollow.userId;
+  const fromUserId = user.userId;
   //creo el objeto porque no estoy seguro si la query funciona solo con la Id en un array de objetos
   // la solucion? PASARLE EL OBJETO DIRECTAMENTE AAAAA
   const fromUser = {
-    userId: userToFollow.userId,
-    avatar: userToFollow.avatar,
-    nickname: userToFollow.nickname,
-    username: userToFollow.username,
+    userId: user.userId,
+    avatar: user.avatar,
+    nickname: user.nickname,
+    username: user.username,
   };
 
   const followedUser = user.follows.includes(userToFollowId);
@@ -126,7 +126,12 @@ async function handleFollows(userId, userToFollowId) {
     await updateUser(user);
 
     //noti
-    const notiRes = await saveNotification(fromUserId, userId, "follow", _);
+    const notiRes = await saveNotification(
+      fromUserId,
+      userToFollowId,
+      "follow",
+      "_"
+    );
     console.log(notiRes);
 
     return { res: "followed" };
