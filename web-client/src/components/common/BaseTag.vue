@@ -1,13 +1,23 @@
 <template lang="">
   <div
+    v-if="props.list"
+    class="rounded-lg px-2 py-0.5 text-base font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
+    @click="openTag(props.name)"
+  >
+    <slot></slot>
+  </div>
+  <div
+    v-else
     class="rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer sm:text-base md:px-2 lg:px-2 lg:text-base"
-    @click="openTag(tag.link)"
+    @click="openTag(props.name)"
   >
     <slot></slot>
   </div>
 </template>
 <script setup lang="ts">
-  // import { useRouter } from "vue-router";
+  import router from "@/router";
+  import EventBus from "@/utils/EventBus";
+
   interface Tag {
     class: String;
     link: String;
@@ -18,10 +28,19 @@
     link: "",
   };
 
+  const props = defineProps({
+    name: {
+      type: String,
+      required: false,
+    },
+    list: {
+      type: Boolean,
+      required: false,
+    },
+  });
+
   function openTag(link: string) {
-    //TODO
-    // const router = useRouter();
-    // router.push(tag);
+    router.push(`/search?tag=${link}`);
   }
 </script>
 <style>

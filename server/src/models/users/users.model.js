@@ -7,7 +7,7 @@ const DEFAULT_USER_ID = 0;
 async function getAllUsers(skip, limit) {
   return await usersRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
-    .sort({ userId: 1 })
+    .sort({ likeCounter: -1 })
     .skip(skip)
     .limit(limit);
 }

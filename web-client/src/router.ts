@@ -6,6 +6,8 @@ import TheMeme from "./views/TheMeme.vue";
 import AppVue from "./App.vue";
 import TheProfile from "./views/TheProfile.vue";
 import LandingPageVue from "./components/layout/LandingPage.vue";
+import TheSearchVue from "./views/TheSearch.vue";
+import TheTrendsVue from "./views/TheTrends.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +20,24 @@ const router = createRouter({
         { path: ":username", name: "TheProfile", component: TheProfile },
         { path: "meme", component: TheMeme },
         { path: "/callback", component: CallbackVue },
+        {
+          path: "/search",
+          name: "TheSearch",
+          component: TheSearchVue,
+          props: (route) => ({
+            tagname: route.query.tag,
+            username: route.query.user,
+          }),
+        },
+
+        {
+          path: "/trends",
+          name: "TheTrends",
+          component: TheTrendsVue,
+          props: (route) => ({
+            topusers: route.query.topusers,
+          }),
+        },
       ],
     },
     { path: "/landing", component: LandingPageVue },

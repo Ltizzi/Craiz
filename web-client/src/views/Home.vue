@@ -11,13 +11,18 @@
       </div>
       <!-- items-center justify-center -->
       <div
-        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-7/12"
+        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-3/5"
       >
         <keep-alive>
           <RouterView></RouterView>
         </keep-alive>
       </div>
-      <div class="w-14 sm:w-14 md:w-32 lg:w-52" v-if="!state.isMobile"></div>
+      <div
+        class="ml-5 flex h-screen w-14 items-center sm:w-14 md:w-32 lg:w-52"
+        v-if="!state.isMobile"
+      >
+        <LateralRight />
+      </div>
     </div>
     <div v-if="state.isMobile">
       <MobileNav class="fixed bottom-0" />
@@ -27,6 +32,7 @@
 
 <script setup lang="ts">
   import LateralMenu from "../components/layout/LateralMenu.vue";
+  import LateralRight from "@/components/layout/LateralRight.vue";
   import Callback from "../components/ui/Callback.vue";
   import MobileNav from "../components/ui/MobileNav.vue";
   import { useUserStore } from "@/store";
