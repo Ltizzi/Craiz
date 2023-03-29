@@ -67,13 +67,19 @@ async function httpSearchValue(req, res) {
   const returnValues = {};
 
   const memesSortedByLike = await memesRepo
-    .find({ softDeleted: false, tags: searchValue }, { _id: 0, __v: 0 })
+    .find(
+      { softDeleted: false, tags: { $regex: searchValue, $options: "i" } },
+      { _id: 0, __v: 0 }
+    )
     .sort({ likeCounter: -1 })
     .skip(skip)
     .limit(limit);
   if (memesSortedByLike) returnValues.memesSortedByLike = memesSortedByLike;
   const memesSortedByUpdate = await memesRepo
-    .find({ softDeleted: false, tags: searchValue }, { _id: 0, __v: 0 })
+    .find(
+      { softDeleted: false, tags: { $regex: searchValue, $options: "i" } },
+      { _id: 0, __v: 0 }
+    )
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
@@ -82,8 +88,8 @@ async function httpSearchValue(req, res) {
 
   const filter = {
     softDeleted: false,
-    username: searchValue,
-    nicknames: searchValue,
+    username: { $regex: searchValue, $options: "i" },
+    nicknames: { $regex: searchValue, $options: "i" },
   };
   const users = await findUsers(filter, skip, limit);
   if (users) returnValues.users = users;
