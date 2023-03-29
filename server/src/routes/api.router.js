@@ -13,6 +13,6 @@ apiRouter.use("/meme", memesRouter);
 apiRouter.use("/tag", tagsRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/utils", utilsRouter);
-apiRouter.use("/notifications");
+apiRouter.use("/notifications", notifsRouter);
 
 module.exports = apiRouter;
