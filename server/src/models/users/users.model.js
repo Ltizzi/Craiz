@@ -141,6 +141,13 @@ async function findUser(filter) {
   return await usersRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
+async function findUsers(filter, skip, limit) {
+  return await usersRepo
+    .find(filter, { _id: 0, __v: 0 })
+    .skip(skip)
+    .limit(limit);
+}
+
 module.exports = {
   getAllUsers,
   getSoftDeletedUsers,
@@ -154,4 +161,5 @@ module.exports = {
   deleteUser,
   updateUser,
   handleFollows,
+  findUsers,
 };

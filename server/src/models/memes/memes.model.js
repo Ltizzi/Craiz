@@ -124,17 +124,21 @@ async function getLastMemeId() {
 }
 
 async function saveMeme(meme) {
-  const newMemeId = (await getLastMemeId()) + 1;
-  const user = await getUserById(meme.uploader);
+  const newMemeId = (await getLastMemeId()) + 1; //busca el último Id y le adiciona 1
+  const user = await getUserById(meme.uploader); //busca info del uploader
+
+  //información básica añadida al meme
   const newMeme = Object.assign(meme, {
     memeId: newMemeId,
     likes: 0,
     createdAt: Date.now(),
+    updatedAt: Date.now(),
   });
   const tagNames = meme.tags;
   console.log(meme);
   console.log("***");
   console.log(tagNames);
+  //incrementa el contador de cada tag -para medir su popularidad-
   tagNames.forEach((tag) => {
     tagIncrementalCounter(tag);
   });
@@ -146,15 +150,15 @@ async function saveMeme(meme) {
       upsert: true,
     }
   );
-  user.memes.push(newMemeId);
+  user.memes.push(newMemeId); //asocia el meme al uploader
   const usedTags = newMeme.tags;
   if (usedTags) {
     for (let i = 0; i < usedTags.length; i++) {
-      user.tags.push(usedTags[i]);
+      user.tags.push(usedTags[i]); //agrega los tags al usuario para personalizar contenido luego
     }
-    usedTags.forEach((tag) => {
-      tagIncrementalCounter(tag);
-    });
+    // usedTags.forEach((tag) => {
+    //   tagIncrementalCounter(tag);
+    // });
   }
   await updateUser(user);
   return savedMeme;
@@ -217,21 +221,32 @@ async function likeMeme(memeId, userId) {
   if (!user) {
     throw new Error("User doesn't exists");
   }
+  const memeOwner = await getUserById(meme.uploader);
+  if (!memeOwner) {
+    throw new Error("Memes should have an owner");
+  }
   const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
   console.log(likedMeme);
+  //si el usuario no likeo al meme
   if (likedMeme.length == 0) {
     meme.likedBy.push(user.userId);
+    meme.likeCounter += 1;
     user.likedMemes.push(meme.memeId);
-    user.likeCounter += 1;
+    memeOwner.likeCounter += 1;
     await updateMeme(meme);
     await updateUser(user);
+    await updateUser(memeOwner);
     return { ok: "liked meme" };
-  } else {
+  }
+  //si el meme ya fue likeado
+  else {
     meme.likedBy = meme.likedBy.filter((usr) => usr != userId);
+    meme.likeCounter -= 1;
     user.likedMemes = user.likedMemes.filter((mm) => mm != memeId);
-    user.likeCounter -= 1;
+    memeOwner.likeCounter -= 1;
     await updateMeme(meme);
     await updateUser(user);
+    await updateUser(memeOwner);
     return { ok: "unliked meme" };
   }
 }
