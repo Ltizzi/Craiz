@@ -104,7 +104,7 @@ async function handleFollows(userId, userToFollowId) {
   }
 
   //notification preparation
-  const userId = user.userId;
+  // const userId = user.userId;
   const fromUserId = userToFollow.userId;
   //creo el objeto porque no estoy seguro si la query funciona solo con la Id en un array de objetos
   // la solucion? PASARLE EL OBJETO DIRECTAMENTE AAAAA
