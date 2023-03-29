@@ -5,7 +5,7 @@ const DEFAULT_NOTIFICATION_ID = 0;
 
 async function getNotificationsByUserId(id, skip, limit) {
   return await notiRepo
-    .find({}, { _id: 0, __v: 0 })
+    .find({ ownerId: id }, { _id: 0, __v: 0 })
     .sort({ isNew: 1, updatedAt: -1 })
     .skip(skip)
     .limit(limit);
@@ -13,7 +13,7 @@ async function getNotificationsByUserId(id, skip, limit) {
 
 async function getNewNotificationsByUserId(id, skip, limit) {
   return await notiRepo
-    .find({ isNew: true }, { _id: 0, __v: 0 })
+    .find({ isNew: true, ownerId: id }, { _id: 0, __v: 0 })
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
@@ -34,6 +34,14 @@ async function getNotificationByMemeIdTypeAndOwnerId(memeId, ownerId, type) {
   );
 }
 
+async function getFollowNotification(ownerId, fromUserId) {
+  return await notiRepo.findOne({
+    ownerId: ownerId,
+    type: "follow",
+    fromUser: fromUserId,
+  });
+}
+
 async function saveNotification(fromUserId, ownerId, type, memeId) {
   const newNotificationId = (await getLastNotificationId()) + 1;
   const fromUser = await userRepo.findOne(
@@ -43,7 +51,7 @@ async function saveNotification(fromUserId, ownerId, type, memeId) {
     },
     { _id: 0, __v: 0 }
   );
-  if (!memeId) {
+  if (memeId == _) {
     memeId = null;
   }
   const newNoti = Object.assign(notification, {
@@ -137,5 +145,6 @@ async function saveNotification(fromUserId, ownerId, type, memeId) {
     removeFromUserInNotification,
     removeNotification,
     checkNotificationAsView,
+    getFollowNotification,
   };
 }
