@@ -192,6 +192,8 @@ async function addCommentToMeme(memeId, comment) {
     userId,
     "comment"
   );
+
+  console.log(noti);
   //existe la notification
   if (noti) {
     await addFromUserToNotification(noti, fromUserId);
@@ -264,9 +266,10 @@ async function likeMeme(memeId, userId) {
   //preparacion notification
   const noti = await getNotificationByMemeIdTypeAndOwnerId(
     memeId,
-    userId,
+    memeOwner.userId,
     "like"
   );
+  console.log("notiiiii", noti);
   let fromUserId = userId;
   let ownerId = memeOwner.userId;
 
