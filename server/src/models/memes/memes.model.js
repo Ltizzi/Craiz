@@ -253,6 +253,7 @@ async function likeMeme(memeId, userId) {
     throw new Error("Memes should have an owner");
   }
   const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
+  console.log("**********");
   console.log(likedMeme);
 
   //preparacion notification
