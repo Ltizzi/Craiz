@@ -82,36 +82,24 @@
   }
 
   async function getMeme(id: number) {
-    const response = await axios.get(
-      `${API_URL}meme/byId?id=${id}`
-      //`http://localhost:4246/v1/meme/byId?id=${id}`
-    );
+    const response = await axios.get(`${API_URL}meme/byId?id=${id}`);
     return response.data;
   }
 
   async function getUser(id: number) {
-    const response = await axios.get(
-      `${API_URL}user/byId?id=${id}`
-      //`http://localhost:4246/v1/user/byId?id=${id}`,
-    );
+    const response = await axios.get(`${API_URL}user/byId?id=${id}`);
     return response.data;
   }
 
   onMounted(async () => {
     try {
-      // meme.value = await getMeme(memeId);
-      // user.value = await getUser(userId);
-
-      // let likedList = meme.value.likedBy as Array<number>;
       let likedList = props.meme.likedBy as Array<number>;
 
       likeCounter.value = likedList.length;
-      // let isLikedByUser = user.value.likedMemes.filter(
-      //   (mem: number) => mem == meme.value.memeId
-      // );
+      // likeCounter.value = props.meme.likeCounter;
 
       let user = userStore.user as User;
-
+      console.log(user.likedMemes);
       let isLikedByUser = user.likedMemes.includes(props.meme.memeId);
       console.log("liked by user:", isLikedByUser);
       // if (isLikedByUser.length > 0) liked.value = true;

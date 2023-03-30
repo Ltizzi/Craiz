@@ -15,7 +15,7 @@
     </button>
 
     <button
-      class="fixed left-16 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/3"
+      class="fixed left-16 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/4 lg:ml-20"
       v-if="isComment"
       @click="backToParent"
     >
@@ -159,6 +159,12 @@
         { withCredentials: true }
       );
       userStore.setUser(response.data.user);
+      if (!response.data.user) {
+        let localGuest = localStorage.getItem("guest");
+        if (localGuest == "userIsGuest") {
+          userStore.setGuest();
+        }
+      }
     } catch (err) {
       console.log(err);
     }

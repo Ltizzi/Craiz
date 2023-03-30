@@ -4,7 +4,7 @@
       class="max-w-sm:full xs:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 sm:w-full sm:justify-start md:w-11/12 lg:w-8/12"
     >
       <div
-        class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-64"
+        class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-2/12"
         v-if="!state.isMobile"
       >
         <LateralMenu></LateralMenu>
@@ -18,7 +18,7 @@
         </keep-alive>
       </div>
       <div
-        class="ml-5 flex h-screen w-14 items-center sm:w-14 md:w-32 lg:w-52"
+        class="ml-5 flex h-screen w-14 items-center sm:w-14 md:w-32 lg:mx-auto lg:w-72 lg:justify-center"
         v-if="!state.isMobile"
       >
         <LateralRight />
@@ -105,7 +105,8 @@
       isLogged.value = false;
       console.log("no logueado");
       isGuest.value = userStore.isGuest;
-      if (isGuest.value) {
+      let localGuest = localStorage.getItem("guest");
+      if (isGuest.value || localGuest == "userIsGuest") {
         isLogged.value = true;
       } else {
         router.push("/landing");

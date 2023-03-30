@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="fixed flex w-52 flex-col gap-5">
+  <div class="fixed flex w-64 flex-col gap-5">
     <div class="w-full">
       <SearchBar class="ml-0 w-64 bg-transparent" :back="false" />
     </div>

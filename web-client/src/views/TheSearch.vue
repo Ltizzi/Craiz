@@ -1,21 +1,26 @@
 <template lang="">
-  <div class="flex flex-col pt-24 lg:w-fit" v-if="isLoaded">
+  <div class="flex flex-col pt-24 lg:w-full" v-if="isLoaded">
     <SearchHeader class="w-full lg:w-2/5" />
-    <div v-if="noSearch" class="mt-40 text-2xl">Busca tags o usuarios</div>
+    <div v-if="noSearch" class="mt-40 w-full text-2xl">
+      Busca tags o usuarios
+    </div>
     <div v-else>
       <MemeList
         :searchedTag="searchedTag"
-        v-if="state.activeTab == 'highlights' || state.activeTab == 'recent'"
+        v-if="state.activeTab == 'highlights'"
+      />
+      <MemeList
+        :searchedTag="searchedRecent"
+        v-if="state.activeTab == 'recent'"
       />
       <div v-if="state.activeTab == 'users'" class="mt-40">
-        <p>asdasdasd</p>
         <div
-          class="flex flex-row"
+          class="mb-5 flex flex-row gap-2"
           v-for="user in searchedUser"
           :key="user.userId"
         >
-          <img :src="user.avatar" alt="" />
-          <p>{{ user.nickname }}</p>
+          <img :src="user.avatar" alt="" class="w-14 rounded-full" />
+          <p class="text-xl font-bold">{{ user.nickname }}</p>
         </div>
       </div>
     </div>
@@ -37,6 +42,7 @@
   const isLoaded = ref(false);
 
   const searchedTag = ref();
+  const searchedRecent = ref();
   const searchedUser = ref();
   const noSearch = ref(true);
 
@@ -62,47 +68,35 @@
 
   EventBus.on("isSearching", () => {
     searchedTag.value = [];
+    searchedRecent.value = [];
     searchedUser.value = [];
     noSearch.value = true;
   });
 
-  EventBus.on("searchFinished", () => {
-    noSearch.value = false;
-    console.log("preprepre");
-    let memes = JSON.parse(localStorage.getItem("searchedMemes") as string);
-    let users = JSON.parse(localStorage.getItem("searchedUsers") as string);
-    console.log(memes);
-    console.log(users);
-    if (memes) {
-      searchedTag.value = memes;
-    }
-    if (searchStore.searchedMemes && !memes) {
-      searchedTag.value = searchStore.searchedMemes;
-    }
-    if (users) {
-      searchedUser.value = users;
-    }
-    if (searchStore.searchedUsers && !users) {
-      searchedUser.value = searchStore.searchedUsers;
-    }
-  });
-
   EventBus.on("loadHighlight", () => {
-    noSearch.value = false;
+    if (searchedTag.value) {
+      noSearch.value = false;
+    }
     state.activeTab = "highlights";
   });
 
   EventBus.on("loadRecent", () => {
-    noSearch.value = false;
+    if (searchedRecent.value) {
+      noSearch.value = false;
+    }
+
     state.activeTab = "recent";
   });
 
   EventBus.on("loadSearchUsers", () => {
-    noSearch.value = false;
+    if (searchedUser.value) {
+      noSearch.value = false;
+    }
     state.activeTab = "users";
   });
 
   onMounted(async () => {
+    localStorage.removeItem("searchedValues");
     const tag = props.tagname;
     const user = props.username;
 
@@ -112,11 +106,44 @@
       const response = await axios.get(`${API_URL}meme/byTag?tag=${tag}`);
       searchedTag.value = response.data;
     }
-    if (localStorage.getItem("searchedMemes")) {
-      const local = JSON.parse(localStorage.getItem("searchedMemes") as string);
+    if (route.query.value) {
+      const response = await axios.get(
+        `${API_URL}utils/search?value=${route.query.value}`
+      );
+      if (!response.data.error) {
+        let searchedValues = response.data;
+        searchedTag.value = searchedValues.memesSortedByLike;
+        searchedRecent.value = searchedValues.memesSortedByUpdate;
+        searchedUser.value = searchedValues.users;
+        noSearch.value = false;
+        localStorage.setItem("searchedValues", JSON.stringify(searchedValues));
+        if (
+          !searchedTag.value ||
+          (searchedRecent.value && searchedUser.value)
+        ) {
+          state.activeTab = "users";
+        }
+        if (searchedTag.value) {
+          state.activeTab = "highlights";
+        }
+      }
+    }
+
+    if (localStorage.getItem("searchedValues")) {
+      const local = JSON.parse(
+        localStorage.getItem("searchedValues") as string
+      );
 
       noSearch.value = false;
-      searchedTag.value = local;
+      searchedTag.value = local.memesSortedByLike;
+      searchedRecent.value = local.memesSortedByUpdate;
+      searchedUser.value = local.users;
+      if (!searchedTag.value || (searchedRecent.value && searchedUser.value)) {
+        state.activeTab = "users";
+      }
+      if (searchedTag.value) {
+        state.activeTab = "highlights";
+      }
     }
 
     isLoaded.value = true;

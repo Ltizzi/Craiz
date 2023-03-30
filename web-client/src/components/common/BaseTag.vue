@@ -37,10 +37,16 @@
       type: Boolean,
       required: false,
     },
+    clickeable: {
+      type: Boolean,
+      required: false,
+    },
   });
 
   function openTag(link: string) {
-    router.push(`/search?tag=${link}`);
+    if (!props.clickeable) {
+      router.push(`/search?tag=${link}`);
+    }
   }
 </script>
 <style>
@@ -74,7 +80,7 @@
   .celeb {
     @apply bg-fuchsia-500;
   }
-  .art {
+  .pop {
     @apply bg-lime-500;
   }
   .plus18 {

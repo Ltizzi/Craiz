@@ -40,6 +40,9 @@
 <script setup lang="ts">
   import EventBus from "@/utils/EventBus";
   import { reactive } from "vue";
+  import { useRoute } from "vue-router";
+
+  const route = useRoute();
 
   const state = reactive({
     activeButton: "highlight",

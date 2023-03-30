@@ -252,8 +252,7 @@ async function likeMeme(memeId, userId) {
   if (!memeOwner) {
     throw new Error("Memes should have an owner");
   }
-  const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
-  console.log(likedMeme);
+  const likedMeme = user.likedMemes.includes(memeId);
 
   //preparacion notification
   const noti = await getNotificationByMemeIdTypeAndOwnerId(
@@ -261,19 +260,18 @@ async function likeMeme(memeId, userId) {
     memeOwner.userId,
     "like"
   );
-  console.log("notiiiii", noti);
   let fromUserId = userId;
   let ownerId = memeOwner.userId;
 
   //si el usuario no likeo al meme
-  if (likedMeme.length == 0) {
+  if (!likedMeme) {
     meme.likedBy.push(user.userId);
     meme.likeCounter += 1;
     user.likedMemes.push(meme.memeId);
     memeOwner.likeCounter += 1;
     await updateMeme(meme);
     await updateUser(user);
-    await updateUser(memeOwner);
+    if (user.userId != memeOwner.userId) await updateUser(memeOwner);
 
     //si ya existe la notification
     if (noti) {
@@ -293,15 +291,17 @@ async function likeMeme(memeId, userId) {
 
     return { ok: "liked meme" };
   }
+
   //si el meme ya fue likeado
   else {
+    console.log(user.likedMemes);
     meme.likedBy = meme.likedBy.filter((usr) => usr != userId);
     meme.likeCounter -= 1;
     user.likedMemes = user.likedMemes.filter((mm) => mm != memeId);
     memeOwner.likeCounter -= 1;
     await updateMeme(meme);
     await updateUser(user);
-    await updateUser(memeOwner);
+    if (user.userId != memeOwner.userId) await updateUser(memeOwner);
     return { ok: "unliked meme" };
     if (noti) {
       const notiRes = await removeFromUserInNotification(noti, fromUserId);
