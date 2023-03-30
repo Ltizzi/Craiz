@@ -85,6 +85,7 @@
   import axios from "axios";
   import { API_URL } from "@/main";
   import { Meme } from "@/utils/models";
+  import { useRoute } from "vue-router";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
@@ -149,6 +150,7 @@
   const isUploading = ref(false);
   const uploadComplete = ref(false);
   const uploadFailed = ref(false);
+  const route = useRoute();
 
   async function uploadMeme() {
     isUploading.value = true;
@@ -225,11 +227,18 @@
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
     let parentMeme = memeStore.parentMeme as Meme;
+
     if (parentMeme.memeId !== undefined) {
       isComment.value = true;
       parentMemeId.value = parentMeme.memeId;
       // console.log("is comment:", isComment.value);
       // console.log("parent id:", parentMemeId.value);
+    }
+    if (route.query.id) {
+      let parentId = parseInt(route.query.id as string);
+      isComment.value = true;
+      parentMemeId.value = parentId;
+      console.log(parentId);
     }
   });
 </script>
