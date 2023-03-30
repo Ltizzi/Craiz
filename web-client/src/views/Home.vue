@@ -105,7 +105,8 @@
       isLogged.value = false;
       console.log("no logueado");
       isGuest.value = userStore.isGuest;
-      if (isGuest.value) {
+      let localGuest = localStorage.getItem("guest");
+      if (isGuest.value || localGuest == "userIsGuest") {
         isLogged.value = true;
       } else {
         router.push("/landing");

@@ -159,6 +159,12 @@
         { withCredentials: true }
       );
       userStore.setUser(response.data.user);
+      if (!response.data.user) {
+        let localGuest = localStorage.getItem("guest");
+        if (localGuest == "userIsGuest") {
+          userStore.setGuest();
+        }
+      }
     } catch (err) {
       console.log(err);
     }

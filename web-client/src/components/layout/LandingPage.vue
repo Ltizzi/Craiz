@@ -55,6 +55,7 @@
 
   function goHome() {
     userStore.setGuest();
+    localStorage.setItem("guest", "userIsGuest");
     router.push("/");
   }
 

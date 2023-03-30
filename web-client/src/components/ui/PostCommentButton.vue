@@ -28,9 +28,11 @@
   });
 
   async function modalSwitch() {
+    localStorage.removeItem("parentId");
     EventBus.emit("openDialogComment");
     EventBus.emit("newComment", { parentMeme: props.memeId });
     await memeStore.fetchParentMeme(props.memeId as number);
+    localStorage.set("parentId", props.memeId);
     showModal.value = true;
   }
 </script>

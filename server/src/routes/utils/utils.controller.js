@@ -86,10 +86,12 @@ async function httpSearchValue(req, res) {
   if (memesSortedByUpdate)
     returnValues.memesSortedByUpdate = memesSortedByUpdate;
 
+  const searchValueRegExp = new RegExp(searchValue, "i"); //ignora mayusculas/minusculas
   const filter = {
     softDeleted: false,
-    username: { $regex: searchValue, $options: "i" },
-    nicknames: { $regex: searchValue, $options: "i" },
+    // username: { $regex: searchValue, $options: "i" },
+    // nicknames: { $regex: searchValue, $options: "i" },
+    $or: [{ username: searchValueRegExp }, { nickname: searchValueRegExp }],
   };
   const users = await findUsers(filter, skip, limit);
   if (users) returnValues.users = users;
