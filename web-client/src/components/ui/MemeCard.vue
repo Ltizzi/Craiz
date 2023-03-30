@@ -127,6 +127,7 @@
       loopersNicknames: Array<string>;
       comments: Array<any>;
       loopCounter: number;
+      likeCounter: number;
     };
   }>();
   const isLoaded = ref(false);

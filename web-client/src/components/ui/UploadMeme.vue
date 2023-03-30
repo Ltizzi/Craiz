@@ -20,6 +20,7 @@
         :key="tag.tagId"
         class="mb-0.5 mt-0.5"
         :class="tag.name"
+        :clickeable="true"
         >{{ tag.name }}</BaseTag
       >
     </div>
@@ -43,6 +44,7 @@
           :key="tag.tagId"
           class="mb-1"
           :class="tag.name"
+          :clickeable="true"
           @click="selecTag(tag)"
           >{{ tag.name }}</BaseTag
         >

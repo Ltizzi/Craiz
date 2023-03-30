@@ -19,11 +19,14 @@
             class="h-10 w-10 rounded-full"
           />
           <div class="flex flex-col justify-start gap-0">
-            <h3 class="text-start text-base font-bold">
-              {{ user.nickname }}
-            </h3>
+            <div class="flex flex-row items-center gap-2">
+              <h3 class="text-start text-base font-bold">
+                {{ user.nickname }}
+              </h3>
+              <!-- <p class="text-sm">@{{ user.username }} -</p> -->
+            </div>
+
             <div class="flex flex-col gap-0">
-              <p class="text-sm">@{{ user.username }} -</p>
               <p class="text-sm">{{ user.likeCounter }} likes</p>
             </div>
           </div>

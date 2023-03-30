@@ -1,7 +1,9 @@
 <template lang="">
-  <div class="flex flex-col pt-24 lg:w-fit" v-if="isLoaded">
+  <div class="flex flex-col pt-24 lg:w-full" v-if="isLoaded">
     <SearchHeader class="w-full lg:w-2/5" />
-    <div v-if="noSearch" class="mt-40 text-2xl">Busca tags o usuarios</div>
+    <div v-if="noSearch" class="mt-40 w-full text-2xl">
+      Busca tags o usuarios
+    </div>
     <div v-else>
       <MemeList
         :searchedTag="searchedTag"
