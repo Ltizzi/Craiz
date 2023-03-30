@@ -79,74 +79,7 @@
     localStorage.removeItem("searchedUsers");
     let textToSearch = inputSearch.value.toLowerCase();
 
-    //memesByTag
-    try {
-      const memeRes = await axios.get(
-        `${API_URL}meme/byTag?tag=${textToSearch}`
-      );
-      tagSearch.value = memeRes.data;
-    } catch (err) {
-      console.log(err);
-    }
-
-    // // user by nick and username
-    // let usernameRes;
-    // let nicknameRes;
-    // try {
-    //   usernameRes = await axios.get(
-    //     `${API_URL}user/byUsername?username=${inputSearch.value}`
-    //   );
-    // } catch (err) {
-    //   console.log(err);
+    router.replace(`/search?value=${textToSearch}`);
     // }
-    // try {
-    //   nicknameRes = await axios.get(
-    //     `${API_URL}user/byNickname?nickname=${inputSearch.value}`
-    //   );
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // if (nicknameRes && usernameRes) {
-    //   userSearch.value = usernameRes.data.concat(nicknameRes.data);
-    // }
-
-    //guarda las busquedas en la db
-    let user = userStore.user as User;
-    if (user) {
-      if (user.searchEntries) {
-        user.searchEntries.push(textToSearch);
-      } else {
-        user.searchEntries = [textToSearch];
-      }
-      const response = await axios.patch(`${API_URL}user/update`, user, {
-        withCredentials: true,
-      });
-      console.log(response.data);
-    }
-
-    //guardar la data en localstorage y state manager
-    if (tagSearch.value || userSearch.value) {
-      localStorage.setItem("searchedMemes", JSON.stringify(tagSearch.value));
-      // localStorage.setItem("searchedUsers", JSON.stringify(userSearch.value));
-
-      searchStore.setSearch(tagSearch.value, userSearch.value);
-
-      EventBus.emit("searchFinished");
-      router.replace("/search");
-    }
   }
-
-  // onMounted(async () => {
-  //   //event listener al buscador
-
-  //   inputBar?.addEventListener("keypress", async (e) => {
-  //     if (e.key === "Enter") {
-  //       handleEnterEvent();
-  //     }
-  //   });
-  // });
-
-  // onUnmounted(() => {
-  //   inputBar?.removeEventListener("keypress", handleEnterEvent);
-  // });
 </script>

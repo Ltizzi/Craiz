@@ -27,11 +27,12 @@
   let userIsSignedIn = ref(userStore.isSignedIn);
 
   const handleSignInClick = async () => {
+    localStorage.removeItem("guest");
     window.location.href = `${API_URL}auth/google`;
-    //window.location.href = "http://localhost:4246/v1/auth/google";
   };
 
   const handleSignOutClick = async () => {
+    localStorage.removeItem("guest");
     const response = await axios.get(`${API_URL}logout`, {
       withCredentials: true,
     });
