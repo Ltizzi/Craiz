@@ -41,8 +41,29 @@ async function saveTag(tag) {
   const newTag = Object.assign(tag, {
     tagId: newTagId,
     createdAt: Date.now(),
+    updatedAt: Date.now(),
     softDeleted: false,
     counter: 0, //TODO counter increment
+  });
+  return await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
+    upsert: true,
+  });
+}
+
+async function createCustomTag(tag) {
+  const newTagId = (await getLastTagId()) + 1;
+
+  const alreadyMaked = await findTag({ name: tag.name });
+  if (alreadyMaked) {
+    throw new Error("Duplicated tag name");
+  }
+  const newTag = Object.assign(tag, {
+    tagId: newTagId,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    isCustom: true,
+    softDeleted: false,
+    counter: 0,
   });
   return await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
     upsert: true,
@@ -86,6 +107,7 @@ module.exports = {
   getTagById,
   getLastTagId,
   saveTag,
+  createCustomTag,
   deleteTag,
   updateTag,
   tagIncrementalCounter,

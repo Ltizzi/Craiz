@@ -34,6 +34,14 @@ const tagsSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  updatedAt: {
+    type: Date,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Tag", tagsSchema);
