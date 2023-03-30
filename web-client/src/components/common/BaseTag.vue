@@ -80,7 +80,7 @@
   .celeb {
     @apply bg-fuchsia-500;
   }
-  .art {
+  .pop {
     @apply bg-lime-500;
   }
   .plus18 {

@@ -43,7 +43,7 @@
           v-for="tag in tags"
           :key="tag.tagId"
           class="mb-1"
-          :class="tag.name"
+          :class="tag.class"
           :clickeable="true"
           @click="selecTag(tag)"
           >{{ tag.name }}</BaseTag

@@ -301,7 +301,7 @@ async function likeMeme(memeId, userId) {
     memeOwner.likeCounter -= 1;
     await updateMeme(meme);
     await updateUser(user);
-    await updateUser(memeOwner);
+    if (user.userId != memeOwner.userId) await updateUser(memeOwner);
     return { ok: "unliked meme" };
     if (noti) {
       const notiRes = await removeFromUserInNotification(noti, fromUserId);

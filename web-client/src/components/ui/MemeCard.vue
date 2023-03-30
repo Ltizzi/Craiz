@@ -76,7 +76,7 @@
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"
             :key="index"
-            :class="tag.toLowerCase()"
+            :class="tag.toLowerCase().replaceAll(/\s/g, '')"
             :name="tag"
             class="my-auto mr-1"
             >{{ tag }}</BaseTag

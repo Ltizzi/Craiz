@@ -10,13 +10,13 @@
 
     <div
       class="flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      @click="goHome"
     >
       <h1
         :class="[
           'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
           state.activeButton === 'inicio' ? 'font-extrabold text-white' : '',
         ]"
-        @click="goHome"
       >
         <font-awesome-icon icon="fa-solid fa-house" class="mr-2 mb-1" />
         Inicio
@@ -81,13 +81,13 @@
 
     <div
       class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      @click="goProfile"
     >
       <h1
         :class="[
           'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
           state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
         ]"
-        @click="goProfile"
       >
         <font-awesome-icon icon="fa-solid fa-user" class="mr-2 mb-1" />
         Perfil
