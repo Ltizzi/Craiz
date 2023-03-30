@@ -2,6 +2,7 @@ const {
   getAllTags,
   getTagById,
   saveTag,
+  createCustomTag,
   updateTag,
   deleteTag,
 } = require("../../models/tags/tags.model");
@@ -30,6 +31,16 @@ async function httpGetTagById(req, res) {
 
 async function httpSaveTag(req, res) {
   // tag.createdAt = Date.now();
+  try {
+    const tag = req.body;
+    const newTag = await saveTag(tag);
+    return res.status(201).json(tag);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpCreateCustomTag(req, res) {
   try {
     const tag = req.body;
     const newTag = await saveTag(tag);
@@ -75,6 +86,7 @@ module.exports = {
   httpGetAllTags,
   httpGetTagById,
   httpSaveTag,
+  httpCreateCustomTag,
   httpUpdateTag,
   httpDeleteTag,
 };
