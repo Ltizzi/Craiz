@@ -163,9 +163,6 @@ async function saveMeme(meme) {
     for (let i = 0; i < usedTags.length; i++) {
       user.tags.push(usedTags[i]); //agrega los tags al usuario para personalizar contenido luego
     }
-    // usedTags.forEach((tag) => {
-    //   tagIncrementalCounter(tag);
-    // });
   }
   await updateUser(user);
   return savedMeme;
@@ -213,10 +210,6 @@ async function addCommentToMeme(memeId, comment) {
 }
 
 async function updateMeme(meme) {
-  // const tagNames = meme.tags;
-  // tagNames.forEach((tag) => {
-  //   tagIncrementalCounter(tag);
-  // });
   meme.updatedAt = Date.now();
   return await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
     upsert: true,
@@ -234,7 +227,6 @@ async function deleteMeme(memeId, userId) {
     throw new Error("you can't delete other people memes!");
   }
   meme.softDeleted = true;
-  // meme.updatedAt = Date.now();
   user.memes = user.memes.filter((mm) => mm != memeId);
   if (meme.isComment) {
     const parentMeme = await findMeme({ memeId: meme.parentMeme });
