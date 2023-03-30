@@ -123,6 +123,9 @@
         ) {
           state.activeTab = "users";
         }
+        if (searchedTag.value) {
+          state.activeTab = "highlights";
+        }
       }
     }
 
@@ -137,6 +140,9 @@
       searchedUser.value = local.users;
       if (!searchedTag.value || (searchedRecent.value && searchedUser.value)) {
         state.activeTab = "users";
+      }
+      if (searchedTag.value) {
+        state.activeTab = "highlights";
       }
     }
 
