@@ -5,6 +5,7 @@ const {
   httpGetAllTags,
   httpGetTagById,
   httpSaveTag,
+  httpCreateCustomTag,
   httpUpdateTag,
   httpDeleteTag,
 } = require("./tags.controller");
@@ -13,7 +14,8 @@ const tagsRouter = express.Router();
 
 tagsRouter.get("/all", httpGetAllTags);
 tagsRouter.get("/byId", httpGetTagById);
-tagsRouter.post("/new", checkLoggedIn, httpSaveTag);
+tagsRouter.post("/new", checkIsAdmin, httpSaveTag);
+tagsRouter.post("/custom", checkLoggedIn, httpCreateCustomTag);
 tagsRouter.patch("/update", checkIsAdmin, httpUpdateTag);
 tagsRouter.delete("/delete", checkIsAdmin, httpDeleteTag);
 
