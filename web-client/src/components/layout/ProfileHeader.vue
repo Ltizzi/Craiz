@@ -11,7 +11,7 @@
         alt=""
         class="h-72 w-full object-cover"
       />
-      <div class="h-56 w-full bg-slate-300" v-else></div>
+      <div class="h-72 w-full bg-slate-300" v-else></div>
       <img
         :src="props.user.avatar"
         alt=""

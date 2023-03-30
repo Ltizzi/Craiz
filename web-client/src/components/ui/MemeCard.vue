@@ -76,7 +76,7 @@
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"
             :key="index"
-            :class="tag.toLowerCase()"
+            :class="tag.toLowerCase().replaceAll(/\s/g, '')"
             :name="tag"
             class="my-auto mr-1"
             >{{ tag }}</BaseTag
@@ -127,6 +127,7 @@
       loopersNicknames: Array<string>;
       comments: Array<any>;
       loopCounter: number;
+      likeCounter: number;
     };
   }>();
   const isLoaded = ref(false);
