@@ -9,29 +9,29 @@
         :src="props.user.banner"
         v-if="props.user.banner"
         alt=""
-        class="h-56 w-full object-cover"
+        class="h-72 w-full object-cover"
       />
       <div class="h-56 w-full bg-slate-300" v-else></div>
       <img
         :src="props.user.avatar"
         alt=""
-        class="absolute top-48 left-2 h-20 w-20 rounded-full"
+        class="absolute top-64 left-2 h-20 w-20 rounded-full"
       />
       <BaseButton
-        class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
         v-if="isOwnProfile"
         @click="modalSwitch"
         >Editar Perfil</BaseButton
       >
       <EditProfileModal v-if="showModal" />
       <BaseButton
-        class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
         v-if="!isOwnProfile && !following"
         @click="handleFollows"
         >Seguir</BaseButton
       >
       <BaseButton
-        class="absolute top-56 right-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
         @click="handleFollows"
         v-if="!isOwnProfile && following"
         >Dejar de seguir</BaseButton
