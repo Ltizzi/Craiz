@@ -43,8 +43,8 @@
 <script setup lang="ts">
   import BaseSpinner from "../common/BaseSpinner.vue";
   import axios from "axios";
-  import { API_URL } from "@/main";
-  import { onBeforeMount, ref } from "vue";
+  import { API_URL, RELOAD_TIMER } from "@/main";
+  import { onBeforeMount, onMounted, ref } from "vue";
   import router from "@/router";
 
   const loadTopUsers = ref(false);
@@ -55,12 +55,23 @@
     router.push(`/${username}`);
   }
 
+  async function fetchTopUsers() {
+    return await axios.get(`${API_URL}user/all?skip=0&limit=10`);
+  }
+
   onBeforeMount(async () => {
-    const response = await axios.get(`${API_URL}user/all?skip=0&limit=10`);
+    const response = await fetchTopUsers();
     if (response.data) {
       users.value = response.data;
       loadTopUsers.value = true;
       isLoaded.value = true;
     }
+  });
+
+  onMounted(() => {
+    setInterval(async () => {
+      const response = (await fetchTopUsers) as any;
+      users.value = response.data;
+    }, RELOAD_TIMER);
   });
 </script>

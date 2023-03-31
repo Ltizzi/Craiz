@@ -30,23 +30,34 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, onMounted, ref } from "vue";
   import BaseSpinner from "../common/BaseSpinner.vue";
   import BaseTag from "@/components/common/BaseTag.vue";
   import axios from "axios";
-  import { API_URL } from "@/main";
+  import { API_URL, RELOAD_TIMER } from "@/main";
 
   const trendTags = ref();
   const loadTrends = ref(false);
 
   const isLoaded = ref(false);
 
+  async function fetchTopTrend() {
+    return await axios.get(`${API_URL}tag/all?skip=0&limit=5`);
+  }
+
   onBeforeMount(async () => {
-    const response = await axios.get(`${API_URL}tag/all?skip=0&limit=5`);
+    const response = await fetchTopTrend();
     if (response.data) {
       trendTags.value = response.data;
       loadTrends.value = true;
       isLoaded.value = true;
     }
+  });
+
+  onMounted(async () => {
+    setInterval(async () => {
+      const response = await fetchTopTrend();
+      trendTags.value = response.data;
+    }, RELOAD_TIMER);
   });
 </script>
