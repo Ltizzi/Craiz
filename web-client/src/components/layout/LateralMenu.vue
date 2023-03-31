@@ -137,6 +137,7 @@
 
   function goNotifications() {
     state.activeButton = "notifications";
+    router.push("/notifications");
   }
 
   function goProfile() {
