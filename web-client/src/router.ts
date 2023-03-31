@@ -8,6 +8,7 @@ import TheProfile from "./views/TheProfile.vue";
 import LandingPageVue from "./components/layout/LandingPage.vue";
 import TheSearchVue from "./views/TheSearch.vue";
 import TheTrendsVue from "./views/TheTrends.vue";
+import TheNotificationVue from "./views/TheNotification.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,6 +38,11 @@ const router = createRouter({
           props: (route) => ({
             topusers: route.query.topusers,
           }),
+        },
+        {
+          path: "/notifications",
+          name: "TheNotifications",
+          component: TheNotificationVue,
         },
       ],
     },

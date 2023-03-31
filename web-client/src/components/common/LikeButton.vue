@@ -99,9 +99,9 @@
       // likeCounter.value = props.meme.likeCounter;
 
       let user = userStore.user as User;
-      console.log(user.likedMemes);
+      //console.log(user.likedMemes);
       let isLikedByUser = user.likedMemes.includes(props.meme.memeId);
-      console.log("liked by user:", isLikedByUser);
+      //console.log("liked by user:", isLikedByUser);
       // if (isLikedByUser.length > 0) liked.value = true;
       if (isLikedByUser) liked.value = true;
       // memeId = meme.memeId;

@@ -6,7 +6,7 @@ const DEFAULT_NOTIFICATION_ID = 0;
 async function getNotificationsByUserId(id, skip, limit) {
   return await notiRepo
     .find({ ownerId: id }, { _id: 0, __v: 0 })
-    .sort({ isNewN: 1, updatedAt: -1 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -44,9 +44,9 @@ async function getFollowNotification(ownerId, fromUserId) {
 }
 
 async function saveNotification(fromUserId, ownerId, type, memeId) {
-  // if (fromUserId === ownerId) {
-  //   throw new Error("fromUser and owner user are the same;");
-  // }
+  if (fromUserId == ownerId) {
+    return { msg: "fromUser and owner user are the same" };
+  }
   const newNotificationId = (await getLastNotificationId()) + 1;
   const fromUser = await userRepo.findOne(
     {
@@ -85,9 +85,9 @@ async function saveNotification(fromUserId, ownerId, type, memeId) {
 }
 
 async function addFromUserToNotification(notification, fromUserId) {
-  // if (fromUserId === notification.ownerId) {
-  //   throw new Error("fromUser and owner user are the same;");
-  // }
+  if (fromUserId == notification.ownerId) {
+    return { msg: "fromUser and owner user are the same" };
+  }
   const fromUser = await userRepo.findOne(
     {
       userId: fromUserId,
@@ -118,9 +118,9 @@ async function addFromUserToNotification(notification, fromUserId) {
 }
 
 async function removeFromUserInNotification(notification, fromUserId) {
-  // if (fromUserId === notification.ownerId) {
-  //   throw new Error("fromUser and owner user are the same;");
-  // }
+  if (fromUserId == notification.ownerId) {
+    return { msg: "fromUser and owner user are the same" };
+  }
   notification.isNewN = false;
   notification.fromUser = notification.fromUser.filter(
     (fromUser) => fromUser.userId != fromUserId

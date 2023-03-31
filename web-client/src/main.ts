@@ -29,6 +29,8 @@ import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
 export const API_URL = "http://localhost:4246/v1/";
 
+export const RELOAD_TIMER = 1000 * 60;
+
 library.add(
   faHeart,
   faHeartS,
