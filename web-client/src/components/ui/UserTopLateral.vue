@@ -70,8 +70,10 @@
 
   onMounted(() => {
     setInterval(async () => {
-      const response = (await fetchTopUsers) as any;
+      const response = await axios.get(`${API_URL}user/all?skip=0&limit=10`);
       users.value = response.data;
+      loadTopUsers.value = true;
+      isLoaded.value = true;
     }, RELOAD_TIMER);
   });
 </script>
