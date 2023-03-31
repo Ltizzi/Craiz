@@ -93,11 +93,9 @@
 
   onBeforeMount(async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}auth/logincheck`,
-        //"http://localhost:4246/v1/auth/logincheck",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}auth/logincheck`, {
+        withCredentials: true,
+      });
       userStore.setUser(response.data.user);
       tagStore.fetchTags;
     } catch (err) {

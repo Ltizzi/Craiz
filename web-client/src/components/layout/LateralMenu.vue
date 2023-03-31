@@ -74,7 +74,12 @@
             : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-bell" class="mr-2 mb-1" />
+        <font-awesome-icon icon="fa-solid fa-bell" class="relative mr-2 mb-1" />
+        <span
+          class="absolute -mt-2 -ml-4 rounded-full bg-purple-500 px-1 text-xs font-bold text-white"
+          v-if="notis > 0"
+          >{{ notis }}</span
+        >
         Notificaciones
       </h1>
     </div>
@@ -108,7 +113,9 @@
   import EventBus from "@/utils/EventBus";
   import { useUserStore } from "@/store";
   import { User } from "@/utils/models";
-  import { reactive } from "vue";
+  import { onMounted, reactive, ref } from "vue";
+  import axios from "axios";
+  import { API_URL, RELOAD_TIMER } from "@/main";
 
   const userStore = useUserStore();
   // const route = useRoute();
@@ -148,5 +155,34 @@
     console.log(user);
     router.push(`${user.username}`);
   }
+
+  const notis = ref();
+  const user = ref();
+
+  async function loadNotifications(id: number) {
+    const res = await axios.get(`${API_URL}notifications/newByUserId?id=${id}`);
+    notis.value = res.data.length;
+  }
+
+  EventBus.on("reloadNewNotis", () => {
+    const usuario = JSON.parse(localStorage.getItem("user") as string);
+    let id = usuario.userId;
+    loadNotifications(id);
+  });
+
+  onMounted(async () => {
+    const response = await axios.get(`${API_URL}auth/logincheck`, {
+      withCredentials: true,
+    });
+
+    const user = response.data.user;
+    user.value = user;
+    if (user != undefined) {
+      loadNotifications(user.userId);
+    }
+    setInterval(() => {
+      loadNotifications(user.userId);
+    }, RELOAD_TIMER);
+  });
 </script>
 <style lang=""></style>
