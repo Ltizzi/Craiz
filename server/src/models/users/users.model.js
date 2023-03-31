@@ -88,6 +88,17 @@ async function saveUser(user) {
 }
 
 async function updateUser(user) {
+  // console.log(user);
+  // const oldUser = await findUser({ userId: user.usderId });
+  // console.log("*****");
+  // console.log(oldUser);
+
+  // //fill blank spaces
+  // for (const prop in oldUser) {
+  //   if (!user[prop]) {
+  //     user[prop] = oldUser[prop];
+  //   }
+  // }
   return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
     upsert: true,
   });

@@ -92,6 +92,7 @@ async function httpUpdateUser(req, res) {
     notNullUserValidator(user);
     user = userHasBirthdayAndValidateIt(user);
     user.updatedAt = Date.now();
+    console.log("asdasd");
     await updateUser(user);
     return res.status(200).json(user);
   } catch (err) {
