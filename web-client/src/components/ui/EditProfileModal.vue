@@ -59,7 +59,7 @@
           cols="30"
           rows="5"
           v-model="about"
-          placeholder="Breve descripción"
+          :placeholder="user.about"
         ></textarea>
       </div>
       <div class="flex flex-col justify-start">
@@ -155,27 +155,41 @@
     waitingResponse.value = true;
     const formData = new FormData();
     console.log(avatar);
-    formData.append("file", avatar);
-    console.log(formData);
-    const avatarRes = await axios.post(`${API_URL}utils/uploadImg`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      withCredentials: true,
-    });
-    console.log(avatarRes.data.url);
-    let avatarUrl = avatarRes.data.url;
+    let avatarUrl = "";
+    if (avatar) {
+      formData.append("file", avatar);
+      console.log(formData);
+      const avatarRes = await axios.post(
+        `${API_URL}utils/uploadImg`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+      console.log(avatarRes.data.url);
+      avatarUrl = avatarRes.data.url;
+    }
 
     const formData2 = new FormData();
-    formData2.append("file", banner);
-    const bannerRes = await axios.post(`${API_URL}utils/uploadImg`, formData2, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    });
-    console.log(bannerRes.data.url);
-    let bannerUrl = bannerRes.data.url;
+    let bannerUrl = "";
+    if (banner) {
+      formData2.append("file", banner);
+      const bannerRes = await axios.post(
+        `${API_URL}utils/uploadImg`,
+        formData2,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(bannerRes.data.url);
+      bannerUrl = bannerRes.data.url;
+    }
 
-    const updatedUser = {
+    const updatedUser: any = {
       userId: user.userId,
       email: user.email,
       name: name.value,
@@ -185,14 +199,22 @@
       banner: bannerUrl,
       about: about.value,
     };
+
+    for (const prop in user) {
+      if (!updatedUser[prop]) {
+        updatedUser[prop] = user[prop];
+      }
+    }
+
     const response = await axios.patch(`${API_URL}user/update`, updatedUser, {
       withCredentials: true,
     });
     console.log(response);
     userStore.setUser(response.data.user);
     waitingResponse.value = false;
-    if (response.status == 201) {
+    if (response.status == 200) {
       responseOk.value = true;
+      EventBus.emit("reloadProfileInfo", response.data);
       setTimeout(() => {
         EventBus.emit("closeModal");
         emits("closeModal");
