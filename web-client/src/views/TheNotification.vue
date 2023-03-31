@@ -19,7 +19,7 @@
         />
         <div
           v-if="noti.type == 'like'"
-          class="flex flex-row items-center gap-3 text-xl"
+          class="flex flex-row items-center gap-3 text-lg md:text-xl"
         >
           <p>
             A {{ noti.fromUser[0].nickname }}
@@ -37,7 +37,7 @@
         </div>
         <div
           v-if="noti.type == 'loop'"
-          class="flex flex-row items-center gap-3 text-xl"
+          class="flex flex-row items-center gap-3 text-lg md:text-xl"
         >
           <p>
             {{ noti.fromUser[0].nickname }}
@@ -55,7 +55,7 @@
         </div>
         <div
           v-if="noti.type == 'comment'"
-          class="flex flex-row items-center gap-3 text-xl"
+          class="flex flex-row items-center gap-3 text-lg md:text-xl"
         >
           <p>
             {{ noti.fromUser[0].nickname }}
@@ -73,7 +73,7 @@
         </div>
         <div
           v-if="noti.type === 'follow'"
-          class="flex flex-row items-center gap-3 text-xl"
+          class="flex flex-row items-center gap-3 text-lg md:text-xl"
         >
           <p>{{ noti.fromUser[0].nickname }} ha comenzado a seguirte.</p>
         </div>
