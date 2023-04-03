@@ -26,10 +26,13 @@
         v-if="state.activeTab == 'recent'"
       />
       <div v-if="state.activeTab == 'users'" class="mt-40">
+        <!-- class="mb-5 flex flex-row gap-2" -->
+
         <div
-          class="mb-5 flex flex-row gap-2"
+          class="noti-list flex h-20 flex-row items-center gap-3 border-2 border-t-0 border-gray-300 bg-gray-50 px-4 text-xl text-gray-600 hover:cursor-pointer"
           v-for="user in searchedUser"
           :key="user.userId"
+          @click="goProfile(user.username)"
         >
           <img :src="user.avatar" alt="" class="w-14 rounded-full" />
           <p class="text-xl font-bold">{{ user.nickname }}</p>
@@ -48,6 +51,7 @@
   import axios from "axios";
   import { API_URL } from "@/main";
   import { useSearchStore } from "@/store/search";
+  import router from "@/router";
 
   const route = useRoute();
 
@@ -106,6 +110,10 @@
     }
     state.activeTab = "users";
   });
+
+  function goProfile(username: string) {
+    router.push(`/${username}`);
+  }
 
   onMounted(async () => {
     localStorage.removeItem("searchedValues");

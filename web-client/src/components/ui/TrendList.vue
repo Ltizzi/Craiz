@@ -67,6 +67,7 @@
   import EventBus from "@/utils/EventBus";
   import axios from "axios";
   import { API_URL } from "@/main";
+  import router from "@/router";
 
   const userStore = useUserStore();
 
@@ -106,6 +107,10 @@
     // loadTopUsers.value = true;
     isLoaded.value = true;
   });
+
+  function goProfile(username: string) {
+    router.push(`/${username}`);
+  }
 
   onMounted(async () => {
     const response = await axios.get(`${API_URL}tag/all?skip=0&limit=10`);
