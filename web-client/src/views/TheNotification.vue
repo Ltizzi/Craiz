@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full text-start" v-if="isLoaded">
+  <div class="h-full w-full bg-gray-200 text-start" v-if="isLoaded">
     <div class="fixed w-full bg-slate-800 py-3 text-center opacity-90 lg:w-2/5">
       <h1 class="text-xl font-bold text-white">Notificaciones</h1>
     </div>

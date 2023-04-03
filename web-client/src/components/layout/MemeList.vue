@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isLoaded" class="flex w-full flex-col items-center justify-center">
+  <div
+    v-if="isLoaded"
+    class="flex w-full flex-col items-center justify-center bg-gray-200"
+  >
     <MemeCard v-for="meme in memes" :key="meme.memeId" :data="meme"></MemeCard>
   </div>
   <CreateMemeMobileButton v-if="state.isMobile && !state.isProfile" />

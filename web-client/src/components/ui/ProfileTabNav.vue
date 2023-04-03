@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="mt-5 flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
+    class="flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
   >
     <div
       :class="[

@@ -1,12 +1,15 @@
 <template lang="">
-  <div class="flex flex-col pt-24 lg:w-full" v-if="isLoaded">
+  <div class="flex h-full flex-col bg-gray-200 pt-24 lg:w-full" v-if="isLoaded">
     <SearchHeader class="w-full lg:w-2/5" />
-    <div v-if="noSearch" class="mt-40 w-full text-center text-2xl">
+    <div
+      v-if="noSearch"
+      class="sticky mt-40 w-full items-center text-center text-2xl"
+    >
       Busca tags o usuarios
     </div>
     <div v-else>
       <div
-        class="mt-12 mb-5 w-full bg-slate-500 py-2 text-center text-lg font-bold text-gray-50"
+        class="mt-12 mb-5 w-full bg-violet-500 py-2 text-center text-lg font-bold text-gray-50"
       >
         <h2>
           Mostrando resultados de búsqueda para "{{
@@ -23,10 +26,13 @@
         v-if="state.activeTab == 'recent'"
       />
       <div v-if="state.activeTab == 'users'" class="mt-40">
+        <!-- class="mb-5 flex flex-row gap-2" -->
+
         <div
-          class="mb-5 flex flex-row gap-2"
+          class="noti-list flex h-20 flex-row items-center gap-3 border-2 border-t-0 border-gray-300 bg-gray-50 px-4 text-xl text-gray-600 hover:cursor-pointer"
           v-for="user in searchedUser"
           :key="user.userId"
+          @click="goProfile(user.username)"
         >
           <img :src="user.avatar" alt="" class="w-14 rounded-full" />
           <p class="text-xl font-bold">{{ user.nickname }}</p>
@@ -45,6 +51,7 @@
   import axios from "axios";
   import { API_URL } from "@/main";
   import { useSearchStore } from "@/store/search";
+  import router from "@/router";
 
   const route = useRoute();
 
@@ -103,6 +110,10 @@
     }
     state.activeTab = "users";
   });
+
+  function goProfile(username: string) {
+    router.push(`/${username}`);
+  }
 
   onMounted(async () => {
     localStorage.removeItem("searchedValues");
