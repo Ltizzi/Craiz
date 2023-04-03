@@ -1,12 +1,15 @@
 <template lang="">
-  <div class="flex flex-col pt-24 lg:w-full" v-if="isLoaded">
+  <div class="flex h-full flex-col bg-gray-200 pt-24 lg:w-full" v-if="isLoaded">
     <SearchHeader class="w-full lg:w-2/5" />
-    <div v-if="noSearch" class="mt-40 w-full text-center text-2xl">
+    <div
+      v-if="noSearch"
+      class="sticky mt-40 w-full items-center text-center text-2xl"
+    >
       Busca tags o usuarios
     </div>
     <div v-else>
       <div
-        class="mt-12 mb-5 w-full bg-slate-500 py-2 text-center text-lg font-bold text-gray-50"
+        class="mt-12 mb-5 w-full bg-violet-500 py-2 text-center text-lg font-bold text-gray-50"
       >
         <h2>
           Mostrando resultados de búsqueda para "{{

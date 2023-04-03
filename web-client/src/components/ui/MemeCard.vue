@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="container relative my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
+    class="container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
     v-if="isLoaded"
   >
     <div

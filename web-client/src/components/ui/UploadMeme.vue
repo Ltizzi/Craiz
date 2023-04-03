@@ -286,6 +286,6 @@
     @apply bg-amber-400;
   }
   .custom {
-    @apply bg-gradient-to-r from-pink-500 to-purple-500;
+    @apply bg-gradient-to-r from-orange-400 via-pink-500 to-violet-600;
   }
 </style>
