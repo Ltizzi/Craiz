@@ -141,7 +141,9 @@ async function handleFollows(userId, userToFollowId) {
       fromUserId,
       userToFollowId,
       "follow",
-      "_"
+      null,
+      null,
+      null
     );
     console.log(notiRes);
 
