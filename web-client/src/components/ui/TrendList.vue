@@ -1,5 +1,5 @@
 <template lang="">
-  <div v-if="isLoaded" class="flex w-full flex-col pl-10 pt-5">
+  <div v-if="isLoaded" class="flex w-full flex-col pl-3 pt-5 lg:pl-10">
     <ul v-if="state.activeButton === 'trends'" class="flex flex-col gap-5">
       <li
         v-for="(trend, index) in trendTags"
@@ -31,16 +31,20 @@
         class="mb-6 flex flex-col justify-start hover:cursor-pointer"
         @click="goProfile(user.username)"
       >
-        <div class="flex flex-row items-center justify-start gap-5 text-start">
-          <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
+        <div
+          class="flex flex-row items-center justify-start gap-3 text-start lg:gap-5"
+        >
+          <p class="text-right text-base font-bold sm:text-lg">
+            {{ index + 1 }}.
+          </p>
           <img
             :src="user.avatar"
             alt="user profile picture"
-            class="h-14 w-14 rounded-full"
+            class="h-10 w-10 rounded-full md:h-14 md:w-14"
           />
           <div class="flex flex-col justify-start gap-0">
             <div class="flex flex-row items-center gap-1">
-              <h3 class="text-start text-xl font-bold">
+              <h3 class="text-start text-lg font-bold md:text-xl">
                 {{ user.nickname }}
               </h3>
               <p class="text-base">- @{{ user.username }}</p>
