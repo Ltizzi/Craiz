@@ -193,7 +193,7 @@ async function addCommentToMeme(memeId, comment) {
   console.log(noti);
   //existe la notification
   if (noti) {
-    await addFromUserToNotification(noti, fromUserId);
+    await addFromUserToNotification(noti, fromUserId, comment.imgUrl);
   }
   //no existe la notification
   else {
@@ -201,7 +201,9 @@ async function addCommentToMeme(memeId, comment) {
       fromUserId,
       userId,
       "comment",
-      memeId
+      memeId,
+      meme.imgUrl,
+      comment.imgUrl
     );
     console.log(notiRes);
   }
@@ -275,7 +277,7 @@ async function likeMeme(memeId, userId) {
 
     //si ya existe la notification
     if (noti) {
-      const notiRes = await addFromUserToNotification(noti, fromUserId);
+      const notiRes = await addFromUserToNotification(noti, fromUserId, null);
       console.log(notiRes);
     }
     //si no existe la crea
@@ -284,7 +286,9 @@ async function likeMeme(memeId, userId) {
         fromUserId,
         ownerId,
         "like",
-        memeId
+        memeId,
+        meme.imgUrl,
+        null
       );
       console.log(notiRes);
     }
@@ -325,7 +329,9 @@ async function loopMeme(memeId, userId) {
   const noti = await getNotificationByMemeIdTypeAndOwnerId(
     memeId,
     userId,
-    "loop"
+    "loop",
+    meme.imgUrl,
+    null
   );
   let fromUserId = userId;
   let ownerId = meme.uploader;
@@ -342,7 +348,7 @@ async function loopMeme(memeId, userId) {
 
     //si existe la noti
     if (noti) {
-      const notiRes = await addFromUserToNotification(noti, fromUserId);
+      const notiRes = await addFromUserToNotification(noti, fromUserId, null);
       console.log(notiRes);
     }
     //si no existe
