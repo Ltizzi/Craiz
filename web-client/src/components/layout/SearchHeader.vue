@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="fixed top-0 z-50 opacity-95 lg:right-1/3 lg:-mr-5">
+  <div class="fixed top-0 right-0 z-50 opacity-95 lg:right-1/3 lg:-mr-5">
     <SearchBar :back="true" />
     <SearchNav />
   </div>

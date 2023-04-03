@@ -1,6 +1,6 @@
 <template lang="">
   <BaseButton
-    class="fixed bottom-20 right-5 rounded-full bg-green-600 py-1 px-3 text-2xl text-white shadow-xl shadow-gray-700 transition-transform duration-500 hover:scale-125"
+    class="fixed bottom-20 right-5 rounded-full bg-purple-500 py-1 px-3 text-2xl text-white shadow-xl shadow-gray-700 transition-transform duration-500 hover:scale-125"
     @click="modalSwitch"
   >
     <font-awesome-icon icon="fa-solid fa-plus" />

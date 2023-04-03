@@ -3,12 +3,8 @@
     <div class="w-full">
       <SearchBar class="ml-0 w-64 bg-transparent" :back="false" />
     </div>
-    <TrendLateralList
-      class="flex w-48 flex-col justify-center rounded-2xl bg-white"
-    />
-    <UserTopLateral
-      class="flex w-48 flex-col justify-center rounded-2xl bg-white"
-    />
+    <TrendLateralList class="flex w-48 flex-col justify-center rounded-2xl" />
+    <UserTopLateral class="flex w-48 flex-col justify-center rounded-2xl" />
     <div class="flex flex-col text-center text-sm text-gray-400">
       <p>©Craze 2023</p>
       <p>Creada por Leonardo Terlizzi</p>

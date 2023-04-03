@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="flex w-full flex-col pt-24">
+  <div class="flex h-full w-full flex-col bg-gray-100 pt-24">
     <TrendsHeader class="w-full lg:w-2/5" />
     <keep-alive>
       <TrendList class="mt-10" />

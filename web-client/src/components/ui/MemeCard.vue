@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="container relative my-2 flex flex-col rounded-xl border-2 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
+    class="container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
     v-if="isLoaded"
   >
     <div
@@ -72,13 +72,15 @@
           <ShareDropdown></ShareDropdown>
         </div>
 
-        <div class="flex w-4/12 flex-wrap justify-start lg:justify-center">
+        <div
+          class="mt-1 flex w-4/12 flex-wrap justify-start text-center lg:justify-center"
+        >
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"
             :key="index"
             :class="tag.toLowerCase().replaceAll(/\s/g, '')"
             :name="tag"
-            class="my-auto mr-1"
+            class="my-auto mr-1 mt-0.5 w-fit"
             >{{ tag }}</BaseTag
           >
         </div>

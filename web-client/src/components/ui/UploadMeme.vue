@@ -19,7 +19,7 @@
         v-for="tag in selectedTags"
         :key="tag.tagId"
         class="mb-0.5 mt-0.5"
-        :class="tag.name"
+        :class="tag.class"
         :clickeable="true"
         >{{ tag.name }}</BaseTag
       >
@@ -284,5 +284,8 @@
   }
   .random {
     @apply bg-amber-400;
+  }
+  .custom {
+    @apply bg-gradient-to-r from-orange-400 via-pink-500 to-violet-600;
   }
 </style>

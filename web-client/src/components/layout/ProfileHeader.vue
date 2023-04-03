@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="flex flex-col items-start justify-start gap-0">
+  <div class="flex flex-col items-start justify-start gap-0 bg-gray-200 pb-5">
     <ProfileHeaderTop
       :nickname="props.user.nickname"
       :memes="props.user.memes.length"
@@ -18,20 +18,20 @@
         class="absolute top-64 left-2 h-20 w-20 rounded-full"
       />
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-violet-500 py-1 px-3 font-semibold text-white"
         v-if="isOwnProfile"
         @click="modalSwitch"
         >Editar Perfil</BaseButton
       >
       <EditProfileModal v-if="showModal" />
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-violet-500 py-1 px-3 font-semibold text-white hover:bg-green-500"
         v-if="!isOwnProfile && !following"
         @click="handleFollows"
         >Seguir</BaseButton
       >
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-slate-500 py-1 px-3 text-white"
+        class="absolute top-72 right-2 mt-2 rounded-xl bg-purple-500 py-1 px-3 font-semibold text-white hover:bg-red-600"
         @click="handleFollows"
         v-if="!isOwnProfile && following"
         >Dejar de seguir</BaseButton

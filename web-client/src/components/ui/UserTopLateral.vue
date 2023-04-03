@@ -1,7 +1,7 @@
 <template lang="">
   <div
     v-if="isLoaded"
-    class="flex w-full flex-col justify-center gap-1 rounded-3xl px-5 py-1"
+    class="flex w-full flex-col justify-center gap-1 rounded-3xl bg-slate-100 px-5 py-1"
   >
     <h2 class="mb-2 text-xl font-extrabold">Top Users</h2>
     <ul v-if="loadTopUsers" class="-ml-2 flex flex-col gap-1">
