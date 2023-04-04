@@ -43,7 +43,14 @@ async function getFollowNotification(ownerId, fromUserId) {
   });
 }
 
-async function saveNotification(fromUserId, ownerId, type, memeId) {
+async function saveNotification(
+  fromUserId,
+  ownerId,
+  type,
+  memeId,
+  ownerMeme,
+  commentMeme
+) {
   if (fromUserId == ownerId) {
     return { msg: "fromUser and owner user are the same" };
   }
@@ -55,15 +62,23 @@ async function saveNotification(fromUserId, ownerId, type, memeId) {
     },
     { _id: 0, __v: 0 }
   );
-  if (memeId == "_") {
-    memeId = null;
-  }
+  // if (memeId == "_") {
+  //   memeId = null;
+  // }
+  // if (ownerMeme == "_") {
+  //   ownerMeme = null;
+  // }
+  // if (commentMeme == "_") {
+  //   commentMeme == null;
+  // }
   const newNoti = {
     notificationId: newNotificationId,
     type: type,
     isNewN: true,
     memeId: memeId,
     ownerId: ownerId,
+    ownerMemeUrl: ownerMeme,
+    commentUrl: commentMeme,
     fromUser: [
       {
         userId: fromUser.userId,
@@ -84,7 +99,7 @@ async function saveNotification(fromUserId, ownerId, type, memeId) {
   );
 }
 
-async function addFromUserToNotification(notification, fromUserId) {
+async function addFromUserToNotification(notification, fromUserId, commentUrl) {
   if (fromUserId == notification.ownerId) {
     return { msg: "fromUser and owner user are the same" };
   }
@@ -100,6 +115,7 @@ async function addFromUserToNotification(notification, fromUserId) {
     avatar: fromUser.avatar,
     nickname: fromUser.nickname,
     username: fromUser.username,
+    commentUrl: commentUrl,
   };
   let array = notification.fromUser;
   array.push(newFromUser);

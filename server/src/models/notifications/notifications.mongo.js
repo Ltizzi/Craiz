@@ -16,6 +16,10 @@ const notificationsSchema = new mongoose.Schema({
     ref: "Meme",
     required: false,
   },
+  ownerMemeUrl: {
+    type: String,
+    required: false,
+  },
   ownerId: {
     type: Number,
     ref: "User",
