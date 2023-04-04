@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="items-left sm:ml-2 sm:w-2/5 container fixed mt-24 flex flex-col gap-4 md:-ml-20 md:mt-12 md:w-fit md:gap-2 lg:ml-4 lg:w-fit"
+    class="items-left sm:ml-2 sm:w-2/5 container fixed mt-24 flex flex-col gap-4 md:-ml-20 md:mt-12 md:w-fit md:gap-2 lg:ml-36 lg:w-fit"
   >
     <img
       src="/assets/img/logo.png"
@@ -101,7 +101,7 @@
 
     <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
-    <SignInButton class="mt-52 md:mt-14"></SignInButton>
+    <SignInButton class="md:mt-14 lg:mt-72"></SignInButton>
   </div>
 </template>
 <script setup lang="ts">

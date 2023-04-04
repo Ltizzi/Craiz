@@ -5,7 +5,7 @@
   >
     <div
       v-if="isLoop"
-      class="absolute ml-12 flex flex-row gap-1 text-sm font-bold text-gray-400"
+      class="absolute -mt-2 ml-12 flex flex-row gap-1 text-sm font-bold text-gray-400"
     >
       <font-awesome-icon
         icon="fa-solid fa-arrows-rotate"
@@ -26,7 +26,7 @@
         > -->
 
         <h3
-          class="lg:text-2x2 sm:text-xl ml-2 font-bold hover:cursor-pointer md:text-xl lg:mt-3"
+          class="lg:text-2x2 sm:text-xl ml-2 text-xl font-bold hover:cursor-pointer md:text-xl lg:mt-3"
           @click="goProfile"
         >
           {{ uploader.nickname }}
@@ -34,7 +34,7 @@
         <!-- </router-link> -->
 
         <h4
-          class="sm:text-base pl-2 text-sm italic md:text-lg lg:mt-3 lg:text-lg"
+          class="sm:text-base pl-2 text-base text-sm italic md:text-lg lg:mt-3 lg:text-lg"
         >
           @{{ uploader.username }}
         </h4>

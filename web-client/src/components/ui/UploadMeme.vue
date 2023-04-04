@@ -1,77 +1,115 @@
 <template lang="">
-  <div class="flex w-full flex-col items-center md:flex-row">
-    <div>
-      <h1 class="py-1 text-center text-xl font-bold md:text-lg lg:text-2xl">
-        Upload new meme
-      </h1>
+  <div class="flex-flex-col -mt-5">
+    <h1 class="py-2 text-center text-xl font-bold md:text-lg lg:text-2xl">
+      Subir un nuevo meme
+    </h1>
+    <div class="flex h-auto w-full flex-col items-center md:flex-row">
+      <div>
+        <div class="flex w-full items-center justify-center">
+          <label
+            for="dropzone-file"
+            class="dark:hover:bg-bray-800 flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
+            <img
+              :src="memeImage"
+              v-if="memeImage"
+              ref="meme"
+              class="mx-auto h-72 w-4/5 object-contain md:h-96 lg:h-96 lg:w-4/5"
+            />
+            <div
+              class="flex flex-col items-center justify-center pb-6 pt-5"
+              v-if="!memeImage"
+            >
+              <svg
+                aria-hidden="true"
+                class="mb-3 h-10 w-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span class="font-semibold">Click para elegir una imagen</span>
+              </p>
+            </div>
+            <input
+              id="dropzone-file"
+              type="file"
+              class="hidden"
+              @change="handleFileInput"
+            />
+          </label>
+        </div>
 
-      <img
-        :src="memeImage"
-        v-if="memeImage"
-        ref="meme"
-        class="lg:4/5 mx-auto h-72 w-4/5 object-contain md:h-96 lg:h-96"
-      />
-      <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div>
-      <div
-        v-if="selectedTags"
-        class="flew-row flex w-96 flex-wrap justify-evenly"
-      >
-        <span class="h-7 pb-2"></span>
-        <BaseTag
-          v-for="tag in selectedTags"
-          :key="tag.tagId"
-          class="mb-0.5 mt-0.5"
-          :class="tag.class"
-          :clickeable="true"
-          >{{ tag.name }}</BaseTag
+        <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div> -->
+        <div
+          v-if="selectedTags"
+          class="flew-row mt-2 flex w-96 flex-wrap justify-evenly"
         >
+          <span class="h-7 pb-2"></span>
+          <BaseTag
+            v-for="tag in selectedTags"
+            :key="tag.tagId"
+            class="mb-0.5 mt-0.5"
+            :class="tag.class"
+            :clickeable="true"
+            >{{ tag.name }}</BaseTag
+          >
+        </div>
       </div>
-    </div>
 
-    <div class="flex flex-col justify-center gap-0">
-      <h3 class="mb-1 mt-1 text-center text-base font-bold lg:text-lg">
-        Pick a image file from your local storage:
-      </h3>
-      <input
-        type="file"
-        ref="fileInput"
-        @change="handleFileInput"
-        class="my-2 ml-10"
-      />
-      <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
-        Pick meme tags:
-      </h2>
-      <div
-        class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
-      >
-        <BaseTag
-          v-for="tag in tags"
-          :key="tag.tagId"
-          class="mb-1"
-          :class="tag.class"
-          :clickeable="true"
-          @click="selecTag(tag)"
-          >{{ tag.name }}</BaseTag
+      <div class="flex flex-col justify-center gap-0">
+        <!-- <h3 class="mb-1 mt-1 text-center text-base font-bold lg:text-lg">
+          Pick a image file from your local storage:
+        </h3>
+        <input
+          type="file"
+          ref="fileInput"
+          @change="handleFileInput"
+          class="my-2 ml-10"
+        /> -->
+        <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
+          Elige los tags del meme:
+        </h2>
+        <div
+          class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
         >
-      </div>
-      <div class="flex flex-row items-center justify-center">
-        <BaseButton
-          @click="uploadMeme"
-          class="relative rounded-lg bg-green-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
-          >Subir Meme
-        </BaseButton>
+          <BaseTag
+            v-for="tag in tags"
+            :key="tag.tagId"
+            class="mb-1"
+            :class="tag.class"
+            :clickeable="true"
+            @click="selecTag(tag)"
+            >{{ tag.name }}</BaseTag
+          >
+        </div>
+        <div class="flex flex-row items-center justify-center">
+          <BaseButton
+            @click="uploadMeme"
+            class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+            >Subir Meme
+          </BaseButton>
 
-        <BaseSpinner class="absolute right-28" v-if="isUploading" />
-        <font-awesome-icon
-          icon="fa-solid fa-circle-check"
-          class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
-          v-show="uploadComplete"
-        />
-        <font-awesome-icon
-          icon="fa-solid fa-circle-xmark"
-          class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
-          v-show="uploadFailed"
-        />
+          <BaseSpinner class="absolute right-28" v-if="isUploading" />
+          <font-awesome-icon
+            icon="fa-solid fa-circle-check"
+            class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
+            v-show="uploadComplete"
+          />
+          <font-awesome-icon
+            icon="fa-solid fa-circle-xmark"
+            class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
+            v-show="uploadFailed"
+          />
+        </div>
       </div>
     </div>
   </div>
