@@ -1,22 +1,24 @@
 <template lang="">
   <div
     v-if="isLoaded"
-    class="flex w-full flex-col justify-center gap-1 rounded-3xl bg-slate-100 px-5 py-1"
+    class="flex w-full flex-col justify-center gap-1 rounded-3xl bg-slate-100 px-5 py-1 md:gap-0 md:py-0"
   >
-    <h2 class="mb-2 text-xl font-extrabold">Top Users</h2>
+    <h2 class="mb-2 text-xl font-extrabold md:text-lg">Top Users</h2>
     <ul v-if="loadTopUsers" class="-ml-2 flex flex-col gap-1">
       <li
         v-for="(user, index) in users"
         :key="user.userId"
-        class="flex flex-row justify-start gap-2 hover:cursor-pointer"
+        class="flex flex-row justify-start gap-2 hover:cursor-pointer md:gap-1"
         @click="goProfile(user.username)"
       >
         <div class="flex flex-row items-center justify-start gap-1 text-start">
-          <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
+          <p class="text-right text-lg font-bold md:text-base">
+            {{ index + 1 }}.
+          </p>
           <img
             :src="user.avatar"
             alt="user profile picture"
-            class="h-10 w-10 rounded-full"
+            class="h-10 w-10 rounded-full md:h-8 md:w-8"
           />
           <div class="flex flex-col justify-start gap-0">
             <div class="flex flex-row items-center gap-2">
@@ -27,14 +29,14 @@
             </div>
 
             <div class="flex flex-col gap-0">
-              <p class="text-sm">{{ user.likeCounter }} likes</p>
+              <p class="text-sm md:text-xs">{{ user.likeCounter }} likes</p>
             </div>
           </div>
         </div>
       </li>
     </ul>
     <router-link to="/trends?topusers=true">
-      <h2 class="mb-2 text-base font-extrabold hover:cursor-pointer">
+      <h2 class="mb-2 text-base font-extrabold hover:cursor-pointer md:text-sm">
         Ver más
       </h2>
     </router-link>
