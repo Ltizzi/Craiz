@@ -1,56 +1,129 @@
 <template lang="">
   <BaseDialog
-    class="absolute z-10 flex flex-col justify-center rounded-3xl py-5 px-2"
+    class="absolute z-10 flex flex-col justify-center rounded-3xl px-2 py-5"
     @closeModal="modalSwitch"
   >
     <div
-      class="my-5 mx-2 flex flex-col justify-center gap-2 text-lg text-gray-800"
+      class="mx-2 my-5 flex flex-col justify-center gap-2 text-lg text-gray-800"
     >
-      <div class="flex flex-col justify-start gap-1">
-        <label for="name">Nombre:</label>
-        <input
-          type="text"
-          v-model="name"
-          placeholder="José Perez"
-          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
-        />
+      <h1 class="text-center text-xl font-bold">Editar perfil</h1>
+      <div class="relative flex w-full items-center justify-center">
+        <label
+          for="dropzone-file"
+          class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <img :src="bannerPic" class="mx-auto h-52 w-full" v-if="bannerPic" />
+          <div
+            class="flex flex-col items-center justify-center pb-6 pt-5"
+            v-if="!bannerPic"
+          >
+            <svg
+              aria-hidden="true"
+              class="mb-3 h-10 w-10 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              ></path>
+            </svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold">Click para subir</span> o arrastra
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              imágenes para tu banner
+            </p>
+          </div>
+          <input
+            id="dropzone-file"
+            type="file"
+            class="hidden"
+            @change="handleFileInput('banner', $event)"
+          />
+        </label>
       </div>
-      <div class="flex flex-col justify-start">
-        <label for="nickname">Apodo:</label>
-        <input
-          type="text"
-          v-model="nickname"
-          placeholder="Josesito"
-          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
-        />
+
+      <div
+        class="absolute top-64 z-50 flex h-20 w-20 items-center justify-center rounded-full"
+      >
+        <label>
+          <!-- for="dropzone-file"
+          class="dark:hover:bg-bray-800 flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          -->
+          <img
+            :src="avatarPic"
+            class="mx-auto w-44 rounded-full"
+            v-if="avatarPic"
+          />
+          <div
+            class="flex flex-col items-center justify-center pb-6 pt-5"
+            v-if="!avatarPic"
+          >
+            <svg
+              aria-hidden="true"
+              class="-ml-10 mb-3 h-14 w-14 items-center rounded-full bg-slate-200 px-2 py-1 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              ></path>
+            </svg>
+          </div>
+          <input
+            id="dropzone-file"
+            type="file"
+            class="hidden"
+            @change="handleFileInput('avatar', $event)"
+          />
+        </label>
       </div>
-      <div class="flex flex-col justify-start">
-        <label for="username">Nombre de Usuario:</label>
-        <input
-          type="text"
-          v-model="username"
-          placeholder="@Pepeuwu"
-          class="border-2 border-gray-200 py-2 px-1 focus:border-gray-500"
-        />
+
+      <div class="mt-10 grid grid-cols-2 gap-3">
+        <div class="flex flex-col justify-start gap-1">
+          <label for="name">Nombre:</label>
+          <input
+            type="text"
+            v-model="name"
+            placeholder="José Perez"
+            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+          />
+        </div>
+        <div class="flex flex-col justify-start gap-1">
+          <label for="nickname">Apodo:</label>
+          <input
+            type="text"
+            v-model="nickname"
+            placeholder="Josesito"
+            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+          />
+        </div>
+        <div class="flex flex-col justify-start gap-1">
+          <label for="username">Nombre de Usuario:</label>
+          <input
+            type="text"
+            v-model="username"
+            placeholder="@Pepeuwu"
+            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+          />
+        </div>
+        <div class="flex flex-col justify-start gap-1">
+          <label for="birthday">Fecha de nacimiento:</label>
+          <input type="date" name="birthday" v-model="birthday" />
+        </div>
       </div>
-      <div class="flex flex-col justify-start">
-        <img
-          :src="avatarPic"
-          class="mx-auto w-10 rounded-full"
-          v-if="avatarPic"
-        />
-      </div>
-      <div class="flex flex-col justify-start">
-        <label for="avatar">Avatar:</label>
-        <input type="file" @change="handleFileInput('avatar', $event)" />
-      </div>
-      <div class="flex flex-col justify-start">
-        <img :src="bannerPic" class="mx-auto w-20" v-if="bannerPic" />
-      </div>
-      <div class="flex flex-col justify-start">
-        <label for="banner">Banner</label>
-        <input type="file" @change="handleFileInput('banner', $event)" />
-      </div>
+
       <div class="flex flex-col justify-start">
         <label for="about">Sobre mí:</label>
         <textarea
@@ -62,26 +135,23 @@
           :placeholder="user.about"
         ></textarea>
       </div>
-      <div class="flex flex-col justify-start">
-        <label for="birthday">Fecha de nacimiento:</label>
-        <input type="date" name="birthday" v-model="birthday" />
-      </div>
+
       <div class="flex justify-center">
         <button
           @click="handleSubmit"
-          class="relative rounded-2xl bg-green-600 py-2 px-4 text-white"
+          class="relative rounded-2xl bg-green-600 px-4 py-2 text-white"
         >
           Actualizar Perfil
         </button>
         <BaseSpinner class="absolute z-10 ml-56" v-show="waitingResponse" />
         <font-awesome-icon
           icon="fa-solid fa-circle-check"
-          class="absolute z-10 mt-1 ml-56 rounded-full bg-green-600 p-1 text-2xl text-white"
+          class="absolute z-10 ml-56 mt-1 rounded-full bg-green-600 p-1 text-2xl text-white"
           v-show="responseOk"
         />
         <font-awesome-icon
           icon="fa-solid fa-circle-xmark"
-          class="absolute z-10 mt-1 ml-56 rounded-full bg-red-600 p-1 text-2xl text-white"
+          class="absolute z-10 ml-56 mt-1 rounded-full bg-red-600 p-1 text-2xl text-white"
           v-show="responseFail"
         />
       </div>
