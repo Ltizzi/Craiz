@@ -7,31 +7,31 @@
     >
       <img
         src="/assets/img/collage.jpg"
-        class="absolute top-16 z-0 h-5/6 opacity-40 lg:left-16 lg:top-0 lg:h-full lg:w-11/12 lg:object-fill"
+        class="absolute top-16 z-0 h-5/6 opacity-40 md:left-14 md:-mt-5 md:w-11/12 md:object-cover lg:left-16 lg:top-0 lg:h-full lg:w-11/12 lg:object-fill"
         alt=""
       />
       <img
         src="/assets/img/logo.png"
-        class="absolute bottom-72 right-4 z-20 w-36 opacity-90 md:w-52 lg:top-32 lg:left-44 lg:w-1/4"
+        class="absolute bottom-72 right-4 z-20 w-36 opacity-90 md:right-72 md:top-20 md:w-52 lg:left-44 lg:top-32 lg:w-1/4"
         alt=""
       />
       <h1
-        class="absolute bottom-28 left-5 w-52 text-left font-merriweather text-5xl font-extrabold text-white opacity-95 md:left-14 lg:left-1/2 lg:top-1/4 lg:-ml-60 lg:w-3/6 lg:text-right lg:text-8xl"
+        class="absolute bottom-28 left-5 w-52 text-left font-merriweather text-5xl font-extrabold text-white opacity-95 md:left-72 md:top-36 md:w-1/3 md:text-6xl lg:left-1/2 lg:top-1/4 lg:-ml-60 lg:w-3/6 lg:text-right lg:text-8xl"
       >
         Todos los memes en un sólo lugar al mismo tiempo
       </h1>
       <div
-        class="absolute right-8 bottom-36 flex w-28 flex-col gap-2 text-sm md:w-fit md:text-lg lg:bottom-32 lg:right-1/4 lg:-mr-40 lg:flex-row"
+        class="absolute bottom-36 right-8 flex w-28 flex-col gap-2 text-sm md:right-72 md:w-fit md:flex-row md:text-lg lg:bottom-32 lg:right-1/4 lg:-mr-40 lg:flex-row"
       >
         <button
-          class="rounded-lg bg-green-600 py-1 px-2 font-bold text-white md:rounded-3xl md:py-1 md:px-3 lg:rounded-3xl lg:py-2 lg:px-4"
+          class="rounded-lg bg-green-600 px-2 py-1 font-bold text-white md:rounded-3xl md:px-3 md:py-1 lg:rounded-3xl lg:px-4 lg:py-2"
           @click="handleSignInClick"
         >
           Loguear con Google
         </button>
 
         <button
-          class="rounded-lg bg-orange-600 py-1 px-2 font-bold text-white md:rounded-3xl md:py-1 md:px-3 lg:py-2 lg:px-4 lg:text-xl"
+          class="rounded-lg bg-orange-600 px-2 py-1 font-bold text-white md:rounded-3xl md:px-3 md:py-1 lg:px-4 lg:py-2 lg:text-xl"
           @click="goHome"
         >
           Ver memes
