@@ -1,24 +1,24 @@
 <template>
   <div class="bg-slate-900">
     <div
-      class="max-w-sm:full xs:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 sm:w-full sm:justify-start md:w-11/12 lg:w-8/12"
+      class="max-w-sm:full xs:justify-start sm:w-full sm:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 md:w-10/12 lg:w-8/12"
     >
       <div
-        class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-2/12"
+        class="sm:w-20 h-screen w-16 rounded-sm md:-ml-32 md:w-24 lg:w-2/12"
         v-if="!state.isMobile"
       >
         <LateralMenu></LateralMenu>
       </div>
       <!-- items-center justify-center -->
       <div
-        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-3/5"
+        class="sm:w-full flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 md:w-3/5 lg:w-3/5"
       >
         <keep-alive>
           <RouterView></RouterView>
         </keep-alive>
       </div>
       <div
-        class="ml-5 flex h-screen w-14 items-center sm:w-14 md:w-32 lg:mx-auto lg:w-72 lg:justify-center"
+        class="sm:w-14 ml-5 flex h-screen w-14 items-center md:w-10 lg:mx-auto lg:w-72 lg:justify-center"
         v-if="!state.isMobile"
       >
         <LateralRight />

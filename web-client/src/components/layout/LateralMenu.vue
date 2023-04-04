@@ -1,11 +1,11 @@
 <template lang="">
   <div
-    class="items-left container fixed mt-24 flex w-60 flex-col gap-4 sm:ml-2 sm:w-2/5 md:mx-3 lg:ml-4 lg:w-fit"
+    class="items-left sm:ml-2 sm:w-2/5 container fixed mt-24 flex flex-col gap-4 md:-ml-20 md:mt-12 md:w-fit md:gap-2 lg:ml-4 lg:w-fit"
   >
     <img
       src="/assets/img/logo.png"
       alt="Craze logo"
-      class="w-14 md:ml-1 md:w-20 lg:ml-8 lg:w-32"
+      class="w-14 md:ml-4 md:w-20 lg:ml-8 lg:w-32"
     />
 
     <div
@@ -14,11 +14,11 @@
     >
       <h1
         :class="[
-          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
           state.activeButton === 'inicio' ? 'font-extrabold text-white' : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-house" class="mr-2 mb-1" />
+        <font-awesome-icon icon="fa-solid fa-house" class="mb-1 mr-2" />
         Inicio
       </h1>
     </div>
@@ -30,13 +30,13 @@
       >
         <h1
           :class="[
-            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
             state.activeButton === 'search' ? 'font-extrabold text-white' : '',
           ]"
         >
           <font-awesome-icon
             icon="fa-solid fa-magnifying-glass"
-            class="mr-2 mb-1"
+            class="mb-1 mr-2"
           />
           Buscar
         </h1>
@@ -50,13 +50,13 @@
       >
         <h1
           :class="[
-            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
             state.activeButton === 'trends' ? 'font-extrabold text-white' : '',
           ]"
         >
           <font-awesome-icon
             icon="fa-solid fa-arrow-trend-up"
-            class="mr-2 mb-1 text-lg"
+            class="mb-1 mr-2 text-lg"
           />Tendencias
         </h1>
       </div>
@@ -68,15 +68,15 @@
     >
       <h1
         :class="[
-          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
           state.activeButton === 'notifications'
             ? 'font-extrabold text-white'
             : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-bell" class="relative mr-2 mb-1" />
+        <font-awesome-icon icon="fa-solid fa-bell" class="relative mb-1 mr-2" />
         <span
-          class="absolute -mt-2 -ml-4 rounded-full bg-purple-500 px-1 text-xs font-bold text-white"
+          class="absolute -ml-4 -mt-2 rounded-full bg-purple-500 px-1 text-xs font-bold text-white"
           v-if="notis > 0"
           >{{ notis }}</span
         >
@@ -90,18 +90,18 @@
     >
       <h1
         :class="[
-          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
           state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-user" class="mr-2 mb-1" />
+        <font-awesome-icon icon="fa-solid fa-user" class="mb-1 mr-2" />
         Perfil
       </h1>
     </div>
 
     <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
-    <SignInButton class="mt-52"></SignInButton>
+    <SignInButton class="mt-52 md:mt-14"></SignInButton>
   </div>
 </template>
 <script setup lang="ts">
