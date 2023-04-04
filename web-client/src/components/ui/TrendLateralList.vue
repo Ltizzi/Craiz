@@ -3,15 +3,17 @@
     v-if="isLoaded"
     class="flex w-full flex-col justify-center gap-1 rounded-3xl bg-slate-100 px-5 py-1"
   >
-    <h2 class="mb-2 text-xl font-extrabold">Tendencias</h2>
+    <h2 class="mb-2 text-xl font-extrabold md:text-lg">Tendencias</h2>
     <ul v-if="loadTrends" class="flex flex-col gap-1">
       <li
         v-for="(trend, index) in trendTags"
         :key="trend.tagId"
-        class="flex flex-row justify-start gap-4"
+        class="flex flex-row justify-start gap-4 md:gap-2"
       >
-        <p class="text-right text-lg font-bold">{{ index + 1 }}.</p>
-        <div class="flex flex-col gap-0">
+        <p class="text-right text-lg font-bold md:text-base">
+          {{ index + 1 }}.
+        </p>
+        <div class="flex flex-col gap-0 md:flex-row md:items-center md:gap-1">
           <BaseTag :class="trend.name" :name="trend.name" class="text-center">{{
             trend.name
           }}</BaseTag>
@@ -20,7 +22,7 @@
       </li>
     </ul>
     <router-link to="/trends">
-      <h2 class="mb-2 text-base font-extrabold hover:cursor-pointer">
+      <h2 class="mb-2 text-base font-extrabold hover:cursor-pointer md:text-sm">
         Ver más
       </h2>
     </router-link>

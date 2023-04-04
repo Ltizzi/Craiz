@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md sm:w-full md:w-10/12 lg:w-11/12"
+    class="sm:w-full container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md md:w-11/12 lg:w-11/12"
     v-if="isLoaded"
   >
     <div
@@ -26,14 +26,16 @@
         > -->
 
         <h3
-          class="lg:text-2x2 ml-2 font-bold hover:cursor-pointer sm:text-xl lg:mt-3"
+          class="lg:text-2x2 sm:text-xl ml-2 font-bold hover:cursor-pointer md:text-xl lg:mt-3"
           @click="goProfile"
         >
           {{ uploader.nickname }}
         </h3>
         <!-- </router-link> -->
 
-        <h4 class="pl-2 text-sm italic sm:text-base lg:mt-3 lg:text-lg">
+        <h4
+          class="sm:text-base pl-2 text-sm italic md:text-lg lg:mt-3 lg:text-lg"
+        >
           @{{ uploader.username }}
         </h4>
       </div>
@@ -44,7 +46,7 @@
     </div>
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
-    <div class="flex flex-col sm:mx-1 lg:mx-12">
+    <div class="sm:mx-1 flex flex-col lg:mx-12">
       <img :src="props.data.imgUrl" alt="" class="mx-auto w-fit rounded-3xl" />
 
       <div class="flex h-12 flex-row justify-between">

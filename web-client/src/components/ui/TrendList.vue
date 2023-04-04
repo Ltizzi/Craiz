@@ -1,5 +1,5 @@
 <template lang="">
-  <div v-if="isLoaded" class="flex w-full flex-col pl-3 pt-5 lg:pl-10">
+  <div v-if="isLoaded" class="flex h-screen w-full flex-col pl-3 pt-5 lg:pl-10">
     <ul v-if="state.activeButton === 'trends'" class="flex flex-col gap-5">
       <li
         v-for="(trend, index) in trendTags"
@@ -34,7 +34,7 @@
         <div
           class="flex flex-row items-center justify-start gap-3 text-start lg:gap-5"
         >
-          <p class="text-right text-base font-bold sm:text-lg">
+          <p class="sm:text-lg text-right text-base font-bold">
             {{ index + 1 }}.
           </p>
           <img

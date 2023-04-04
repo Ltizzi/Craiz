@@ -1,6 +1,8 @@
 <template>
   <div class="h-full w-full bg-gray-200 text-start" v-if="isLoaded">
-    <div class="fixed w-full bg-slate-800 py-3 text-center opacity-90 lg:w-2/5">
+    <div
+      class="fixed w-full bg-slate-800 py-3 text-center opacity-90 md:-ml-0.5 md:w-6/12 lg:w-2/5"
+    >
       <h1 class="text-xl font-bold text-white">Notificaciones</h1>
     </div>
 

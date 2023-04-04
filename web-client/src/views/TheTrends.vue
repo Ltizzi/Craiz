@@ -2,7 +2,7 @@
   <div class="flex h-full w-full flex-col bg-gray-100 pt-24">
     <TrendsHeader class="w-full lg:w-2/5" />
     <keep-alive>
-      <TrendList class="mt-10" />
+      <TrendList class="mt-10 md:ml-4" />
     </keep-alive>
   </div>
 </template>
