@@ -8,6 +8,21 @@ const {
 
 const DEFAULT_USER_ID = 0;
 
+const FILTRO_DTO = {
+  _id: 0,
+  __v: 0,
+  email: 0,
+  googleId: 0,
+  isAdmin: 0,
+  likedMemes: 0,
+  memes: 0,
+  searchEntries: 0,
+  tags: 0,
+  birthday: 0,
+  updatedAt: 0,
+  about: 0,
+};
+
 async function getAllUsers(skip, limit) {
   return await usersRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
@@ -57,6 +72,31 @@ async function getUserByNickname(nickname) {
     nickname: nickname,
     softDeleted: false,
   });
+}
+
+async function getAllFriendsFromUserById(id, skip, limit) {
+  const user = await findUser({ userId: id });
+  // const followers = await findUsers({ userId: user.followers });
+  const followers = await usersRepo
+    .find({ userId: user.followers, softDeleted: false }, FILTRO_DTO)
+    .skip(skip)
+    .limit(limit);
+  // const follows = await findUsers({ userId: user.follows });
+  const follows = await usersRepo
+    .find(
+      {
+        userId: user.follows,
+        softDeleted: false,
+      },
+      FILTRO_DTO
+    )
+    .skip(skip)
+    .limit(limit);
+  const list = {
+    followers: followers,
+    follows: follows,
+  };
+  return list;
 }
 
 async function getLastUserId() {
@@ -200,6 +240,7 @@ module.exports = {
   getUserByGoogleId,
   getUserByNickname,
   getUserByUsername,
+  getAllFriendsFromUserById,
   getLastUserId,
   saveUser,
   deleteUser,

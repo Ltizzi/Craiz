@@ -4,6 +4,7 @@ const {
   getUserById,
   getUserByNickname,
   getUserByUsername,
+  getAllFriendsFromUserById,
   saveUser,
   updateUser,
   deleteUser,
@@ -66,6 +67,17 @@ async function httpGetUserByNickname(req, res) {
     const user = await getUserByNickname(nickname);
     if (!user) return res.status(404).json({ error: "User not found!" });
     return res.status(200).json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetAllFriendsByUserId(req, res) {
+  try {
+    const id = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const friends = await getAllFriendsFromUserById(id, skip, limit);
+    return res.status(200).json(friends);
   } catch (err) {
     return res.status(404).json({ error: err.message });
   }
@@ -138,6 +150,7 @@ module.exports = {
   httpGetUserById,
   httpGetUserByUsername,
   httpGetUserByNickname,
+  httpGetAllFriendsByUserId,
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,
