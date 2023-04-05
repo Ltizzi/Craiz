@@ -10,75 +10,90 @@
       <li
         v-for="(noti, index) in notifications"
         :key="noti.notificationId"
-        class="noti-list flex h-20 flex-row items-center gap-3 border-2 border-t-0 border-gray-300 bg-gray-50 px-4 text-xl text-gray-600"
+        class="noti-list flex min-h-min flex-col items-start justify-start gap-3 border-2 border-t-0 border-gray-300 bg-gray-50 px-4 py-2 text-xl text-gray-600"
         :class="{ 'bg-purple-200': noti.isNewN }"
         :id="index.toString()"
       >
+        <div class="flex flex-row justify-start gap-2">
+          <img
+            :src="noti.fromUser[noti.fromUser.length - 1].avatar"
+            alt=""
+            class="h-14 w-14 rounded-full"
+          />
+          <div
+            v-if="noti.type == 'like'"
+            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+          >
+            <p>
+              A {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+              <span v-if="noti.fromUser.length == 1">le gusta</span>
+              <span v-if="noti.fromUser.length > 1">
+                y a {{ noti.fromUser.length }} usuarios más les gusta
+              </span>
+              tu
+              <router-link :to="'/meme?id=' + noti.memeId">
+                <span class="hover:font-extrabold hover:text-violet-600">
+                  meme</span
+                ></router-link
+              >.
+            </p>
+          </div>
+          <div
+            v-if="noti.type == 'loop'"
+            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+          >
+            <p>
+              {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+              <span v-if="noti.fromUser.length == 1">ha loopeado</span>
+              <span v-if="noti.fromUser.length > 1">
+                y {{ noti.fromUser.length }} usuarios más han loopeado
+              </span>
+              tu
+              <router-link :to="'/meme?id=' + noti.memeId">
+                <span class="hover:font-extrabold hover:text-violet-600">
+                  meme</span
+                ></router-link
+              >.
+            </p>
+          </div>
+
+          <div
+            v-if="noti.type == 'comment'"
+            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+          >
+            <p>
+              {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+              <span v-if="noti.fromUser.length == 1">ha comentado</span>
+              <span v-if="noti.fromUser.length > 1">
+                y {{ noti.fromUser.length }} usuarios más han comentado
+              </span>
+              tu
+              <router-link :to="'/meme?id=' + noti.memeId">
+                <span class="hover:font-extrabold hover:text-violet-600">
+                  meme</span
+                ></router-link
+              >.
+            </p>
+          </div>
+          <div
+            v-if="noti.type === 'follow'"
+            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+          >
+            <p>{{ noti.fromUser[0].nickname }} ha comenzado a seguirte.</p>
+          </div>
+        </div>
         <img
-          :src="noti.fromUser[0].avatar"
+          :src="noti.ownerMemeUrl"
+          v-if="noti.type != 'comment'"
+          class="mx-auto w-72"
           alt=""
-          class="h-14 w-14 rounded-full"
         />
-        <div
-          v-if="noti.type == 'like'"
-          class="flex flex-row items-center gap-3 text-lg md:text-xl"
-        >
-          <p>
-            A {{ noti.fromUser[0].nickname }}
-            <span v-if="noti.fromUser.length == 1">le gusta</span>
-            <span v-if="noti.fromUser.length > 1">
-              y a {{ noti.fromUser.length }} usuarios más les gusta
-            </span>
-            tu
-            <router-link :to="'/meme?id=' + noti.memeId">
-              <span class="hover:font-extrabold hover:text-violet-600">
-                meme</span
-              ></router-link
-            >.
-          </p>
-        </div>
-        <div
-          v-if="noti.type == 'loop'"
-          class="flex flex-row items-center gap-3 text-lg md:text-xl"
-        >
-          <p>
-            {{ noti.fromUser[0].nickname }}
-            <span v-if="noti.fromUser.length == 1">ha loopeado</span>
-            <span v-if="noti.fromUser.length > 1">
-              y {{ noti.fromUser.length }} usuarios más han loopeado
-            </span>
-            tu
-            <router-link :to="'/meme?id=' + noti.memeId">
-              <span class="hover:font-extrabold hover:text-violet-600">
-                meme</span
-              ></router-link
-            >.
-          </p>
-        </div>
-        <div
+        <img
+          :src="noti.fromUser[noti.fromUser.length - 1].commentUrl"
           v-if="noti.type == 'comment'"
-          class="flex flex-row items-center gap-3 text-lg md:text-xl"
-        >
-          <p>
-            {{ noti.fromUser[0].nickname }}
-            <span v-if="noti.fromUser.length == 1">ha comentado</span>
-            <span v-if="noti.fromUser.length > 1">
-              y {{ noti.fromUser.length }} usuarios más han comentado
-            </span>
-            tu
-            <router-link :to="'/meme?id=' + noti.memeId">
-              <span class="hover:font-extrabold hover:text-violet-600">
-                meme</span
-              ></router-link
-            >.
-          </p>
-        </div>
-        <div
-          v-if="noti.type === 'follow'"
-          class="flex flex-row items-center gap-3 text-lg md:text-xl"
-        >
-          <p>{{ noti.fromUser[0].nickname }} ha comenzado a seguirte.</p>
-        </div>
+          class="ml-14 w-40"
+          alt=""
+        />
       </li>
     </ul>
   </div>

@@ -1,20 +1,22 @@
 <template lang="">
-  <div class="flex-flex-col -mt-5">
+  <div class="flex-flex-col -mt-5 h-auto">
     <h1 class="py-2 text-center text-xl font-bold md:text-lg lg:text-2xl">
       Subir un nuevo meme
     </h1>
-    <div class="flex h-auto w-full flex-col items-center md:flex-row">
+    <div
+      class="flex h-auto w-full flex-col items-center gap-10 md:flex-row md:gap-0"
+    >
       <div>
         <div class="flex w-full items-center justify-center">
           <label
             for="dropzone-file"
-            class="dark:hover:bg-bray-800 flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            class="dark:hover:bg-bray-800 flex h-72 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             <img
               :src="memeImage"
               v-if="memeImage"
               ref="meme"
-              class="mx-auto h-72 w-4/5 object-contain md:h-96 lg:h-96 lg:w-4/5"
+              class="mx-auto h-64 w-4/5 object-contain md:h-96 lg:h-96 lg:w-4/5"
             />
             <div
               class="flex flex-col items-center justify-center pb-6 pt-5"
@@ -51,7 +53,7 @@
         <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div> -->
         <div
           v-if="selectedTags"
-          class="flew-row mt-2 flex w-96 flex-wrap justify-evenly"
+          class="flew-row my-2 flex w-96 flex-wrap justify-evenly"
         >
           <span class="h-7 pb-2"></span>
           <BaseTag
@@ -65,60 +67,61 @@
         </div>
       </div>
 
-      <div class="flex flex-col justify-center gap-0">
-        <!-- <h3 class="mb-1 mt-1 text-center text-base font-bold lg:text-lg">
-          Pick a image file from your local storage:
-        </h3>
-        <input
-          type="file"
-          ref="fileInput"
-          @change="handleFileInput"
-          class="my-2 ml-10"
-        /> -->
+      <div class="flex h-40 flex-col justify-center gap-0">
         <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
           Elige los tags del meme:
         </h2>
-        <div
-          class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
-        >
-          <BaseTag
-            v-for="tag in tags"
-            :key="tag.tagId"
-            class="mb-1"
-            :class="tag.class"
-            :clickeable="true"
-            @click="selecTag(tag)"
-            >{{ tag.name }}</BaseTag
-          >
-        </div>
-        <div class="flex flex-row items-center justify-center">
-          <BaseButton
-            @click="uploadMeme"
-            class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
-            >Subir Meme
-          </BaseButton>
-
-          <BaseSpinner class="absolute right-28" v-if="isUploading" />
-          <font-awesome-icon
-            icon="fa-solid fa-circle-check"
-            class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
-            v-show="uploadComplete"
-          />
-          <font-awesome-icon
-            icon="fa-solid fa-circle-xmark"
-            class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
-            v-show="uploadFailed"
-          />
+        <div class="flex w-fit flex-col items-center justify-center">
+          <SelectTagNav />
+          <div class="h-32">
+            <div
+              class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
+            >
+              <BaseTag
+                v-for="tag in tags"
+                :key="tag.tagId"
+                class="mb-1"
+                :class="tag.class"
+                :clickeable="true"
+                @click="selecTag(tag)"
+                v-if="state.activeTab == 'basic'"
+                >{{ tag.name }}</BaseTag
+              >
+            </div>
+            <CustomTag class="mx-5" v-if="state.activeTab == 'custom'" />
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="flex flex-row items-center justify-center">
+      <BaseButton
+        @click="uploadMeme"
+        class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+        >Subir Meme
+      </BaseButton>
+
+      <BaseSpinner class="absolute right-28" v-if="isUploading" />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-check"
+        class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
+        v-show="uploadComplete"
+      />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-xmark"
+        class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
+        v-show="uploadFailed"
+      />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, reactive, ref } from "vue";
   import BaseSpinner from "../common/BaseSpinner.vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
+  import CustomTag from "./CustomTagUI.vue";
+  import SelectTagNav from "./SelectTagNav.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
   import { useMemesStore } from "@/store/memes";
@@ -143,7 +146,6 @@
   selectedTags.value = [];
 
   const memeImage = ref();
-  let fileToUpload: any;
 
   let isComment = ref(false);
 
@@ -152,6 +154,8 @@
   EventBus.on("newComment", () => {
     isComment.value = true;
   });
+
+  let fileToUpload: any;
 
   function handleFileInput(event: any) {
     const file = event.target.files[0];
@@ -284,6 +288,25 @@
       console.log(parentId);
     }
   });
+
+  // TAG NAVIGATION
+  const state = reactive({
+    activeTab: "basic",
+  });
+
+  EventBus.on("basicTags", () => {
+    state.activeTab = "basic";
+  });
+
+  EventBus.on("customTags", () => {
+    state.activeTab = "custom";
+  });
+
+  //CUSTOM TAG
+
+  EventBus.on("createdCustom", (tag: any) => {
+    selectedTags.value.push(tag);
+  });
 </script>
 <style>
   .sports {
@@ -329,6 +352,6 @@
     @apply bg-amber-400;
   }
   .custom {
-    @apply bg-gradient-to-r from-orange-400 via-pink-500 to-violet-600;
+    @apply bg-gradient-to-r from-amber-400 via-pink-500 to-emerald-400;
   }
 </style>
