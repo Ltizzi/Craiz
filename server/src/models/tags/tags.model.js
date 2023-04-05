@@ -5,7 +5,7 @@ const DEFAULT_TAG_ID = 0;
 
 async function getAllTags(skip, limit) {
   return await tagsRepo
-    .find({ softDeleted: false }, { _id: 0, __v: 0 })
+    .find({ softDeleted: false, isCustom: false }, { _id: 0, __v: 0 })
     .sort({ counter: -1 })
     .skip(skip)
     .limit(limit);
@@ -21,6 +21,14 @@ async function getAllCustomTags(skip, limit) {
 
 async function getTagById(id) {
   return await findTag({ tagId: id, softDeleted: false });
+}
+
+async function getTagsByName(name) {
+  return await findTags({
+    name: { $regex: name },
+    isCustom: true,
+    softDeleted: false,
+  });
 }
 
 async function getLastTagId() {
@@ -65,9 +73,10 @@ async function createCustomTag(tag) {
     softDeleted: false,
     counter: 0,
   });
-  return await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
+  await tagsRepo.findOneAndUpdate({ tagId: newTag.tagId }, newTag, {
     upsert: true,
   });
+  return newTag;
 }
 
 async function updateTag(tag) {
@@ -89,6 +98,10 @@ async function findTag(filter) {
   return await tagsRepo.findOne(filter, { _id: 0, __v: 0 });
 }
 
+async function findTags(filter) {
+  return await tagsRepo.find(filter, { _id: 0, __v: 0 });
+}
+
 async function tagIncrementalCounter(tagName) {
   const tag = await findTag({ name: tagName });
   tag.counter += 1;
@@ -105,6 +118,7 @@ module.exports = {
   getAllTags,
   getAllCustomTags,
   getTagById,
+  getTagsByName,
   getLastTagId,
   saveTag,
   createCustomTag,

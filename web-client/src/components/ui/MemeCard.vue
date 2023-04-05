@@ -80,7 +80,7 @@
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"
             :key="index"
-            :class="tag.toLowerCase().replaceAll(/\s/g, '')"
+            :class="[checkIsCustom(tag) ? trimSpaces(tag) : 'custom']"
             :name="tag"
             class="my-auto mr-1 mt-0.5 w-fit"
             >{{ tag }}</BaseTag
@@ -139,6 +139,33 @@
   let id = ref();
   let lowerCaseTags = ref<string[]>([]);
   // let memeToProps = ref();
+
+  //tags styles
+
+  let basicTags = [
+    "fun",
+    "pop",
+    "trash",
+    "politics",
+    "emo",
+    "celeb",
+    "classic",
+    "wholesome",
+    "random",
+    "just bad",
+    "sports",
+    "plus18",
+    "dadmeme",
+    "auntmeme",
+  ];
+
+  function checkIsCustom(tag: string) {
+    return basicTags.includes(tag);
+  }
+
+  function trimSpaces(tag: string) {
+    return tag.toLowerCase().replaceAll(/\s/g, "");
+  }
 
   async function openMeme(meme: Meme) {
     let rutaId = Number(route.query.id);
@@ -214,3 +241,9 @@
     }
   });
 </script>
+
+<style>
+  .custom {
+    @apply bg-gradient-to-r from-orange-300 via-pink-500 to-sky-400;
+  }
+</style>

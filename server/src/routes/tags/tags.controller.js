@@ -1,6 +1,7 @@
 const {
   getAllTags,
   getTagById,
+  getTagsByName,
   saveTag,
   createCustomTag,
   updateTag,
@@ -29,6 +30,16 @@ async function httpGetTagById(req, res) {
   }
 }
 
+async function httpGetTagsByName(req, res) {
+  const tagName = req.query.value;
+  try {
+    const tags = await getTagsByName(tagName);
+    return res.status(200).json(tags);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 async function httpSaveTag(req, res) {
   // tag.createdAt = Date.now();
   try {
@@ -43,8 +54,8 @@ async function httpSaveTag(req, res) {
 async function httpCreateCustomTag(req, res) {
   try {
     const tag = req.body;
-    const newTag = await saveTag(tag);
-    return res.status(201).json(tag);
+    const newTag = await createCustomTag(tag);
+    return res.status(201).json(newTag);
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
@@ -85,6 +96,7 @@ async function httpDeleteTag(req, res) {
 module.exports = {
   httpGetAllTags,
   httpGetTagById,
+  httpGetTagsByName,
   httpSaveTag,
   httpCreateCustomTag,
   httpUpdateTag,
