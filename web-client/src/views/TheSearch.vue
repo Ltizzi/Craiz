@@ -90,6 +90,8 @@
     username: String,
   });
 
+  //navigation tab event handlers
+
   EventBus.on("isSearching", () => {
     searchedTag.value = [];
     searchedRecent.value = [];
@@ -157,6 +159,8 @@
       }
     }
   });
+
+  //función reutilizable que hace query en la API
 
   async function searchValues(query: string) {
     const response = await axios.get(`${API_URL}utils/search?value=${query}`);
