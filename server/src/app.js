@@ -98,7 +98,7 @@ app.get("/success", async (req, res) => {
       console.log(err);
     }
 
-    if (!user.username) {
+    if (!user.username || user.username == user.googleId) {
       res.redirect(`http://localhost:5173/callback`);
     } else {
       console.log(user.username);
