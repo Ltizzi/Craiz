@@ -7,7 +7,7 @@
     >
       <img
         src="/assets/img/collage.jpg"
-        class="absolute top-16 z-0 h-5/6 opacity-40 md:left-14 md:-mt-5 md:w-11/12 md:object-cover lg:left-16 lg:top-0 lg:h-full lg:w-11/12 lg:object-fill"
+        class="absolute top-16 z-0 h-5/6 opacity-40 md:left-14 md:-mt-5 md:w-11/12 md:object-cover lg:left-16 lg:top-4 lg:-mt-3 lg:h-full lg:w-11/12 lg:object-fill"
         alt=""
       />
       <img

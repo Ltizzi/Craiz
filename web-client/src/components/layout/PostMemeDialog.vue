@@ -2,20 +2,20 @@
   <BaseDialog :is-active="showModal" v-if="showModal" @closeModal="modalSwitch">
     <div class="sm:px-7 sm:py-5 flex flex-col justify-center px-2 py-2">
       <h1 class="text-center text-xl font-bold lg:text-3xl">
-        What do you want to do?
+        Qué te gustaría hacer?
       </h1>
       <div class="flex flex-row justify-around py-3">
         <BaseButton
-          class="mr-5 rounded-lg bg-purple-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+          class="mr-5 rounded-lg bg-pink-600 px-3 py-1 text-base font-bold text-white lg:text-lg"
           @click="turnShowUpload"
-          >Upload meme</BaseButton
+          >Subir meme</BaseButton
         >
         <!-- v-if="btnTurn"
         v-else -->
         <BaseButton
           class="rounded-lg bg-green-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
           @click="turnShowCreate"
-          >Create new meme</BaseButton
+          >Crear nuevo meme</BaseButton
         >
       </div>
       <UploadMeme v-if="showUpload" @closeModal="modalSwitch"></UploadMeme>

@@ -92,4 +92,7 @@
   .random {
     @apply bg-amber-400;
   }
+  .custom {
+    @apply bg-gradient-to-r from-orange-300 via-pink-500 to-sky-400;
+  }
 </style>

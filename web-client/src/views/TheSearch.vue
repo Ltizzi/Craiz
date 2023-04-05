@@ -1,9 +1,9 @@
 <template lang="">
   <div
-    class="flex h-full flex-col bg-gray-200 pt-24 md:w-full lg:w-full"
+    class="flex h-full w-full flex-col bg-gray-200 pt-24 md:w-full lg:w-full"
     v-if="isLoaded"
   >
-    <SearchHeader class="md:w-full lg:w-2/5" />
+    <SearchHeader class="sm:w-full md:w-full lg:w-6/12" />
     <div
       v-if="noSearch"
       class="sticky mt-40 h-screen w-full items-center text-center text-2xl"
