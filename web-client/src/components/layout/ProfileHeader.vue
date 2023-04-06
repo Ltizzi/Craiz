@@ -15,29 +15,29 @@
       <img
         :src="props.user.avatar"
         alt=""
-        class="absolute top-64 left-2 h-20 w-20 rounded-full"
+        class="absolute left-2 top-64 h-20 w-20 rounded-full"
       />
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-violet-500 py-1 px-3 font-semibold text-white"
+        class="absolute right-2 top-72 mt-2 rounded-xl bg-violet-500 px-3 py-1 font-semibold text-white"
         v-if="isOwnProfile"
         @click="modalSwitch"
         >Editar Perfil</BaseButton
       >
       <EditProfileModal v-if="showModal" />
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-violet-500 py-1 px-3 font-semibold text-white hover:bg-green-500"
+        class="absolute right-2 top-72 mt-2 rounded-xl bg-violet-500 px-3 py-1 font-semibold text-white hover:bg-green-500"
         v-if="!isOwnProfile && !following"
         @click="handleFollows"
         >Seguir</BaseButton
       >
       <BaseButton
-        class="absolute top-72 right-2 mt-2 rounded-xl bg-purple-500 py-1 px-3 font-semibold text-white hover:bg-red-600"
+        class="absolute right-2 top-72 mt-2 rounded-xl bg-purple-500 px-3 py-1 font-semibold text-white hover:bg-red-600"
         @click="handleFollows"
         v-if="!isOwnProfile && following"
         >Dejar de seguir</BaseButton
       >
     </div>
-    <div class="mt-16 ml-2 flex flex-col justify-start">
+    <div class="ml-2 mt-16 flex flex-col justify-start">
       <h1 class="text-2xl font-extrabold text-gray-700">
         {{ props.user.nickname }}
       </h1>
@@ -52,7 +52,8 @@
       </div>
       <p>{{ props.user.createdAt }}</p>
       <div
-        class="mt-2 flex flex-row items-center justify-start gap-2 text-start"
+        class="mt-2 flex flex-row items-center justify-start gap-2 text-start hover:cursor-pointer"
+        @click="loadFriendsDialog"
       >
         <div class="flex items-center gap-1">
           <span class="text-lg font-bold">{{ props.user.followsCounter }}</span>
@@ -65,6 +66,7 @@
           <p class="text-text-gray-500 italic">Seguidores</p>
         </div>
       </div>
+      <FriendsDialog :friends="friends" v-if="showFriendsModal" />
     </div>
   </div>
 </template>
@@ -73,6 +75,7 @@
   import ProfileHeaderTop from "../ui/ProfileHeaderTop.vue";
   import BaseButton from "../common/BaseButton.vue";
   import EditProfileModal from "../ui/EditProfileModal.vue";
+  import FriendsDialog from "../ui/FriendsDialog.vue";
   import { User } from "@/utils/models";
   import { useUserStore } from "@/store";
   import axios from "axios";
@@ -194,5 +197,31 @@
     showModal.value = !showModal.value;
     EventBus.emit("openDialog");
   }
+
+  //FRIENDS MODAL
+
+  const friends = ref();
+  const showFriendsModal = ref(false);
+
+  EventBus.on("closeModal", () => {
+    showFriendsModal.value = false;
+  });
+
+  function loadFriendsDialog() {
+    showFriendsModal.value = !showFriendsModal.value;
+    EventBus.emit("openFriendDialog");
+  }
+
+  onBeforeMount(async () => {
+    if (props.user) {
+      try {
+        let id = props.user.userId as number;
+        const response = await axios.get(`${API_URL}user/friends?id=${id}`);
+        friends.value = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  });
 </script>
 <style lang=""></style>
