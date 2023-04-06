@@ -138,7 +138,7 @@
   import { Meme } from "@/utils/models";
   import { useRoute } from "vue-router";
 
-  import { useField, useForm } from "vee-validate";
+  import { useField } from "vee-validate";
   import { required } from "@vee-validate/rules";
 
   const userStore = useUserStore();
@@ -198,11 +198,7 @@
     state.errors.fileToUpload = "";
     const file = event.target.files[0];
     console.log(file);
-    if (!file) {
-      state.errors.fileToUpload = "Se requiere una image";
-      state.fileToUpload = "";
-      return;
-    }
+
     if (!/\.(jpeg|png|jpg|jfif|webp|gif)$/i.test(file.name)) {
       state.errors.fileToUpload = "El archivo debe ser de imagen";
       state.fileToUpload = "";
@@ -254,8 +250,19 @@
 
   async function uploadMeme() {
     isUploading.value = true;
-
+    uploadFailed.value = false;
+    state.errors.fileToUpload = "";
     //prepara imagen para ser subida a la ThumbSnap
+    if (state.fileToUpload == "") {
+      state.errors.fileToUpload = "Se requiere una image";
+      state.fileToUpload = "";
+      isUploading.value = false;
+      uploadFailed.value = true;
+      setTimeout(() => {
+        uploadFailed.value = false;
+      }, 1500);
+      return;
+    }
     const formData = new FormData();
     formData.append("file", state.fileToUpload);
     const response = await axios.post(`${API_URL}utils/uploadImg`, formData, {
