@@ -42,6 +42,7 @@
       <MemeDropdown
         @click="openDropdown()"
         :memeId="props.data.memeId"
+        :memeUrl="props.data.imgUrl"
       ></MemeDropdown>
     </div>
 
