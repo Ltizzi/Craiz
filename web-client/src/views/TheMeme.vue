@@ -106,7 +106,8 @@
         params.id ||
         route.path == "/search" ||
         route.path == "/trends" ||
-        route.path == "/notifications"
+        route.path == "/notifications" ||
+        route.path == "/meme"
       ) {
         //por esto es necesaria, la ruta cambiaba pero se activaba en el watcher
 
@@ -118,6 +119,9 @@
           meme = memesStore.parentMeme;
           localStorage.setItem("meme", JSON.stringify(meme));
           isLoaded.value = true;
+          location.reload();
+        }
+        if (route.path == "/meme") {
           location.reload();
         }
       }
