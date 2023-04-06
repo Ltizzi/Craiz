@@ -23,21 +23,27 @@ const { Session } = require("express-session");
 
 require("dotenv").config();
 
-setupPassport();
-
 const app = express();
 
+
 //production
-//app.set("trust proxy", 1);
+app.set("trust proxy", 1);
+
 app.use(helmet());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://accounts.google.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://craze-test.web.app",
+      "https://accounts.google.com",
+    ],
     //   exposedHeaders: ["set-cookie"],
     credentials: true,
   })
 );
+
+setupPassport();
 
 app.use(
   session({
@@ -45,12 +51,12 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    //production
-    // cookie: {
-    //   sameSite: "none",
-    //   secure: true,
-    //   proxy: true,
-    // },
+    cookie: {
+      sameSite: "none",
+      secure: true,
+      rolling: true,
+      proxy: true,
+    },
   })
 );
 
@@ -76,7 +82,11 @@ app.get(
     successRedirect: "/success",
     session: true,
   }),
-  (req, res) => {}
+  (req, res) => {
+    req.login(req.passport.email, (err) => {
+      if (err) return next(err);
+    });
+  }
 );
 
 app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
@@ -88,10 +98,10 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   }
 });
 
+
 app.get("/success", async (req, res) => {
   console.log("Current user is:....", req.user);
   const user = await getUserByGoogleId(req.user.googleId);
-
   // // Call the login function from Passport
   req.login(req.user, (err) => {
     if (err) {
@@ -99,16 +109,16 @@ app.get("/success", async (req, res) => {
     }
 
     if (!user.username || user.username == user.googleId) {
-      res.redirect(`http://localhost:5173/callback`);
+      res.redirect(`https://craze-test.web.app/callback`);
     } else {
       console.log(user.username);
-      res.redirect("http://localhost:5173");
+      res.redirect("https://craze-test.web.app");
     }
   });
 });
 
 app.get("/failure", (req, res) => {
-  res.redirect("http://localhost:5173/home?loggedIn=false");
+  res.redirect("https://craze-test.web.app/logfail");
 });
 
 app.get("/v1/logout", checkLoggedIn, (req, res) => {

@@ -14,7 +14,8 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + "-" + Date.now() + extension);
   },
 });
-
+console.log("el storage es:");
+console.log(storage);
 const upload = multer({ storage: storage });
 
 utilsRouter.post("/uploadImg", upload.single("file"), httpUploadImage);

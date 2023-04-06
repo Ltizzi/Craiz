@@ -21,11 +21,13 @@ async function httpUploadImage(req, res) {
   const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
 
   // const fileData = await readFileAsBlob(filePath);
+
   const fileData = fs.createReadStream(filePath);
+
 
   let imageData = new FormData();
   imageData.append("key", FREEIMG.KEY);
-  imageData.append("media", fileData, req.file.originalname);
+  imageData.append("media", fileStream, req.file.originalname); //en lugar de fileData
 
   try {
     const response = await axios.post(`${FREEIMG.URL}`, imageData, {
@@ -100,6 +102,7 @@ async function httpSearchValue(req, res) {
   }
   return res.status(200).json(returnValues);
 }
+
 
 module.exports = {
   httpUploadImage,

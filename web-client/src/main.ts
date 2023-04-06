@@ -4,6 +4,7 @@ import { createPinia } from "pinia";
 import router from "./router";
 import axios from "axios";
 
+
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -27,7 +28,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
-export const API_URL = "http://localhost:4246/v1/";
+export const API_URL = "https://crazeapi.onrender.com/v1/";
 
 export const RELOAD_TIMER = 1000 * 60;
 
