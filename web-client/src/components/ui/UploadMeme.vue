@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <div class="flex flex-row items-center justify-center">
+    <div class="flex flex-row items-center justify-evenly">
       <BaseButton
         @click="uploadMeme"
         class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
