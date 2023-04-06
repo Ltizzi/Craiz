@@ -13,7 +13,7 @@ async function getAllTags(skip, limit) {
 
 async function getTopTags(skip, limit) {
   return await tagsRepo
-    .find({ softDeleted: false, counter: counter > 1 }, { _id: 0, __v: 0 })
+    .find({ softDeleted: false }, { _id: 0, __v: 0 })
     .sort({ counter: -1 })
     .skip(skip)
     .limit(limit);

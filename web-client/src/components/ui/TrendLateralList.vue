@@ -44,7 +44,7 @@
   const isLoaded = ref(false);
 
   async function fetchTopTrend() {
-    return await axios.get(`${API_URL}tag/all?skip=0&limit=5`);
+    return await axios.get(`${API_URL}tag/top?skip=0&limit=5`);
   }
 
   onBeforeMount(async () => {
