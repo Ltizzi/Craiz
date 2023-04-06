@@ -47,7 +47,13 @@
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
     <div class="sm:mx-1 flex flex-col lg:mx-12">
-      <img :src="props.data.imgUrl" alt="" class="mx-auto w-fit rounded-3xl" />
+      <router-link :to="'/meme?id=' + props.data.memeId">
+        <img
+          :src="props.data.imgUrl"
+          alt=""
+          class="mx-auto w-fit rounded-3xl"
+        />
+      </router-link>
 
       <div class="flex h-12 flex-row justify-between">
         <div
