@@ -1,23 +1,28 @@
 <template>
-  <div class="bg-gray-800">
+  <div class="bg-slate-900">
     <div
-      class="max-w-sm:full xs:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 sm:w-full sm:justify-start md:w-11/12 lg:w-8/12"
+      class="max-w-sm:full xs:justify-start sm:w-full sm:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 md:w-10/12 lg:w-8/12"
     >
       <div
-        class="h-screen w-16 rounded-sm sm:w-20 md:w-32 lg:w-64"
+        class="sm:w-20 h-screen w-16 rounded-sm md:-ml-32 md:w-24 lg:w-3/12"
         v-if="!state.isMobile"
       >
         <LateralMenu></LateralMenu>
       </div>
       <!-- items-center justify-center -->
       <div
-        class="flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 sm:w-full md:w-9/12 lg:w-7/12"
+        class="sm:w-full flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-16 md:w-3/5 lg:ml-8 lg:w-3/5"
       >
         <keep-alive>
           <RouterView></RouterView>
         </keep-alive>
       </div>
-      <div class="w-14 sm:w-14 md:w-32 lg:w-52" v-if="!state.isMobile"></div>
+      <div
+        class="sm:w-14 ml-5 mt-10 flex h-screen w-14 items-start md:w-10 lg:mx-auto lg:w-40 lg:justify-center"
+        v-if="!state.isMobile"
+      >
+        <LateralRight />
+      </div>
     </div>
     <div v-if="state.isMobile">
       <MobileNav class="fixed bottom-0" />
@@ -27,6 +32,7 @@
 
 <script setup lang="ts">
   import LateralMenu from "../components/layout/LateralMenu.vue";
+  import LateralRight from "@/components/layout/LateralRight.vue";
   import Callback from "../components/ui/Callback.vue";
   import MobileNav from "../components/ui/MobileNav.vue";
   import { useUserStore } from "@/store";
@@ -87,19 +93,9 @@
 
   onBeforeMount(async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}auth/logincheck`,
-        //"http://localhost:4246/v1/auth/logincheck",
-        {
-          withCredentials: true,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers":
-              "Origin, Content-Type, Accept, Authorization, set-cookie",
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}auth/logincheck`, {
+        withCredentials: true,
+      });
       userStore.setUser(response.data.user);
       tagStore.fetchTags;
     } catch (err) {
@@ -107,7 +103,8 @@
       isLogged.value = false;
       console.log("no logueado");
       isGuest.value = userStore.isGuest;
-      if (isGuest.value) {
+      let localGuest = localStorage.getItem("guest");
+      if (isGuest.value || localGuest == "userIsGuest") {
         isLogged.value = true;
       } else {
         router.push("/landing");

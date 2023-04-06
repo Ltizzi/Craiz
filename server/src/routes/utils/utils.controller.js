@@ -3,7 +3,11 @@ const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
 const FormData = require("form-data");
-//const { Blob } = require("buffer");
+const { findUsers } = require("../../models/users/users.model");
+const memesRepo = require("../../models/memes/memes.mongo");
+
+const { getPagination } = require("../../services/query");
+
 require("dotenv").config();
 
 const app = express();
@@ -17,7 +21,9 @@ async function httpUploadImage(req, res) {
   const filePath = path.join(__dirname, "..", "..", "..", req.file.path);
 
   // const fileData = await readFileAsBlob(filePath);
-  const fileStream = fs.createReadStream(filePath);
+
+  const fileData = fs.createReadStream(filePath);
+
 
   let imageData = new FormData();
   imageData.append("key", FREEIMG.KEY);
@@ -56,6 +62,49 @@ async function httpUploadImage(req, res) {
 //   });
 // }
 
+async function httpSearchValue(req, res) {
+  const searchValue = req.query.value;
+  const { skip, limit } = getPagination(req.query);
+
+  const returnValues = {};
+
+  const memesSortedByLike = await memesRepo
+    .find(
+      { softDeleted: false, tags: { $regex: searchValue, $options: "i" } },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ likeCounter: -1 })
+    .skip(skip)
+    .limit(limit);
+  if (memesSortedByLike) returnValues.memesSortedByLike = memesSortedByLike;
+  const memesSortedByUpdate = await memesRepo
+    .find(
+      { softDeleted: false, tags: { $regex: searchValue, $options: "i" } },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ updatedAt: -1 })
+    .skip(skip)
+    .limit(limit);
+  if (memesSortedByUpdate)
+    returnValues.memesSortedByUpdate = memesSortedByUpdate;
+
+  const searchValueRegExp = new RegExp(searchValue, "i"); //ignora mayusculas/minusculas
+  const filter = {
+    softDeleted: false,
+    // username: { $regex: searchValue, $options: "i" },
+    // nicknames: { $regex: searchValue, $options: "i" },
+    $or: [{ username: searchValueRegExp }, { nickname: searchValueRegExp }],
+  };
+  const users = await findUsers(filter, skip, limit);
+  if (users) returnValues.users = users;
+  if (!memesSortedByLike && !memesSortedByUpdate && !users) {
+    return res.status(400).json({ error: "No search matches" });
+  }
+  return res.status(200).json(returnValues);
+}
+
+
 module.exports = {
   httpUploadImage,
+  httpSearchValue,
 };

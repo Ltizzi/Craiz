@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="mt-5 flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
+    class="flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
   >
     <div
       :class="[
@@ -12,6 +12,17 @@
       @click="loadUserMemes"
     >
       <h1 class="">Memes</h1>
+    </div>
+    <div
+      :class="[
+        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        state.activeButton === 'loops'
+          ? 'border-b-2 border-gray-100 font-bold text-white'
+          : '',
+      ]"
+      @click="loadUserLoops"
+    >
+      <h1 class="">Loops</h1>
     </div>
     <div
       :class="[
@@ -54,6 +65,11 @@
   function loadUserMemes() {
     state.activeButton = "memes";
     EventBus.emit("loadUserMemes", props.id);
+  }
+
+  function loadUserLoops() {
+    state.activeButton = "loops";
+    EventBus.emit("loadLoopedMemes", props.id);
   }
 
   function loadUserComments() {

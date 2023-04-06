@@ -1,7 +1,7 @@
 {
   "name": "craze-api",
-  "version": "0.1.0",
-  "description": "first production api for Craze",
+  "version": "0.2.0",
+  "description": "first api for Craze",
   "main": "src/server.js ",
   "scripts": {
     "start": "node src/server.js",

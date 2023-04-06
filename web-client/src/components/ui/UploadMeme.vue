@@ -1,66 +1,132 @@
 <template lang="">
-  <div class="w-full items-center">
-    <h1 class="py-2 text-center text-xl font-bold lg:text-2xl">
-      Upload new meme
+  <div class="flex-flex-col -mt-5 h-auto">
+    <h1 class="py-2 text-center text-xl font-bold md:text-lg lg:text-2xl">
+      Subir un nuevo meme
     </h1>
-
-    <img
-      :src="memeImage"
-      v-if="memeImage"
-      ref="meme"
-      class="lg:4/5 mx-auto h-96 w-4/5 object-contain"
-    />
-    <div v-else class="my-2 mx-auto h-72 w-4/5 bg-gray-200 lg:w-full"></div>
     <div
-      v-if="selectedTags"
-      class="flew-row flex w-96 flex-wrap justify-evenly"
+      class="flex h-auto w-full flex-col items-center gap-10 md:flex-row md:gap-0"
     >
-      <BaseTag
-        v-for="tag in selectedTags"
-        :key="tag.tagId"
-        class="mb-1 mt-1"
-        :class="tag.name"
-        >{{ tag.name }}</BaseTag
-      >
-    </div>
-    <h3 class="ml-10 mt-3 mb-2 text-base font-bold lg:text-lg">
-      Pick a image file from your local storage:
-    </h3>
-    <input
-      type="file"
-      ref="fileInput"
-      @change="handleFileInput"
-      class="my-3 ml-10"
-    />
-
-    <div class="flex flex-col justify-center">
-      <h2 class="mt-3 mb-2 ml-10 text-base font-bold lg:text-lg">
-        Pick meme tags:
-      </h2>
-      <div class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2">
-        <BaseTag
-          v-for="tag in tags"
-          :key="tag.tagId"
-          class="mb-1"
-          :class="tag.name"
-          @click="selecTag(tag)"
-          >{{ tag.name }}</BaseTag
+      <div>
+        <div class="flex w-full items-center justify-center">
+          <label
+            for="dropzone-file"
+            class="dark:hover:bg-bray-800 flex h-72 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
+            <img
+              :src="memeImage"
+              v-if="memeImage"
+              ref="meme"
+              class="mx-auto h-64 w-4/5 object-contain md:h-72 lg:h-72 lg:w-4/5"
+            />
+            <div
+              class="flex flex-col items-center justify-center pb-6 pt-5"
+              v-if="!memeImage"
+            >
+              <svg
+                aria-hidden="true"
+                class="mb-3 h-10 w-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span class="font-semibold">Click para elegir una imagen</span>
+              </p>
+            </div>
+            <input
+              id="dropzone-file"
+              type="file"
+              class="hidden"
+              @change="handleFileInput"
+            />
+          </label>
+        </div>
+        <span
+          v-if="state.errors.fileToUpload"
+          class="mx-auto text-center font-bold text-red-500"
+          >{{ state.errors.fileToUpload }}</span
         >
+
+        <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div> -->
+        <div
+          v-if="selectedTags"
+          class="flew-row my-2 flex w-96 flex-wrap justify-evenly"
+        >
+          <span class="h-7 pb-2"></span>
+          <BaseTag
+            v-for="tag in selectedTags"
+            :key="tag.tagId"
+            class="mb-0.5 mt-0.5"
+            :class="tag.class"
+            :clickeable="true"
+            >{{ tag.name }}</BaseTag
+          >
+        </div>
+      </div>
+
+      <div class="flex h-40 flex-col justify-center gap-0">
+        <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
+          Elige los tags del meme:
+        </h2>
+        <div class="flex w-fit flex-col items-center justify-center">
+          <SelectTagNav />
+          <div class="h-32">
+            <div
+              class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
+            >
+              <BaseTag
+                v-for="tag in tags"
+                :key="tag.tagId"
+                class="mb-1"
+                :class="tag.class"
+                :clickeable="true"
+                @click="selecTag(tag)"
+                v-if="state.activeTab == 'basic'"
+                >{{ tag.name }}</BaseTag
+              >
+            </div>
+            <CustomTag class="mx-5" v-if="state.activeTab == 'custom'" />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="flex flex-row justify-evenly">
+
+    <div class="flex flex-row items-center justify-evenly">
       <BaseButton
         @click="uploadMeme"
-        class="rounded-lg bg-green-500 py-1 px-3 text-base font-bold text-white lg:text-lg"
-        >Subir Meme</BaseButton
-      >
+        class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+        >Subir Meme
+      </BaseButton>
+
+      <BaseSpinner class="absolute right-28" v-if="isUploading" />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-check"
+        class="absolute right-28 rounded-full bg-green-600 p-1 text-2xl text-white"
+        v-show="uploadComplete"
+      />
+      <font-awesome-icon
+        icon="fa-solid fa-circle-xmark"
+        class="absolute right-28 rounded-full bg-red-600 p-1 text-2xl text-white"
+        v-show="uploadFailed"
+      />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref } from "vue";
+  import { computed, onBeforeMount, reactive, ref } from "vue";
+  import BaseSpinner from "../common/BaseSpinner.vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
+  import CustomTag from "./CustomTagUI.vue";
+  import SelectTagNav from "./SelectTagNav.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
   import { useMemesStore } from "@/store/memes";
@@ -70,6 +136,10 @@
   import axios from "axios";
   import { API_URL } from "@/main";
   import { Meme } from "@/utils/models";
+  import { useRoute } from "vue-router";
+
+  import { useField } from "vee-validate";
+  import { required } from "@vee-validate/rules";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
@@ -84,7 +154,6 @@
   selectedTags.value = [];
 
   const memeImage = ref();
-  let fileToUpload: any;
 
   let isComment = ref(false);
 
@@ -94,10 +163,49 @@
     isComment.value = true;
   });
 
+  // TAG NAVIGATION
+  const state = reactive({
+    activeTab: "basic",
+    fileToUpload: "",
+    errors: {
+      fileToUpload: "",
+    },
+  });
+
+  EventBus.on("basicTags", () => {
+    state.activeTab = "basic";
+  });
+
+  EventBus.on("customTags", () => {
+    state.activeTab = "custom";
+  });
+
+  //validations
+
+  const { value: errors } = useField("fileToUpload", required);
+
+  const isFormValid = computed(() => {
+    return !Object.values(state.errors).some((error) => error !== null);
+  });
+
+  //file handler
+
+  //let fileToUpload: any;
+
   function handleFileInput(event: any) {
+    memeImage.value = null;
+    state.fileToUpload = "";
+    state.errors.fileToUpload = "";
     const file = event.target.files[0];
     console.log(file);
-    fileToUpload = file;
+
+    if (!/\.(jpeg|png|jpg|jfif|webp|gif)$/i.test(file.name)) {
+      state.errors.fileToUpload = "El archivo debe ser de imagen";
+      state.fileToUpload = "";
+      return;
+    }
+    state.errors.fileToUpload = "";
+    state.fileToUpload = file;
     const reader = new FileReader();
     reader.onload = (event) => {
       if (event.target) {
@@ -111,12 +219,16 @@
   }
 
   function selecTag(tag: any) {
-    if (!selectedTags.value.includes(tag)) {
-      selectedTags.value.push(tag);
+    if (selectedTags.value.length < 4) {
+      if (!selectedTags.value.includes(tag)) {
+        selectedTags.value.push(tag);
+      } else {
+        selectedTags.value = selectedTags.value.filter(
+          (selTag: any) => selTag.tagId != tag.tagId
+        );
+      }
     } else {
-      selectedTags.value = selectedTags.value.filter(
-        (selTag: any) => selTag.tagId != tag.tagId
-      );
+      errors.value = "Máximo cuatro tags ";
     }
   }
 
@@ -129,10 +241,30 @@
     return names;
   }
 
+  //spinner and complete/fail icons and handle upload
+
+  const isUploading = ref(false);
+  const uploadComplete = ref(false);
+  const uploadFailed = ref(false);
+  const route = useRoute();
+
   async function uploadMeme() {
+    isUploading.value = true;
+    uploadFailed.value = false;
+    state.errors.fileToUpload = "";
     //prepara imagen para ser subida a la ThumbSnap
+    if (state.fileToUpload == "") {
+      state.errors.fileToUpload = "Se requiere una image";
+      state.fileToUpload = "";
+      isUploading.value = false;
+      uploadFailed.value = true;
+      setTimeout(() => {
+        uploadFailed.value = false;
+      }, 1500);
+      return;
+    }
     const formData = new FormData();
-    formData.append("file", fileToUpload);
+    formData.append("file", state.fileToUpload);
     const response = await axios.post(`${API_URL}utils/uploadImg`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -162,11 +294,16 @@
         }
       );
       if (res.status == 201) {
+        isUploading.value = false;
+        uploadComplete.value = true;
         await memeStore.fetchCommentsById(parentMemeId.value);
-        EventBus.emit("reloadComments", { id: parentMemeId.value });
-        EventBus.emit("closeModal");
-        emits("closeModal");
+        setTimeout(() => {
+          EventBus.emit("reloadComments", { id: parentMemeId.value });
+          emits("closeModal");
+        }, 1000);
       } else {
+        isUploading.value = false;
+        uploadFailed.value = true;
         console.log("error al subir la imagen");
       }
     } else {
@@ -175,26 +312,47 @@
         withCredentials: true,
       });
       if (res.status == 201) {
+        isUploading.value = false;
+        uploadComplete.value = true;
         await memeStore.fetchMemesWoC();
-        EventBus.emit("reloadMemes");
-
-        emits("closeModal");
+        setTimeout(() => {
+          EventBus.emit("reloadMemes");
+          emits("closeModal");
+        }, 1000);
       } else {
+        isUploading.value = false;
+        uploadFailed.value = true;
         console.log("error al subir la imagen");
       }
     }
   }
 
   onBeforeMount(async () => {
+    uploadComplete.value = false;
+    uploadFailed.value = false;
+    isUploading.value = false;
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
     let parentMeme = memeStore.parentMeme as Meme;
+
     if (parentMeme.memeId !== undefined) {
       isComment.value = true;
       parentMemeId.value = parentMeme.memeId;
       // console.log("is comment:", isComment.value);
       // console.log("parent id:", parentMemeId.value);
     }
+    if (route.query.id) {
+      let parentId = parseInt(route.query.id as string);
+      isComment.value = true;
+      parentMemeId.value = parentId;
+      console.log(parentId);
+    }
+  });
+
+  //CUSTOM TAG
+
+  EventBus.on("createdCustom", (tag: any) => {
+    selectedTags.value.push(tag);
   });
 </script>
 <style>
@@ -239,5 +397,8 @@
   }
   .random {
     @apply bg-amber-400;
+  }
+  .custom {
+    @apply bg-gradient-to-r from-amber-400 via-pink-500 to-emerald-400;
   }
 </style>

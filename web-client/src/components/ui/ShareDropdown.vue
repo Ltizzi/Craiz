@@ -1,6 +1,6 @@
 <template lang="">
   <div class="relative inline-block">
-    <BaseButton @click.stop="showDropdownMenu" class="mt-3">
+    <BaseButton @click.stop="showDropdownMenu" class="mt-0">
       <font-awesome-icon icon="fa-solid fa-share-nodes" />
     </BaseButton>
     <div

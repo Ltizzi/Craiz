@@ -1,13 +1,23 @@
 <template lang="">
   <div
-    class="rounded-lg px-2 py-0.5 text-sm font-bold text-white hover:cursor-pointer sm:text-base lg:text-base"
-    @click="openTag(tag.link)"
+    v-if="props.list"
+    class="sm:text-base rounded-lg px-2 py-0.5 text-base font-bold text-white hover:cursor-pointer md:px-2 md:text-base lg:px-2 lg:text-base"
+    @click="openTag(props.name)"
+  >
+    <slot></slot>
+  </div>
+  <div
+    v-else
+    class="sm:text-base rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer md:px-2 md:text-sm lg:px-2 lg:text-base"
+    @click="openTag(props.name)"
   >
     <slot></slot>
   </div>
 </template>
 <script setup lang="ts">
-  // import { useRouter } from "vue-router";
+  import router from "@/router";
+  import EventBus from "@/utils/EventBus";
+
   interface Tag {
     class: String;
     link: String;
@@ -18,10 +28,25 @@
     link: "",
   };
 
+  const props = defineProps({
+    name: {
+      type: String,
+      required: false,
+    },
+    list: {
+      type: Boolean,
+      required: false,
+    },
+    clickeable: {
+      type: Boolean,
+      required: false,
+    },
+  });
+
   function openTag(link: string) {
-    //TODO
-    // const router = useRouter();
-    // router.push(tag);
+    if (!props.clickeable) {
+      router.push(`/search?tag=${link}`);
+    }
   }
 </script>
 <style>
@@ -55,7 +80,7 @@
   .celeb {
     @apply bg-fuchsia-500;
   }
-  .art {
+  .pop {
     @apply bg-lime-500;
   }
   .plus18 {
@@ -66,5 +91,8 @@
   }
   .random {
     @apply bg-amber-400;
+  }
+  .custom {
+    @apply bg-gradient-to-r from-orange-300 via-pink-500 to-sky-400;
   }
 </style>

@@ -4,7 +4,7 @@
     v-if="isLoaded"
   >
     <button
-      class="fixed right-12 top-3/4 z-50 w-10 animate-bounce rounded-full bg-green-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3"
+      class="fixed right-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-green-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3"
       @click="scrollToParent"
       v-show="parentOutOfView"
     >
@@ -15,7 +15,7 @@
     </button>
 
     <button
-      class="fixed left-16 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 py-1 px-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/3"
+      class="fixed left-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/4 lg:ml-20"
       v-if="isComment"
       @click="backToParent"
     >
@@ -54,6 +54,7 @@
   import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useMemesStore } from "@/store/memes";
+  import { useUserStore } from "@/store";
   import axios from "axios";
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
@@ -61,6 +62,7 @@
   import { Meme } from "@/utils/models";
 
   const memesStore = useMemesStore();
+  const userStore = useUserStore();
   const route = useRoute();
 
   //evento necesario para ir al home
@@ -96,8 +98,19 @@
     async (params, preParams) => {
       console.log("****PARAMS***");
       console.log(params);
-      if (goHome.value || goBack.value || params.username || params.id) {
-        //por esto es necesaria, la ruta cambiaba pero se activaba el el watcher
+
+      if (
+        goHome.value ||
+        goBack.value ||
+        params.username ||
+        params.id ||
+        route.path == "/search" ||
+        route.path == "/trends" ||
+        route.path == "/notifications" ||
+        route.path == "/meme"
+      ) {
+        //por esto es necesaria, la ruta cambiaba pero se activaba en el watcher
+
         params = preParams;
         if (goBack.value) {
           isLoaded.value = false;
@@ -106,6 +119,9 @@
           meme = memesStore.parentMeme;
           localStorage.setItem("meme", JSON.stringify(meme));
           isLoaded.value = true;
+          location.reload();
+        }
+        if (route.path == "/meme") {
           location.reload();
         }
       }
@@ -150,6 +166,23 @@
 
   //carga la data de memes y comments y las guarda en local
   onMounted(async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}auth/logincheck`,
+        //"http://localhost:4246/v1/auth/logincheck",
+        { withCredentials: true }
+      );
+      userStore.setUser(response.data.user);
+      if (!response.data.user) {
+        let localGuest = localStorage.getItem("guest");
+        if (localGuest == "userIsGuest") {
+          userStore.setGuest();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     let memeString = localStorage.getItem("meme");
     if (memeString) {
       let preMeme = JSON.parse(memeString);

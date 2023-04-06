@@ -1,11 +1,11 @@
 <template>
   <teleport to="body">
     <div
-      class="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center"
+      class="fixed left-0 top-0 z-50 flex h-screen w-screen items-start justify-center md:items-center lg:items-center"
       :class="{ 'is-active': isActive }"
     >
       <div
-        class="fixed top-0 left-0 z-20 h-full w-full bg-black/50 backdrop-blur-lg"
+        class="fixed left-0 top-0 z-20 h-full w-full bg-black/50 backdrop-blur-lg"
         @click="$emit('closeModal')"
       ></div>
       <div

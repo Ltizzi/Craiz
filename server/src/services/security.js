@@ -50,17 +50,20 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
     nickname: profile._json.given_name,
     avatar: "https://iili.io/HVxfJnV.png",
     googleId: profile.id,
+    username: profile.id,
   };
   //console.log(user);
   const alreadyUser = await getUserByEmail(user.email);
   if (!alreadyUser) {
     await saveUser(user);
   }
-  const sendUser = {
+
+  const passportUser = {
     email: user.email,
     googleId: user.googleId,
   };
-  done(null, sendUser);
+  done(null, passportUser);
+
 }
 
 //  moved from app.js and exported as setupPassport() method
@@ -75,7 +78,11 @@ function setupPassport() {
       googleId: user.googleId,
       email: user.email,
     };
-    done(null, user);
+
+    console.log("serializando...");
+    console.log(sessionData);
+    done(null, sessionData);
+
   });
 
   passport.deserializeUser((obj, done) => {

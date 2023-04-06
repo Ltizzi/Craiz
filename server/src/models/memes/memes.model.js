@@ -5,6 +5,13 @@ const {
   tagDecrementalCounter,
 } = require("../tags/tags.model");
 const { getUserById, updateUser } = require("../users/users.model");
+const {
+  getNotificationByMemeIdTypeAndOwnerId,
+  saveNotification,
+  addFromUserToNotification,
+  removeFromUserInNotification,
+  removeNotification,
+} = require("../notifications/notifications.model");
 //const axios = require("axios");
 
 const DEFAULT_MEME_ID = 0;
@@ -28,7 +35,7 @@ async function getAllSoftDeletedMemes(skip, limit) {
 async function getAllMemesWithoutComments(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false, isComment: false }, { _id: 0, __v: 0 })
-    .sort({ memeId: -1 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -36,7 +43,11 @@ async function getAllMemesWithoutComments(skip, limit) {
 async function getUserMemesWithoutComments(userId, skip, limit) {
   return await memesRepo
     .find(
-      { uploader: userId, softDeleted: false, isComment: false },
+      {
+        uploader: userId,
+        softDeleted: false,
+        isComment: false,
+      },
       { _id: 0, __v: 0 }
     )
     .sort({ memeId: -1 })
@@ -51,6 +62,14 @@ async function getUserComments(userId, skip, limit) {
       { _id: 0, __v: 0 }
     )
     .sort({ memeId: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getUserLoopedMemes(userId, skip, limit) {
+  return await memesRepo
+    .find({ loopersId: userId, softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -112,17 +131,21 @@ async function getLastMemeId() {
 }
 
 async function saveMeme(meme) {
-  const newMemeId = (await getLastMemeId()) + 1;
-  const user = await getUserById(meme.uploader);
+  const newMemeId = (await getLastMemeId()) + 1; //busca el último Id y le adiciona 1
+  const user = await getUserById(meme.uploader); //busca info del uploader
+
+  //información básica añadida al meme
   const newMeme = Object.assign(meme, {
     memeId: newMemeId,
     likes: 0,
     createdAt: Date.now(),
+    updatedAt: Date.now(),
   });
   const tagNames = meme.tags;
   console.log(meme);
   console.log("***");
   console.log(tagNames);
+  //incrementa el contador de cada tag -para medir su popularidad-
   tagNames.forEach((tag) => {
     tagIncrementalCounter(tag);
   });
@@ -134,15 +157,12 @@ async function saveMeme(meme) {
       upsert: true,
     }
   );
-  user.memes.push(newMemeId);
+  user.memes.push(newMemeId); //asocia el meme al uploader
   const usedTags = newMeme.tags;
   if (usedTags) {
     for (let i = 0; i < usedTags.length; i++) {
-      user.tags.push(usedTags[i]);
+      user.tags.push(usedTags[i]); //agrega los tags al usuario para personalizar contenido luego
     }
-    usedTags.forEach((tag) => {
-      tagIncrementalCounter(tag);
-    });
   }
   await updateUser(user);
   return savedMeme;
@@ -159,14 +179,39 @@ async function addCommentToMeme(memeId, comment) {
   meme.comments.push(comment.memeId);
   meme.commentsCounter += 1;
   await updateMeme(meme);
+
+  //notification
+  const userId = meme.uploader;
+  const fromUserId = comment.uploader;
+  //const user = await getUserById(userId);
+  const noti = await getNotificationByMemeIdTypeAndOwnerId(
+    meme.memeId,
+    userId,
+    "comment"
+  );
+
+  console.log(noti);
+  //existe la notification
+  if (noti) {
+    await addFromUserToNotification(noti, fromUserId, comment.imgUrl);
+  }
+  //no existe la notification
+  else {
+    const notiRes = await saveNotification(
+      fromUserId,
+      userId,
+      "comment",
+      memeId,
+      meme.imgUrl,
+      comment.imgUrl
+    );
+    console.log(notiRes);
+  }
+
   return uploadedComment;
 }
 
 async function updateMeme(meme) {
-  // const tagNames = meme.tags;
-  // tagNames.forEach((tag) => {
-  //   tagIncrementalCounter(tag);
-  // });
   meme.updatedAt = Date.now();
   return await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
     upsert: true,
@@ -184,7 +229,6 @@ async function deleteMeme(memeId, userId) {
     throw new Error("you can't delete other people memes!");
   }
   meme.softDeleted = true;
-  meme.updatedAt = Date.now();
   user.memes = user.memes.filter((mm) => mm != memeId);
   if (meme.isComment) {
     const parentMeme = await findMeme({ memeId: meme.parentMeme });
@@ -193,6 +237,8 @@ async function deleteMeme(memeId, userId) {
   }
   const softDeleted = await updateMeme(meme);
   await updateUser(user);
+
+  return { ok: "meme deleted", meme: softDeleted };
 }
 
 async function likeMeme(memeId, userId) {
@@ -204,22 +250,135 @@ async function likeMeme(memeId, userId) {
   if (!user) {
     throw new Error("User doesn't exists");
   }
-  const likedMeme = user.likedMemes.filter((mem) => mem == memeId);
-  console.log(likedMeme);
-  if (likedMeme.length == 0) {
+  const memeOwner = await getUserById(meme.uploader);
+  if (!memeOwner) {
+    throw new Error("Memes should have an owner");
+  }
+  const likedMeme = user.likedMemes.includes(memeId);
+
+  //preparacion notification
+  const noti = await getNotificationByMemeIdTypeAndOwnerId(
+    memeId,
+    memeOwner.userId,
+    "like"
+  );
+  let fromUserId = userId;
+  let ownerId = memeOwner.userId;
+
+  //si el usuario no likeo al meme
+  if (!likedMeme) {
     meme.likedBy.push(user.userId);
+    meme.likeCounter += 1;
     user.likedMemes.push(meme.memeId);
-    user.likeCounter += 1;
+    memeOwner.likeCounter += 1;
     await updateMeme(meme);
     await updateUser(user);
+    if (user.userId != memeOwner.userId) await updateUser(memeOwner);
+
+    //si ya existe la notification
+    if (noti) {
+      const notiRes = await addFromUserToNotification(noti, fromUserId, null);
+      console.log(notiRes);
+    }
+    //si no existe la crea
+    else {
+      const notiRes = await saveNotification(
+        fromUserId,
+        ownerId,
+        "like",
+        memeId,
+        meme.imgUrl,
+        null
+      );
+      console.log(notiRes);
+    }
+
     return { ok: "liked meme" };
-  } else {
+  }
+
+  //si el meme ya fue likeado
+  else {
+    console.log(user.likedMemes);
     meme.likedBy = meme.likedBy.filter((usr) => usr != userId);
+    meme.likeCounter -= 1;
     user.likedMemes = user.likedMemes.filter((mm) => mm != memeId);
-    user.likeCounter -= 1;
+    memeOwner.likeCounter -= 1;
     await updateMeme(meme);
     await updateUser(user);
+    if (user.userId != memeOwner.userId) await updateUser(memeOwner);
     return { ok: "unliked meme" };
+    if (noti) {
+      const notiRes = await removeFromUserInNotification(noti, fromUserId);
+      console.log(notiRes);
+    }
+  }
+}
+
+async function loopMeme(memeId, userId) {
+  const meme = await getMemeById(memeId);
+  if (!meme) {
+    throw new Error("Meme doesn't exists");
+  }
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error("User doesn't exists");
+  }
+  const alreadyLooped = user.memes.includes(memeId);
+
+  //preparacion para notis
+  const noti = await getNotificationByMemeIdTypeAndOwnerId(
+    memeId,
+    userId,
+    "loop"
+  );
+  let fromUserId = userId;
+  let ownerId = meme.uploader;
+
+  //para memes  y no loopeados
+  if (!alreadyLooped) {
+    //add loop counter to original meme
+    meme.loopCounter += 1;
+    meme.loopersId.push(userId);
+    meme.loopersNicknames.push(user.nickname);
+    await updateMeme(meme);
+    user.memes.push(meme.memeId);
+    await updateUser(user);
+
+    //si existe la noti
+    if (noti) {
+      const notiRes = await addFromUserToNotification(noti, fromUserId, null);
+      console.log(notiRes);
+    }
+    //si no existe
+    else {
+      const notiRes = await saveNotification(
+        fromUserId,
+        ownerId,
+        "loop",
+        memeId,
+        meme.imgUrl,
+        null
+      );
+      console.log(notiRes);
+    }
+
+    return { ok: "looped Meme" };
+  } else {
+    meme.loopCounter -= 1;
+    meme.loopersId = meme.loopersId.filter((looperId) => looperId != userId);
+    meme.loopersNicknames = meme.loopersNicknames.filter(
+      (looperNick) => looperNick != user.nickname
+    );
+    await updateMeme(meme);
+    user.memes = user.memes.filter((meme) => meme != memeId);
+    await updateUser(user);
+
+    if (noti) {
+      const notiRes = await removeFromUserInNotification(noti, fromUserId);
+      console.log(notiRes);
+    }
+
+    return { ok: "unlooped Meme" };
   }
 }
 
@@ -244,6 +403,7 @@ module.exports = {
   getMemesByUser,
   getUserMemesWithoutComments,
   getUserComments,
+  getUserLoopedMemes,
   getUserLikedMemes,
   getMemesByTemplate,
   getLastMemeId,
@@ -252,4 +412,5 @@ module.exports = {
   deleteMeme,
   addCommentToMeme,
   likeMeme,
+  loopMeme,
 };

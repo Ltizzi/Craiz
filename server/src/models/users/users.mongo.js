@@ -69,7 +69,12 @@ const usersSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-
+  // roles: [
+  //   {
+  //     type: String,
+  //     required: true,
+  //   },
+  // ],
   isAdmin: {
     type: Boolean,
     required: true,
@@ -89,6 +94,7 @@ const usersSchema = new mongoose.Schema({
       required: false,
     },
   ],
+
   tags: [
     {
       type: String,
@@ -102,6 +108,13 @@ const usersSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  // followers: [
+  //   {
+  //     type: Object,
+  //     ref: "User",
+  //     required: false,
+  //   },
+  // ],
   followersCounter: {
     type: Number,
     default: 0,
@@ -112,6 +125,13 @@ const usersSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  // follows: [
+  //   {
+  //     type: Object,
+  //     ref: "User",
+  //     required: false,
+  //   },
+  // ],
   followsCounter: {
     type: Number,
     default: 0,

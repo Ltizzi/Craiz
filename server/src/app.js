@@ -25,7 +25,10 @@ require("dotenv").config();
 
 const app = express();
 
+
+//production
 app.set("trust proxy", 1);
+
 app.use(helmet());
 
 app.use(
@@ -95,27 +98,23 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   }
 });
 
-app.get("/success", checkLoggedIn, async (req, res) => {
-  try {
-    console.log("Current user is:....", req.user);
-    const user = await getUserByGoogleId(req.user.googleId);
 
-    // // Call the login function from Passport
-    req.login(req.user, (err) => {
-      if (err) {
-        console.log(err);
-      }
+app.get("/success", async (req, res) => {
+  console.log("Current user is:....", req.user);
+  const user = await getUserByGoogleId(req.user.googleId);
+  // // Call the login function from Passport
+  req.login(req.user, (err) => {
+    if (err) {
+      console.log(err);
+    }
 
-      if (!user.username) {
-        res.redirect(`https://craze-test.web.app/callback`);
-      } else {
-        console.log(user.username);
-        res.redirect("https://craze-test.web.app");
-      }
-    });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+    if (!user.username || user.username == user.googleId) {
+      res.redirect(`https://craze-test.web.app/callback`);
+    } else {
+      console.log(user.username);
+      res.redirect("https://craze-test.web.app");
+    }
+  });
 });
 
 app.get("/failure", (req, res) => {

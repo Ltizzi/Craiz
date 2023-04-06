@@ -4,6 +4,7 @@ const {
   getUserById,
   getUserByNickname,
   getUserByUsername,
+  getAllFriendsFromUserById,
   saveUser,
   updateUser,
   deleteUser,
@@ -71,6 +72,17 @@ async function httpGetUserByNickname(req, res) {
   }
 }
 
+async function httpGetAllFriendsByUserId(req, res) {
+  try {
+    const id = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const friends = await getAllFriendsFromUserById(id, skip, limit);
+    return res.status(200).json(friends);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
 async function httpSaveUser(req, res) {
   var newUser = req.body;
 
@@ -92,6 +104,7 @@ async function httpUpdateUser(req, res) {
     notNullUserValidator(user);
     user = userHasBirthdayAndValidateIt(user);
     user.updatedAt = Date.now();
+    console.log("asdasd");
     await updateUser(user);
     return res.status(200).json(user);
   } catch (err) {
@@ -137,6 +150,7 @@ module.exports = {
   httpGetUserById,
   httpGetUserByUsername,
   httpGetUserByNickname,
+  httpGetAllFriendsByUserId,
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,

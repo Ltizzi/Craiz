@@ -1,8 +1,8 @@
 <template lang="">
   <BaseButton
-    class="mt-2 w-14 rounded-xl bg-emerald-500 py-1 text-sm font-bold text-white sm:w-3/12 sm:text-base lg:w-40"
+    class="sm:w-3/12 sm:text-base mt-2 w-14 rounded-xl bg-violet-500 py-2 text-sm font-bold text-white md:w-full lg:w-full lg:text-lg"
     @click="modalSwitch"
-    >Crear Meme</BaseButton
+    >Publicar Meme</BaseButton
   >
   <PostMemeDialog />
 </template>

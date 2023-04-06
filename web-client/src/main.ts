@@ -3,6 +3,8 @@ import App from "./App.vue";
 import { createPinia } from "pinia";
 import router from "./router";
 import axios from "axios";
+
+
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -19,10 +21,16 @@ import {
   faRightToBracket,
   faRightFromBracket,
   faPlus,
+  faCircleCheck,
+  faCircleXmark,
+  faHome,
+  faArrowTrendUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
 export const API_URL = "https://crazeapi.onrender.com/v1/";
+
+export const RELOAD_TIMER = 1000 * 60;
 
 library.add(
   faHeart,
@@ -38,7 +46,11 @@ library.add(
   faUser,
   faRightToBracket,
   faRightFromBracket,
-  faPlus
+  faPlus,
+  faCircleCheck,
+  faCircleXmark,
+  faHome,
+  faArrowTrendUp
 );
 
 const app = createApp(App);

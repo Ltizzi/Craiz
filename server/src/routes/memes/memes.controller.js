@@ -8,6 +8,7 @@ const {
   getMemesByUser,
   getUserMemesWithoutComments,
   getUserComments,
+  getUserLoopedMemes,
   getUserLikedMemes,
   getMemesByTemplate,
   saveMeme,
@@ -15,6 +16,7 @@ const {
   updateMeme,
   addCommentToMeme,
   likeMeme,
+  loopMeme,
 } = require("../../models/memes/memes.model");
 
 const { getPagination } = require("../../services/query");
@@ -132,6 +134,18 @@ async function httpGetUserComments(req, res) {
   }
 }
 
+async function httpGetUserLoopedMemes(req, res) {
+  try {
+    const userId = req.query.id;
+    const { skip, limit } = getPagination(req.query);
+    const memes = await getUserLoopedMemes(userId, skip, limit);
+    return res.status(200).json(memes);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(404).json({ error: err.message });
+  }
+}
+
 async function httpGetUserLikedMemes(req, res) {
   try {
     const userId = req.query.id;
@@ -210,6 +224,17 @@ async function httpLikeMeme(req, res) {
   }
 }
 
+async function httpLoopMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const userId = req.query.userId;
+    const response = await loopMeme(memeId, userId);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 module.exports = {
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
@@ -221,10 +246,12 @@ module.exports = {
   httpGetAllMemesByUser,
   httpGetUserMemesWoC,
   httpGetUserComments,
+  httpGetUserLoopedMemes,
   httpGetUserLikedMemes,
   httpSaveMeme,
   httpUpdateMeme,
   httpDeleteMeme,
   httpAddCommentToMeme,
   httpLikeMeme,
+  httpLoopMeme,
 };
