@@ -16,7 +16,7 @@
               :src="memeImage"
               v-if="memeImage"
               ref="meme"
-              class="mx-auto h-64 w-4/5 object-contain md:h-96 lg:h-96 lg:w-4/5"
+              class="mx-auto h-64 w-4/5 object-contain md:h-72 lg:h-72 lg:w-4/5"
             />
             <div
               class="flex flex-col items-center justify-center pb-6 pt-5"
@@ -49,6 +49,11 @@
             />
           </label>
         </div>
+        <span
+          v-if="state.errors.fileToUpload"
+          class="mx-auto text-center font-bold text-red-500"
+          >{{ state.errors.fileToUpload }}</span
+        >
 
         <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div> -->
         <div
@@ -116,7 +121,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, reactive, ref } from "vue";
+  import { computed, onBeforeMount, reactive, ref } from "vue";
   import BaseSpinner from "../common/BaseSpinner.vue";
   import BaseButton from "../common/BaseButton.vue";
   import BaseTag from "../common/BaseTag.vue";
@@ -132,6 +137,9 @@
   import { API_URL } from "@/main";
   import { Meme } from "@/utils/models";
   import { useRoute } from "vue-router";
+
+  import { useField, useForm } from "vee-validate";
+  import { required } from "@vee-validate/rules";
 
   const userStore = useUserStore();
   const tagStore = useTagStore();
@@ -155,12 +163,53 @@
     isComment.value = true;
   });
 
-  let fileToUpload: any;
+  // TAG NAVIGATION
+  const state = reactive({
+    activeTab: "basic",
+    fileToUpload: "",
+    errors: {
+      fileToUpload: "",
+    },
+  });
+
+  EventBus.on("basicTags", () => {
+    state.activeTab = "basic";
+  });
+
+  EventBus.on("customTags", () => {
+    state.activeTab = "custom";
+  });
+
+  //validations
+
+  const { value: errors } = useField("fileToUpload", required);
+
+  const isFormValid = computed(() => {
+    return !Object.values(state.errors).some((error) => error !== null);
+  });
+
+  //file handler
+
+  //let fileToUpload: any;
 
   function handleFileInput(event: any) {
+    memeImage.value = null;
+    state.fileToUpload = "";
+    state.errors.fileToUpload = "";
     const file = event.target.files[0];
     console.log(file);
-    fileToUpload = file;
+    if (!file) {
+      state.errors.fileToUpload = "Se requiere una image";
+      state.fileToUpload = "";
+      return;
+    }
+    if (!/\.(jpeg|png|jpg|jfif|webp|gif)$/i.test(file.name)) {
+      state.errors.fileToUpload = "El archivo debe ser de imagen";
+      state.fileToUpload = "";
+      return;
+    }
+    state.errors.fileToUpload = "";
+    state.fileToUpload = file;
     const reader = new FileReader();
     reader.onload = (event) => {
       if (event.target) {
@@ -174,12 +223,16 @@
   }
 
   function selecTag(tag: any) {
-    if (!selectedTags.value.includes(tag)) {
-      selectedTags.value.push(tag);
+    if (selectedTags.value.length < 4) {
+      if (!selectedTags.value.includes(tag)) {
+        selectedTags.value.push(tag);
+      } else {
+        selectedTags.value = selectedTags.value.filter(
+          (selTag: any) => selTag.tagId != tag.tagId
+        );
+      }
     } else {
-      selectedTags.value = selectedTags.value.filter(
-        (selTag: any) => selTag.tagId != tag.tagId
-      );
+      errors.value = "Máximo cuatro tags ";
     }
   }
 
@@ -204,7 +257,7 @@
 
     //prepara imagen para ser subida a la ThumbSnap
     const formData = new FormData();
-    formData.append("file", fileToUpload);
+    formData.append("file", state.fileToUpload);
     const response = await axios.post(`${API_URL}utils/uploadImg`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -287,19 +340,6 @@
       parentMemeId.value = parentId;
       console.log(parentId);
     }
-  });
-
-  // TAG NAVIGATION
-  const state = reactive({
-    activeTab: "basic",
-  });
-
-  EventBus.on("basicTags", () => {
-    state.activeTab = "basic";
-  });
-
-  EventBus.on("customTags", () => {
-    state.activeTab = "custom";
   });
 
   //CUSTOM TAG

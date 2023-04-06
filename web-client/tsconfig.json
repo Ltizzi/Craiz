@@ -14,7 +14,10 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@vee-validate/rules": [
+        "node_modules/@vee-validate/rules/dist/vee-validate-rules.d.ts"
+      ]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
