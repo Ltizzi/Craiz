@@ -25,14 +25,25 @@
             class="flex flex-row items-center gap-3 text-lg md:text-xl"
           >
             <p>
-              A {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
-              <span v-if="noti.fromUser.length == 1">le gusta</span>
+              A
+              <router-link
+                :to="'/' + noti.fromUser[noti.fromUser.length - 1].username"
+              >
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                  >{{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+                </span>
+              </router-link>
+
+              <span v-if="noti.fromUser.length == 1"> le gusta</span>
               <span v-if="noti.fromUser.length > 1">
                 y a {{ noti.fromUser.length }} usuarios más les gusta
               </span>
               tu
               <router-link :to="'/meme?id=' + noti.memeId">
-                <span class="hover:font-extrabold hover:text-violet-600">
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
                   meme</span
                 ></router-link
               >.
@@ -43,14 +54,24 @@
             class="flex flex-row items-center gap-3 text-lg md:text-xl"
           >
             <p>
-              {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
-              <span v-if="noti.fromUser.length == 1">ha loopeado</span>
+              <router-link
+                :to="'/' + noti.fromUser[noti.fromUser.length - 1].username"
+              >
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
+                  {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+                </span>
+              </router-link>
+              <span v-if="noti.fromUser.length == 1"> ha loopeado</span>
               <span v-if="noti.fromUser.length > 1">
                 y {{ noti.fromUser.length }} usuarios más han loopeado
               </span>
               tu
               <router-link :to="'/meme?id=' + noti.memeId">
-                <span class="hover:font-extrabold hover:text-violet-600">
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
                   meme</span
                 ></router-link
               >.
@@ -62,14 +83,25 @@
             class="flex flex-row items-center gap-3 text-lg md:text-xl"
           >
             <p>
-              {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
-              <span v-if="noti.fromUser.length == 1">ha comentado</span>
+              <router-link
+                :to="'/' + noti.fromUser[noti.fromUser.length - 1].username"
+              >
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
+                  {{ noti.fromUser[noti.fromUser.length - 1].nickname }}
+                </span>
+              </router-link>
+
+              <span v-if="noti.fromUser.length == 1"> ha comentado</span>
               <span v-if="noti.fromUser.length > 1">
                 y {{ noti.fromUser.length }} usuarios más han comentado
               </span>
               tu
               <router-link :to="'/meme?id=' + noti.memeId">
-                <span class="hover:font-extrabold hover:text-violet-600">
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
                   meme</span
                 ></router-link
               >.
@@ -79,26 +111,47 @@
             v-if="noti.type === 'follow'"
             class="flex flex-row items-center gap-3 text-lg md:text-xl"
           >
-            <p>{{ noti.fromUser[0].nickname }} ha comenzado a seguirte.</p>
+            <router-link :to="'/' + noti.fromUser[0].username">
+              <p>
+                <span
+                  class="hover:cursor-pointer hover:font-bold hover:text-violet-500"
+                >
+                  {{ noti.fromUser[0].nickname }}
+                </span>
+                ha comenzado a seguirte.
+              </p>
+            </router-link>
+
+            <!-- <BaseFollow
+              :userToFollowoId="noti.fromUser[0].userId"
+              :userFollow="!checkFollows(noti.fromUser[0].userId)"
+              :sameUser="checkSameUser(noti.fromUser[0].userId)"
+            /> -->
           </div>
         </div>
-        <img
-          :src="noti.ownerMemeUrl"
-          v-if="noti.type != 'comment'"
-          class="mx-auto w-72"
-          alt=""
-        />
-        <img
-          :src="noti.fromUser[noti.fromUser.length - 1].commentUrl"
-          v-if="noti.type == 'comment'"
-          class="ml-14 w-40"
-          alt=""
-        />
+        <router-link :to="'/meme?id=' + noti.memeId" class="mx-auto">
+          <img
+            :src="noti.ownerMemeUrl"
+            v-if="noti.type != 'comment'"
+            class="mx-auto w-72"
+            alt=""
+          />
+        </router-link>
+
+        <router-link :to="'/meme?id=' + noti.memeId" class="mx-auto">
+          <img
+            :src="noti.fromUser[noti.fromUser.length - 1].commentUrl"
+            v-if="noti.type == 'comment'"
+            class="mx-auto w-72"
+            alt=""
+          />
+        </router-link>
       </li>
     </ul>
   </div>
 </template>
 <script setup lang="ts">
+  // import BaseFollow from "@/components/common/BaseFollow.vue";
   import axios from "axios";
   import { onBeforeMount, onMounted, ref } from "vue";
   import EventBus from "@/utils/EventBus";
@@ -119,6 +172,35 @@
   //para actualizar las notificaciones cuando son vistas
 
   const currentNoti = ref();
+
+  //HANDLE FOLLOW BUTTON
+
+  // function checkFollows(id: number){
+  //   const user = JSON.parse(localStorage.getItem("user")as string);
+  //   return user.follows.includes(id);
+  // }
+
+  // function checkSameUser(id:number){
+  //   const user = JSON.parse(localStorage.getItem("user")as string);
+  //   return user.userId == id;
+  // }
+
+  // EventBus.on("handleFollows", async(id)=>{
+  //   const user = JSON.parse(localStorage.getItem("user") as string);
+  //   if(user.userId != id) {
+  //     const response = await axios.patch(`${API_URL}user/handleFollows?userId=${user.userId}&userToFollowId=${id}`, null, {withCredentials:true})
+  //   };
+  //   if(response.data.res =="followed"){
+  //     user.follows.push(id);
+  //     localStorage.setItem("user", JSON.stringify(user));
+ 
+  //   }
+  //   if(response.data.res == "unfollowed"){
+  //     user.follows = user.follows.filter((usr:number)=> usr != id);
+  //     localStorage.setItem("user", JSON.stringify(user));
+      
+  //   }
+  // })
 
   onBeforeMount(async () => {
     try {
