@@ -42,7 +42,6 @@
       <MemeDropdown
         @click="openDropdown()"
         :memeId="props.data.memeId"
-        :memeUrl="props.data.imgUrl"
       ></MemeDropdown>
     </div>
 
@@ -78,7 +77,7 @@
             class="hover:cursor-pointer"
           ></CommentIcon>
 
-          <ShareDropdown></ShareDropdown>
+          <ShareDropdown :memeUrl="props.data.imgUrl"></ShareDropdown>
         </div>
 
         <div
@@ -162,8 +161,8 @@
     "just bad",
     "sports",
     "plus18",
-    "dadmeme",
-    "auntmeme",
+    "dad meme",
+    "aunt meme",
   ];
 
   function checkIsCustom(tag: string) {

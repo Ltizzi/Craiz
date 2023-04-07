@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen items-center bg-gray-800">
-    <div class="mx-auto h-fit w-2/3 rounded-xl bg-gray-50 p-10">
-      <div v-if="!isUserDataLoaded">
-        <h1>Autenticando con google..</h1>
-      </div>
-      <div v-else class="flex flex-col justify-center">
+  <div class="h-screen w-full items-center bg-violet-600">
+    <div v-if="!isLoaded" class="flex items-center justify-center">
+      <BaseSpinner />
+    </div>
+    <div class="mx-auto h-fit w-2/3 rounded-xl bg-gray-50 p-10" v-else>
+      <div class="flex flex-col justify-center">
         <img src="/assets/img/banner.png" alt="" class="w-full" />
         <p class="text-center text-xl font-semibold">
           Bienvenido {{ user.nickname }}, el logueo mediante Google fue un
@@ -91,6 +91,8 @@
   const isUserDataLoaded = ref(false);
 
   let user: any = reactive({});
+
+  const isLoaded = ref(false);
 
   const birthday = ref("");
   const username = ref("");
@@ -195,8 +197,8 @@
     );
 
     user = response.data.user;
-    if (response.data) {
-      isUserDataLoaded.value = true;
+    if (await response.data) {
+      isLoaded.value = true;
     }
     //router.push("/");
 

@@ -58,7 +58,7 @@
   }
 
   async function fetchTopUsers() {
-    return await axios.get(`${API_URL}user/all?skip=0&limit=10`);
+    return await axios.get(`${API_URL}user/all?skip=0&limit=5`);
   }
 
   onBeforeMount(async () => {
@@ -72,7 +72,7 @@
 
   onMounted(() => {
     setInterval(async () => {
-      const response = await axios.get(`${API_URL}user/all?skip=0&limit=10`);
+      const response = await axios.get(`${API_URL}user/all?skip=0&limit=5`);
       users.value = response.data;
       loadTopUsers.value = true;
       isLoaded.value = true;
