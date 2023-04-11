@@ -36,8 +36,10 @@ export const useMemesStore = defineStore("memes", {
       );
       this.comments = response.data;
     },
-    async fetchMemesWoC() {
-      const response = await axios.get(`${API_URL}meme/allWoC`);
+    async fetchMemesWoC(skip: number, limit: number) {
+      const response = await axios.get(
+        `${API_URL}meme/allWoC?skip=${skip}&limit=${limit}`
+      );
       this.memesWoC = response.data;
     },
     setMeme(meme: Meme) {
