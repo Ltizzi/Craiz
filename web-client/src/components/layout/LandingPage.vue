@@ -74,6 +74,6 @@
 </script>
 <style scoped>
   .back {
-    background: url("./assets/img/pattern.png");
+    background: url("./img/pattern.png");
   }
 </style>

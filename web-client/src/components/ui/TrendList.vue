@@ -162,7 +162,7 @@
   });
 
   onMounted(async () => {
-    const response = await axios.get(`${API_URL}tag/all?skip=0&limit=10`);
+    const response = await axios.get(`${API_URL}tag/top?skip=0&limit=10`);
     if (response.data) {
       trendTags.value = response.data;
       loadTrends.value = true;

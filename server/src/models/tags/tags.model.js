@@ -11,6 +11,14 @@ async function getAllTags(skip, limit) {
     .limit(limit);
 }
 
+async function getTopTags(skip, limit) {
+  return await tagsRepo
+    .find({ softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ counter: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
 async function getAllCustomTags(skip, limit) {
   return await tagsRepo
     .find({ softDeleted: false, isCustom: true }, { _id: 0, __v: 0 })
@@ -116,6 +124,7 @@ async function tagDecrementalCounter(tagName) {
 
 module.exports = {
   getAllTags,
+  getTopTags,
   getAllCustomTags,
   getTagById,
   getTagsByName,
