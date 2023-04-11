@@ -18,7 +18,7 @@
         </keep-alive>
       </div>
       <div
-        class="sm:w-14 ml-5 flex h-screen w-14 items-center md:w-10 lg:mx-auto lg:w-40 lg:justify-center"
+        class="sm:w-14 ml-5 mt-10 flex h-screen w-14 items-start md:w-10 lg:mx-auto lg:w-40 lg:justify-center"
         v-if="!state.isMobile"
       >
         <LateralRight />
@@ -97,6 +97,7 @@
         withCredentials: true,
       });
       userStore.setUser(response.data.user);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       tagStore.fetchTags;
     } catch (err) {
       console.log(err);

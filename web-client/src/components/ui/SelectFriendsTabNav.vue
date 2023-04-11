@@ -3,28 +3,28 @@
     <ul
       class="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400"
     >
-      <li class="mr-2" @click="loadBasic">
+      <li class="mr-2" @click="loadFollows">
         <a
           aria-current="page"
           :class="[
             'active inline-block rounded-t-lg  p-4 ',
-            state.activeTab == 'basic'
+            state.activeTab == 'follows'
               ? 'bg-slate-200 font-semibold text-violet-600'
               : 'text-gray-300  hover:bg-gray-50 hover:text-violet-500',
           ]"
-          >Tags básicas</a
+          >Seguidos</a
         >
       </li>
 
-      <li class="mr-2" @click="loadCustom">
+      <li class="mr-2" @click="loadFollowers">
         <a
           :class="[
             'inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-violet-500',
-            state.activeTab == 'custom'
+            state.activeTab == 'followers'
               ? 'bg-slate-200 font-semibold text-violet-600'
               : 'text-gray-300  hover:bg-gray-50 hover:text-violet-500',
           ]"
-          >Tags personalizadas</a
+          >Seguidores</a
         >
       </li>
     </ul>
@@ -35,16 +35,16 @@
   import { reactive } from "vue";
 
   const state = reactive({
-    activeTab: "basic",
+    activeTab: "follows",
   });
 
-  function loadBasic() {
-    state.activeTab = "basic";
-    EventBus.emit("basicTags");
+  function loadFollows() {
+    state.activeTab = "follows";
+    EventBus.emit("loadFollows");
   }
 
-  function loadCustom() {
-    state.activeTab = "custom";
-    EventBus.emit("customTags");
+  function loadFollowers() {
+    state.activeTab = "followers";
+    EventBus.emit("loadFollowers");
   }
 </script>

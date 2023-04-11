@@ -15,6 +15,11 @@ const AUTH_OPTIONS = {
   callbackURL: "/v1/auth/google/callback",
   clientID: config.CLIENT_ID,
   clientSecret: config.CLIENT_SECRET,
+  // cookie: {
+  //   // sameSite: "none",
+  //   // secure: true,
+  //   proxy: false,
+  // },
 };
 
 function checkLoggedIn(req, res, next) {
@@ -22,7 +27,7 @@ function checkLoggedIn(req, res, next) {
   const isLoggedIn = req.isAuthenticated() && req.user;
   if (!isLoggedIn) {
     return res.status(401).json({
-      error: "You must log in!",
+      error: "You must log in! -from checkLoggedIn-",
     });
   }
   next();
@@ -52,11 +57,13 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
   if (!alreadyUser) {
     await saveUser(user);
   }
+
   const passportUser = {
     email: user.email,
     googleId: user.googleId,
   };
   done(null, passportUser);
+
 }
 
 //  moved from app.js and exported as setupPassport() method
@@ -65,16 +72,22 @@ function setupPassport() {
   passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
   passport.serializeUser((user, done) => {
+    console.log("serialize, user:");
+    console.log(user);
     const sessionData = {
       googleId: user.googleId,
       email: user.email,
     };
+
     console.log("serializando...");
     console.log(sessionData);
     done(null, sessionData);
+
   });
 
   passport.deserializeUser((obj, done) => {
+    console.log("deserializando..");
+    console.log(obj);
     done(null, obj);
   });
 }

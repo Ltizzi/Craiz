@@ -10,11 +10,12 @@
     >
       <ul class="m-2 p-2">
         <li
-          class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
+          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-emerald-500"
+          @click="downloadImage"
         >
           Descargar meme
         </li>
-        <li
+        <!-- <li
           class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
         >
           Whatsapp
@@ -23,7 +24,7 @@
           class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
         >
           Twitter
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
@@ -31,6 +32,14 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, ref } from "vue";
   import BaseButton from "../common/BaseButton.vue";
+  import { stringify } from "querystring";
+
+  const props = defineProps({
+    memeUrl: {
+      type: String,
+      required: true,
+    },
+  });
 
   onMounted(() => {
     document.addEventListener("click", handleClickOutside);
@@ -50,6 +59,10 @@
     ) {
       showDropdown.value = !showDropdown.value;
     }
+  }
+
+  function downloadImage() {
+    window.open(props.memeUrl);
   }
 
   onUnmounted(() => {

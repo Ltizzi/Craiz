@@ -1,7 +1,7 @@
 <template lang="">
   <BaseDialog
     class="absolute z-10 flex flex-col justify-center rounded-3xl px-2 py-5"
-    @closeModal="modalSwitch"
+    @closeModal="loadFriendsDialog"
   >
     <div
       class="mx-2 my-5 flex flex-col justify-center gap-2 text-lg text-gray-800"

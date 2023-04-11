@@ -1,5 +1,6 @@
 const {
   getAllTags,
+  getTopTags,
   getTagById,
   getTagsByName,
   saveTag,
@@ -14,6 +15,16 @@ async function httpGetAllTags(req, res) {
   try {
     const { skip, limit } = getPagination(req.query);
     const tags = await getAllTags(skip, limit);
+    return res.status(200).json(tags);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetTopTags(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const tags = await getTopTags(skip, limit);
     return res.status(200).json(tags);
   } catch (err) {
     return res.status(404).json({ error: err.message });
@@ -95,6 +106,7 @@ async function httpDeleteTag(req, res) {
 
 module.exports = {
   httpGetAllTags,
+  httpGetTopTags,
   httpGetTagById,
   httpGetTagsByName,
   httpSaveTag,

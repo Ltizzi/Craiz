@@ -62,15 +62,7 @@ async function saveNotification(
     },
     { _id: 0, __v: 0 }
   );
-  // if (memeId == "_") {
-  //   memeId = null;
-  // }
-  // if (ownerMeme == "_") {
-  //   ownerMeme = null;
-  // }
-  // if (commentMeme == "_") {
-  //   commentMeme == null;
-  // }
+
   const newNoti = {
     notificationId: newNotificationId,
     type: type,
@@ -78,13 +70,13 @@ async function saveNotification(
     memeId: memeId,
     ownerId: ownerId,
     ownerMemeUrl: ownerMeme,
-    commentUrl: commentMeme,
     fromUser: [
       {
         userId: fromUser.userId,
         avatar: fromUser.avatar,
         nickname: fromUser.nickname,
         username: fromUser.username,
+        commentUrl: commentMeme,
       },
     ],
     createdAt: Date.now(),

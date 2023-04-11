@@ -6,6 +6,7 @@ const {
   httpGetUserById,
   httpGetUserByUsername,
   httpGetUserByNickname,
+  httpGetAllFriendsByUserId,
   httpSaveUser,
   httpUpdateUser,
   httpDeleteUser,
@@ -19,6 +20,7 @@ usersRouter.get("/softDeleted", httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);
 usersRouter.get("/byUsername", httpGetUserByUsername);
 usersRouter.get("/byNickname", httpGetUserByNickname);
+usersRouter.get("/friends", httpGetAllFriendsByUserId);
 usersRouter.post("/new", httpSaveUser);
 usersRouter.patch("/update", checkLoggedIn, httpUpdateUser);
 usersRouter.delete("/delete", checkLoggedIn, httpDeleteUser);

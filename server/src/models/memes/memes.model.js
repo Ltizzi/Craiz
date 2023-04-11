@@ -329,9 +329,7 @@ async function loopMeme(memeId, userId) {
   const noti = await getNotificationByMemeIdTypeAndOwnerId(
     memeId,
     userId,
-    "loop",
-    meme.imgUrl,
-    null
+    "loop"
   );
   let fromUserId = userId;
   let ownerId = meme.uploader;
@@ -357,7 +355,9 @@ async function loopMeme(memeId, userId) {
         fromUserId,
         ownerId,
         "loop",
-        memeId
+        memeId,
+        meme.imgUrl,
+        null
       );
       console.log(notiRes);
     }

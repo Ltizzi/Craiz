@@ -42,12 +42,20 @@
       <MemeDropdown
         @click="openDropdown()"
         :memeId="props.data.memeId"
+        :meme="props.data"
+        :uploader="uploader"
       ></MemeDropdown>
     </div>
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
     <div class="sm:mx-1 flex flex-col lg:mx-12">
-      <img :src="props.data.imgUrl" alt="" class="mx-auto w-fit rounded-3xl" />
+      <router-link :to="'/meme?id=' + props.data.memeId">
+        <img
+          :src="props.data.imgUrl"
+          alt=""
+          class="mx-auto w-fit rounded-3xl"
+        />
+      </router-link>
 
       <div class="flex h-12 flex-row justify-between">
         <div
@@ -71,7 +79,7 @@
             class="hover:cursor-pointer"
           ></CommentIcon>
 
-          <ShareDropdown></ShareDropdown>
+          <ShareDropdown :memeUrl="props.data.imgUrl"></ShareDropdown>
         </div>
 
         <div
@@ -119,6 +127,7 @@
   const userIsLooper = ref(false);
   const looper = ref("");
 
+  //isComment, parentMeme, softDeleted, template, updatedAt
   const props = defineProps<{
     data: {
       memeId: number;
@@ -132,6 +141,11 @@
       comments: Array<any>;
       loopCounter: number;
       likeCounter: number;
+      isComment: boolean;
+      parentMeme: number;
+      softDeleted: boolean;
+      template: string;
+      updatedAt: Date;
     };
   }>();
   const isLoaded = ref(false);
@@ -155,8 +169,8 @@
     "just bad",
     "sports",
     "plus18",
-    "dadmeme",
-    "auntmeme",
+    "dad meme",
+    "aunt meme",
   ];
 
   function checkIsCustom(tag: string) {
@@ -193,20 +207,9 @@
     router.replace(`/${uploader.value.username}`);
   }
 
-  // watch(
-  //   () => props.data.loopersNicknames,
-  //   (newValue: any) => {
-  //     let user = userStore.profileUser as User;
-  //     if (newValue.includes(user.nickname)) {
-  //       userIsLooper.value = true;
-  //     }
-  //   }
-  // );
-
   onBeforeMount(async () => {
     const uploaderData = await axios.get(
       `${API_URL}user/byId?id=${props.data.uploader}`
-      // `http://localhost:4246/v1/user/byId?id=${props.data.uploader}`
     );
     if (uploaderData) {
       uploader.value = uploaderData.data;
@@ -234,7 +237,8 @@
     EventBus.emit("isLoaded");
     // console.log("la id del meme es:");
     // console.log(props.data.memeId);
-    memesStore.fetchMemeById(props.data.memeId);
+    // memesStore.fetchMemeById(props.data.memeId);
+    memesStore.setMeme(props.data as Meme);
     if (memesStore.id) {
       id.value = memesStore.id;
       memesStore.fetchCommentsById(id.value);

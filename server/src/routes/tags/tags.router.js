@@ -3,6 +3,7 @@ const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
 
 const {
   httpGetAllTags,
+  httpGetTopTags,
   httpGetTagById,
   httpGetTagsByName,
   httpSaveTag,
@@ -14,6 +15,7 @@ const {
 const tagsRouter = express.Router();
 
 tagsRouter.get("/all", httpGetAllTags);
+tagsRouter.get("/top", httpGetTopTags);
 tagsRouter.get("/byId", httpGetTagById);
 tagsRouter.get("/byName", httpGetTagsByName);
 tagsRouter.post("/new", checkIsAdmin, httpSaveTag);
