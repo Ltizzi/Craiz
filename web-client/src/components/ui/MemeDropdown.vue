@@ -10,26 +10,26 @@
     >
       <ul class="m-2 p-2">
         <li
-          class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
+          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-emerald-500"
           v-if="!userIsOwner && !following"
           @click="handleFollows"
         >
           Seguir a @{{ memeOwner.username }}
         </li>
         <li
-          class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
+          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-emerald-500"
           v-if="!userIsOwner && following"
           @click="handleFollows"
         >
           Dejar de seguir a @{{ memeOwner.username }}
         </li>
-        <li
+        <!-- <li
           class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
         >
           Reportar Meme
-        </li>
+        </li> -->
         <li
-          class="rounded-xl py-2 px-3 text-white hover:cursor-pointer hover:bg-emerald-500"
+          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-emerald-500"
           @click="deleteMeme"
           v-if="userIsOwner"
         >
@@ -53,6 +53,14 @@
   let props = defineProps({
     memeId: {
       type: Number,
+      required: true,
+    },
+    meme: {
+      type: Object,
+      required: true,
+    },
+    uploader: {
+      type: Object,
       required: true,
     },
   });
@@ -90,10 +98,11 @@
   }
   onMounted(async () => {
     document.addEventListener("click", handleClickOutside);
-    const response = await axios.get(`${API_URL}meme/byId?id=${props.memeId}`);
-    const meme = response.data;
+    // const response = await axios.get(`${API_URL}meme/byId?id=${props.memeId}`);
+    // const meme = response.data;
+    const meme = props.meme;
     const fetchUserResponse = await axios.get(
-      `${API_URL}user/byId?id=${meme.uploader}`
+      `${API_URL}user/byId?id=${props.uploader.userId}`
     );
     memeOwner.value = fetchUserResponse.data;
     user.value = userStore.user;

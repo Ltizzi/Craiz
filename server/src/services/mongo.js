@@ -16,7 +16,7 @@ mongoose.set("strictQuery", false);
 
 const sessionStore = new MongoDBStore({
   uri: MONGO_URL,
-  collection: "Sessions",
+  collection: "sessions",
 });
 
 sessionStore.on("error", function (err) {

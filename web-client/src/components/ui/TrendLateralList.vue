@@ -14,9 +14,12 @@
           {{ index + 1 }}.
         </p>
         <div class="flex flex-col gap-0 md:flex-row md:items-center md:gap-1">
-          <BaseTag :class="trend.name" :name="trend.name" class="text-center">{{
-            trend.name
-          }}</BaseTag>
+          <BaseTag
+            :class="trend.class"
+            :name="trend.name"
+            class="text-center"
+            >{{ trend.name }}</BaseTag
+          >
           <p class="text-sm">{{ trend.counter }} memes</p>
         </div>
       </li>
@@ -44,7 +47,7 @@
   const isLoaded = ref(false);
 
   async function fetchTopTrend() {
-    return await axios.get(`${API_URL}tag/all?skip=0&limit=5`);
+    return await axios.get(`${API_URL}tag/top?skip=0&limit=5`);
   }
 
   onBeforeMount(async () => {

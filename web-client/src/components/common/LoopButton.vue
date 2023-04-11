@@ -47,6 +47,12 @@
   const counter = ref();
 
   async function loopMeme() {
+    isLoopedByUser.value = !isLoopedByUser.value;
+    if (isLoopedByUser.value) {
+      counter.value += 1;
+    } else {
+      counter.value -= 1;
+    }
     const response = await axios.post(
       `${API_URL}meme/loop?memeId=${props.memeId}&userId=${props.userId}`,
       null,
@@ -59,12 +65,12 @@
     if (response.data.ok == "unlooped Meme") {
       isLoopedByUser.value = false;
     }
-    if (isLoopedByUser.value) {
-      counter.value += 1;
-    }
-    if (!isLoopedByUser.value) {
-      counter.value -= 1;
-    }
+    // if (isLoopedByUser.value) {
+    //   counter.value += 1;
+    // }
+    // if (!isLoopedByUser.value) {
+    //   counter.value -= 1;
+    // }
   }
 
   watch(

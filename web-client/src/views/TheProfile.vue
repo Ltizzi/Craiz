@@ -20,7 +20,7 @@
   import BaseSpinner from "@/components/common/BaseSpinner.vue";
   import { API_URL } from "@/main";
   import axios from "axios";
-  import { onBeforeMount, onMounted, ref, watch } from "vue";
+  import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useUserStore } from "@/store";
   import EventBus from "@/utils/EventBus";
@@ -46,6 +46,7 @@
   );
 
   onMounted(async () => {
+    localStorage.removeItem("profileUser");
     const username = route.params.username;
     console.log(username);
     try {
@@ -54,7 +55,8 @@
       );
       const fetchedUser = response.data;
       userStore.setProfileUser(fetchedUser);
-      user.value = userStore.profileUser;
+      localStorage.setItem("profileUser", JSON.stringify(fetchedUser));
+      user.value = fetchedUser;
       isLoaded.value = true;
       EventBus.emit("loadUserMemes", fetchedUser.userId);
     } catch (err) {
@@ -62,20 +64,8 @@
     }
   });
 
-  // onBeforeMount(async () => {
-  //   const username = route.params.username;
-  //   console.log(username);
-  //   try {
-  //     const response = await axios.get(
-  //       `${API_URL}user/byUsername?username=${username}`
-  //     );
-  //     userStore.setProfileUser(response.data);
-  //     user.value = userStore.profileUser;
-  //     isLoaded.value = true;
-  //     EventBus.emit("loadUserMemes", user.value.userId);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // });
+  onUnmounted(() => {
+    localStorage.removeItem("profileUser");
+  });
 </script>
 <style lang=""></style>

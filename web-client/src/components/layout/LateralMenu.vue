@@ -171,11 +171,14 @@
   });
 
   onMounted(async () => {
-    const response = await axios.get(`${API_URL}auth/logincheck`, {
-      withCredentials: true,
-    });
-
-    const user = response.data.user;
+    let user = JSON.parse(localStorage.getItem("user") as string);
+    if (!user) {
+      const response = await axios.get(`${API_URL}auth/logincheck`, {
+        withCredentials: true,
+      });
+      user = response.data.user;
+      user.value = user;
+    }
     user.value = user;
     if (user != undefined) {
       loadNotifications(user.userId);
