@@ -97,6 +97,7 @@
         withCredentials: true,
       });
       userStore.setUser(response.data.user);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       tagStore.fetchTags;
     } catch (err) {
       console.log(err);

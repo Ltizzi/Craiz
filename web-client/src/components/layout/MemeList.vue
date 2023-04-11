@@ -43,16 +43,49 @@
     },
   });
 
+  function sameUser(memes: Array<any>, id: any) {
+    if (memes && memes[0]) {
+      let uploaderMemeId = memes[0].uploader;
+      console.log("**** ", uploaderMemeId, " = ", id);
+      if (uploaderMemeId == id) {
+        return true;
+      }
+    } else return false;
+  }
+
   EventBus.on("reloadMemes", () => {
     memes.value = memeStore.memesWoC;
   });
+
+  async function loadMemesAndSetLocal(id: any, type: string) {
+    let endpointPath = "";
+    if (type == "userMemes") endpointPath = "byUserWoC";
+    if (type == "userLooped") endpointPath = "byUserLoopedMemes";
+    if (type == "userComments") endpointPath = "byUserComments";
+    if (type == "userLiked") endpointPath = "byUserLikedMemes";
+    console.log(type, " ", endpointPath);
+    const response = await axios.get(`${API_URL}meme/${endpointPath}?id=${id}`);
+    memes.value = response.data;
+    localStorage.setItem(`${type}`, JSON.stringify(response.data));
+  }
 
   EventBus.on("loadUserMemes", async (id) => {
     isLoaded.value = false;
     console.log(id);
     if (id) {
-      const response = await axios.get(`${API_URL}meme/byUserWoC?id=${id}`);
-      memes.value = response.data;
+      let userMemes = JSON.parse(localStorage.getItem("userMemes") as string);
+      let isSameUser = userMemes ? sameUser(userMemes, id) : false;
+      if (
+        !userMemes ||
+        (userMemes && !isSameUser) ||
+        (!userMemes && !isSameUser)
+      ) {
+        loadMemesAndSetLocal(id, "userMemes");
+      } else if (userMemes && isSameUser) {
+        memes.value = userMemes;
+      } else {
+        memes.value = [];
+      }
     }
 
     isLoaded.value = true;
@@ -61,39 +94,70 @@
   EventBus.on("loadLoopedMemes", async (id) => {
     isLoaded.value = false;
     console.log(id);
-    const response = await axios.get(
-      `${API_URL}meme/byUserLoopedMemes?id=${id}`
-    );
-    memes.value = response.data;
+    if (id) {
+      let loopedMemes = JSON.parse(
+        localStorage.getItem("userLooped") as string
+      );
+      let isSameUser = loopedMemes ? sameUser(loopedMemes, id) : false;
+      if (
+        !loopedMemes ||
+        (loopedMemes && !isSameUser) ||
+        (!loopedMemes && !isSameUser)
+      ) {
+        loadMemesAndSetLocal(id, "userLooped");
+      } else if (loopedMemes && isSameUser) {
+        memes.value = loopedMemes;
+      } else {
+        memes.value = [];
+      }
+    }
     isLoaded.value = true;
   });
 
   EventBus.on("loadUserComments", async (id) => {
     isLoaded.value = false;
     console.log(id);
-    const response = await axios.get(`${API_URL}meme/byUserComments?id=${id}`);
-    memes.value = response.data;
+    if (id) {
+      let userComments = JSON.parse(
+        localStorage.getItem("userComments") as string
+      );
+      let isSameUser = userComments ? sameUser(userComments, id) : false;
+      if (
+        !userComments ||
+        (userComments && !isSameUser) ||
+        (!userComments && !isSameUser)
+      ) {
+        loadMemesAndSetLocal(id, "userComments");
+      } else if (userComments && isSameUser) {
+        memes.value = userComments;
+      } else {
+        memes.value = [];
+      }
+    }
     isLoaded.value = true;
   });
 
   EventBus.on("loadUserLikedMemes", async (id) => {
     isLoaded.value = false;
     console.log(id);
-    const response = await axios.get(
-      `${API_URL}meme/byUserLikedMemes?id=${id}`
-    );
-    memes.value = response.data;
+    if (id) {
+      let userLiked = JSON.parse(localStorage.getItem("userLiked") as string);
+      let isSameUser = userLiked ? sameUser(userLiked, id) : false;
+      if (
+        !userLiked ||
+        (userLiked && !isSameUser) ||
+        (!userLiked && !isSameUser)
+      ) {
+        loadMemesAndSetLocal(id, "userLiked");
+      } else if (userLiked && isSameUser) {
+        memes.value = userLiked;
+      } else {
+        memes.value = [];
+      }
+    }
+
     isLoaded.value = true;
   });
-
-  // EventBus.on("searchTag", async (tag) => {
-  //   isLoaded.value = false;
-  //   console.log("evento tag emitido y recibido");
-  //   console.log(tag);
-  //   const response = await axios.get(`${API_URL}meme/byTag?tag=${tag}`);
-  //   memes.value = response.data;
-  //   isLoaded.value = true;
-  // });
 
   EventBus.on("loadTL", async () => {
     memes.value = [];
@@ -110,16 +174,17 @@
       console.log(memes.value);
       isLoaded.value = true;
     }
-    try {
-      const response = await axios.get(
-        `${API_URL}auth/logincheck`,
-        //"http://localhost:4246/v1/auth/logincheck",
-        { withCredentials: true }
-      );
-      userStore.setUser(response.data.user);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-    } catch (err) {
-      console.log(err);
+    let userLocal = JSON.parse(localStorage.getItem("user") as string);
+    if (!userLocal) {
+      try {
+        const response = await axios.get(`${API_URL}auth/logincheck`, {
+          withCredentials: true,
+        });
+        userStore.setUser(response.data.user);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     if (Object.keys(route.params).length === 0 && !props.searchedTag) {
@@ -127,7 +192,11 @@
       memes.value = memeStore.memesWoC;
       isLoaded.value = true;
     } else {
-      const user = userStore.profileUser as User;
+      let user = JSON.parse(localStorage.getItem("profileUser") as string);
+      if (!user) {
+        user = userStore.profileUser as User;
+        localStorage.setItem("profileUser", JSON.stringify(user));
+      }
       const response = await axios.get(
         `${API_URL}meme/byUserWoC?id=${user.userId}`
       );
@@ -157,6 +226,11 @@
 
   onUnmounted(() => {
     window.removeEventListener("resize", handleWindowSize);
+    localStorage.removeItem("userMemes");
+    localStorage.removeItem("userLooped");
+    localStorage.removeItem("userComments");
+    localStorage.removeItem("userLiked");
+    localStorage.removeItem("profileUser");
   });
 </script>
 <style lang=""></style>

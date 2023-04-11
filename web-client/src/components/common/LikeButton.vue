@@ -19,17 +19,13 @@
   import { spring } from "motion";
   import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
   import axios from "axios";
-  import { onMounted, ref, Ref, watch } from "vue";
+  import { onMounted, ref } from "vue";
   import { API_URL } from "@/main";
   import { useUserStore } from "@/store";
   import BaseButton from "./BaseButton.vue";
   import { User } from "@/utils/models";
 
   const userStore = useUserStore();
-
-  // let meme = ref<any>({});
-
-  // let user = ref<any>({});
 
   const props = defineProps({
     //classes: "text-black justify-center items-center",
@@ -47,20 +43,18 @@
     },
   });
 
-  // let memeId = props.memeId;
-  // let userId = props.userId;
-
   let user = userStore.user as User;
 
   const liked = ref(false);
   const likeCounter = ref(props.meme.likeCounter);
 
   async function handleButtonClick() {
-    // const response = await axios.post(
-    //   `${API_URL}meme/like?memeId=${meme.value.memeId}&userId=${user.value.userId}`,
-    //   null,
-    //   { withCredentials: true }
-    // );
+    liked.value = !liked.value;
+    if (liked.value) {
+      likeCounter.value += 1;
+    } else {
+      likeCounter.value -= 1;
+    }
     const response = await axios.post(
       `${API_URL}meme/like?memeId=${props.meme.memeId}&userId=${user.userId}`,
       null,
@@ -73,12 +67,12 @@
     if (response.data.ok == "unliked meme") {
       liked.value = false;
     }
-    if (liked.value) {
-      likeCounter.value += 1;
-    }
-    if (!liked.value) {
-      likeCounter.value -= 1;
-    }
+    // if (liked.value) {
+    //   likeCounter.value += 1;
+    // }
+    // if (!liked.value) {
+    //   likeCounter.value -= 1;
+    // }
   }
 
   async function getMeme(id: number) {

@@ -55,6 +55,14 @@
       type: Number,
       required: true,
     },
+    meme: {
+      type: Object,
+      required: true,
+    },
+    uploader: {
+      type: Object,
+      required: true,
+    },
   });
 
   const user = ref();
@@ -90,10 +98,11 @@
   }
   onMounted(async () => {
     document.addEventListener("click", handleClickOutside);
-    const response = await axios.get(`${API_URL}meme/byId?id=${props.memeId}`);
-    const meme = response.data;
+    // const response = await axios.get(`${API_URL}meme/byId?id=${props.memeId}`);
+    // const meme = response.data;
+    const meme = props.meme;
     const fetchUserResponse = await axios.get(
-      `${API_URL}user/byId?id=${meme.uploader}`
+      `${API_URL}user/byId?id=${props.uploader.userId}`
     );
     memeOwner.value = fetchUserResponse.data;
     user.value = userStore.user;
