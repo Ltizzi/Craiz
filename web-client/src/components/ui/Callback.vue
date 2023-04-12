@@ -1,13 +1,18 @@
 <template>
-  <div class="h-screen w-full items-center bg-violet-600">
+  <div
+    class="h-screen w-full items-center bg-gradient-to-b from-violet-950 via-violet-400 to-purple-900"
+  >
     <div v-if="!isLoaded" class="flex items-center justify-center">
       <BaseSpinner />
     </div>
-    <div class="mx-auto h-fit w-2/3 rounded-xl bg-gray-50 p-10" v-else>
+    <div
+      class="mx-auto h-fit w-2/3 rounded-xl bg-gray-50 p-10 shadow-2xl shadow-slate-950"
+      v-else
+    >
       <div class="flex flex-col justify-center">
         <img src="/assets/img/banner.png" alt="" class="w-full" />
-        <p class="text-center text-xl font-semibold">
-          Bienvenido {{ user.nickname }}, el logueo mediante Google fue un
+        <p class="mt-2 text-center text-xl font-semibold">
+          Bienvenido {{ user.nickname }}!, el logueo mediante Google fue un
           éxito, pero vamos a necesitar que agregues información adicional para
           tu perfil
         </p>
