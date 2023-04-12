@@ -316,7 +316,7 @@
       if (res.status == 201) {
         isUploading.value = false;
         uploadComplete.value = true;
-        await memeStore.fetchMemesWoC();
+        await memeStore.fetchMemesWoC(0, 10);
         setTimeout(() => {
           EventBus.emit("reloadMemes");
           emits("closeModal");

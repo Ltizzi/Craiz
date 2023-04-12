@@ -15,18 +15,18 @@
           class="my-5 flex flex-col items-center text-center"
           @submit.prevent="submitForm"
         >
-          <div class="my-2 flex flex-col justify-center">
+          <div class="justify-centerx my-2 flex flex-col">
             <label for="nickname">Tu apodo:</label>
             <input
               type="text"
               id="nickname"
               v-model="nickname"
               :placeholder="user.nickname"
-              class="w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
+              class="mx-auto w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
             />
-            <!-- <span v-if="nicknameError" class="font-bold text-red-600">{{
+            <span v-if="nicknameError" class="font-bold text-red-600">{{
               nicknameError
-            }}</span> -->
+            }}</span>
           </div>
           <div class="mx-auto my-2 flex flex-col">
             <label for="username">Nombre de usuario:</label>
@@ -35,11 +35,11 @@
               id="username"
               v-model="username"
               placeholder="example123"
-              class="w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
+              class="mx-auto w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
             />
-            <!-- <span v-if="usernameError" class="font-bold text-red-600">{{
+            <span v-if="usernameError" class="font-bold text-red-600">{{
               usernameError
-            }}</span> -->
+            }}</span>
           </div>
           <div class="my-2 flex flex-col justify-center">
             <label for="birthday">Fecha de nacimiento:</label>
@@ -47,8 +47,11 @@
               type="date"
               id="birthday"
               v-model="birthday"
-              class="w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
+              class="mx-auto w-40 rounded-xl border-2 border-gray-300 px-5 py-2 focus:border-gray-900"
             />
+            <span v-if="birthdayError" class="font-bold text-red-600">{{
+              birthdayError
+            }}</span>
           </div>
           <div class="relative flex flex-col justify-around">
             <button
@@ -82,8 +85,8 @@
   import { onMounted, reactive, ref } from "vue";
   import axios from "axios";
   import { API_URL } from "@/main";
-  // import { useForm, useField, defineRule } from "vee-validate";
-  // import { required, alpha_num, between, regex } from "@vee-validate/rules";
+  import { useField, useForm } from "vee-validate";
+  import * as yup from "yup";
 
   const userStore = useUserStore();
   const router = useRouter();
@@ -94,64 +97,48 @@
 
   const isLoaded = ref(false);
 
-  const birthday = ref("");
-  const username = ref("");
-  const nickname = ref("");
+  // const birthday = ref("");
+  // const username = ref("");
+  // const nickname = ref("");
 
   //VALIDATIONS
 
-  // defineRule("required", required);
-  // defineRule("alpha_num", alpha_num);
-  // defineRule("between", between);
-  // defineRule("regex", regex);
+  const schema = yup.object({
+    nickname: yup
+      .string()
+      .required("El apodo es necesario")
+      .min(4, "El apodo tiene que tener entre 4 y 15 caracteres")
+      .max(15, "El apodo tiene que tener entre 4 y 15 caracteres")
+      .matches(
+        /^[a-zA-Z0-9\s]+$/,
+        "El nickname solo puede tener letras, números y espacios"
+      ),
+    username: yup
+      .string()
+      .required("El nombre de usuario es necesario")
+      .min(6, "El nombre de usuario debe tener entre 6 y 15 caracteres")
+      .max(12, "El nombre de usuario debe tener entre 6 y 15 caracteres")
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        "El nombre de usuario solo puede tener letras, números y espacios"
+      ),
+    birthday: yup
+      .date()
+      .max(new Date(Date.now() - 567648000000), "Debes tener mínimo 18 años")
+      .required("La fecha de cumpleaños es necesaria"),
+  });
 
-  // const rules: any = {
-  //   nickname: [
-  //     { rule: "required", message: "El apodo es requerido para continuar" },
-  //     {
-  //       rule: "between",
-  //       min: 4,
-  //       max: 15,
-  //       message: "El apodo tiene que tener entre 4 y 15 caracteres",
-  //     },
-  //     {
-  //       rule: "regex",
-  //       pattern: /^[a-zA-Z0-9 ]+$/,
-  //       message: "El nickname solo puede tener letras, números y espacios",
-  //     },
-  //   ],
-  //   username: [
-  //     { rule: "required", message: "El nombre de usuario es requerido" },
-  //     {
-  //       rule: "alpha_num",
-  //       message: "El nombre de usuario solo puede tener letras y números",
-  //     },
-  //     {
-  //       rule: "between",
-  //       min: 4,
-  //       max: 15,
-  //       message: "El nombre de usuario tiene que tener entre 4 y 15 caracteres",
-  //     },
-  //   ],
-  // };
+  const { handleSubmit } = useForm({
+    validationSchema: schema,
+  });
 
-  // const { handleSubmit, isSubmitting } = useForm();
+  const { value: nickname, errorMessage: nicknameError } = useField("nickname");
+  const { value: username, errorMessage: usernameError } = useField("username");
+  const { value: birthday, errorMessage: birthdayError } = useField("birthday");
 
-  // const { value: nickname, errorMessage: nicknameError } = useField(
-  //   "nickname",
-  //   rules.nickname
-  // );
+  const submitForm = handleSubmit(uploadForm);
 
-  // const { value: username, errorMessage: usernameError } = useField(
-  //   "username",
-  //   rules.username
-  // );
-
-  // const submitForm = handleSubmit(async (values) => {
-  //   await uploadForm();
-  // });
-
-  async function submitForm() {
+  async function uploadForm() {
     isUploading.value = true;
     const updatedUser = {
       userId: user.userId,

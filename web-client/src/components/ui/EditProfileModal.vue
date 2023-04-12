@@ -96,31 +96,66 @@
           <input
             type="text"
             v-model="name"
-            placeholder="José Perez"
-            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+            :placeholder="user.name"
+            :class="[
+              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
+              nameError ? 'border-red-400' : '',
+            ]"
           />
+          <span v-if="nameError" class="text-xs font-semibold text-red-600">{{
+            nameError
+          }}</span>
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="nickname">Apodo:</label>
           <input
             type="text"
             v-model="nickname"
-            placeholder="Josesito"
-            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+            :placeholder="user.nickname"
+            :class="[
+              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
+              nicknameError ? 'border-red-400' : '',
+            ]"
           />
+          <span
+            v-if="nicknameError"
+            class="text-xs font-semibold text-red-600"
+            >{{ nicknameError }}</span
+          >
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="username">Nombre de Usuario:</label>
           <input
             type="text"
             v-model="username"
-            placeholder="@Pepeuwu"
-            class="border-2 border-gray-200 px-1 py-2 focus:border-gray-500"
+            :placeholder="'@' + user.username"
+            :class="[
+              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
+              usernameError ? 'border-red-400' : '',
+            ]"
           />
+          <span
+            v-if="usernameError"
+            class="text-xs font-semibold text-red-600"
+            >{{ usernameError }}</span
+          >
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="birthday">Fecha de nacimiento:</label>
-          <input type="date" name="birthday" v-model="birthday" />
+          <input
+            type="date"
+            name="birthday"
+            v-model="birthday"
+            :class="[
+              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
+              birthdayError ? 'border-red-400' : '',
+            ]"
+          />
+          <span
+            v-if="birthdayError"
+            class="text-xs font-semibold text-red-600"
+            >{{ birthdayError }}</span
+          >
         </div>
       </div>
 
@@ -133,12 +168,19 @@
           rows="5"
           v-model="about"
           :placeholder="user.about"
+          :class="[
+            'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
+            aboutError ? 'border-red-400' : '',
+          ]"
         ></textarea>
+        <span v-if="aboutError" class="text-xs font-semibold text-red-600">{{
+          aboutError
+        }}</span>
       </div>
 
       <div class="flex justify-center">
         <button
-          @click="handleSubmit"
+          @click="submitForm"
           class="relative rounded-2xl bg-green-600 px-4 py-2 text-white"
         >
           Actualizar Perfil
@@ -168,13 +210,16 @@
   import { API_URL } from "@/main";
   import EventBus from "@/utils/EventBus";
   import { emitKeypressEvents } from "readline";
+  import { useField, useForm } from "vee-validate";
+  import * as yup from "yup";
+  import { faBirthdayCake } from "@fortawesome/free-solid-svg-icons";
 
   const userStore = useUserStore();
 
-  const name = ref("");
-  const nickname = ref("");
-  const username = ref("");
-  const about = ref("");
+  // const name = ref("");
+  // const nickname = ref("");
+  // const username = ref("");
+  // const about = ref("");
   let avatar: any;
   const avatarPic = ref();
   let banner: any;
@@ -196,6 +241,8 @@
   const waitingResponse = ref(false);
   const responseOk = ref(false);
   const responseFail = ref(false);
+
+  //file upload handler
 
   function handleFileInput(tipo: string, event: any) {
     const file = event.target.files[0];
@@ -221,7 +268,46 @@
     reader.readAsDataURL(file);
   }
 
-  async function handleSubmit() {
+  //validaciones
+
+  const schema = yup.object({
+    name: yup
+      .string()
+      .min(3, "Mínimo de 3 caracteres")
+      .max(20, "Máximo 20 caracteres")
+      .matches(/^[a-zA-Z\s]+$/, "Solo letras y espacios"),
+    nickname: yup
+      .string()
+      .min(4, "Mínimo de 4 caracteres")
+      .max(15, "Máximo de 15 caracteres")
+      .matches(/^[a-zA-Z0-9\s]+$/, "Solo letras, números y espacios"),
+    username: yup
+      .string()
+      .min(4, "Mínimo de 4 caracteres")
+      .max(15, "Máximo de 15 caracteres")
+      .matches(/^[a-zA-Z0-9]+$/, "Solo letras y números"),
+    about: yup
+      .string()
+      .min(3, "Mínimo de 3 caracteres")
+      .max(200, "Máximo de 200 caracteres"),
+    birthday: yup
+      .date()
+      .max(new Date(Date.now() - 567648000000), "Debe tener al menos 18 años"),
+  });
+
+  const { handleSubmit } = useForm({ validationSchema: schema });
+
+  const { value: name, errorMessage: nameError } = useField("name");
+  const { value: nickname, errorMessage: nicknameError } = useField("nickname");
+  const { value: username, errorMessage: usernameError } = useField("username");
+  const { value: about, errorMessage: aboutError } = useField("about");
+  const { value: birthday, errorMessage: birthdayError } = useField("birthday");
+
+  const submitForm = handleSubmit(handleForm);
+
+  //form submit
+
+  async function handleForm() {
     waitingResponse.value = true;
     const formData = new FormData();
     console.log(avatar);
