@@ -2,7 +2,7 @@
   <div class="h-screen overflow-hidden">
     <div
       v-if="isLoaded"
-      class="flex h-full w-full flex-col items-center overflow-y-scroll bg-gray-200"
+      class="flex h-full w-full flex-col items-center overflow-scroll bg-gray-200 pb-20"
       ref="listEl"
     >
       <MemeCard

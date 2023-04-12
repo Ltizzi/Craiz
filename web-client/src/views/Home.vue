@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-900">
+  <div class="h-full bg-slate-900">
     <div
       class="max-w-sm:full xs:justify-start sm:w-full sm:justify-start mx-auto flex flex-row justify-center gap-0 bg-slate-700 md:w-10/12 lg:w-8/12"
     >
