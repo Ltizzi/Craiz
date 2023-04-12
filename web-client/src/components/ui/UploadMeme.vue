@@ -93,13 +93,15 @@
                 >{{ tag.name }}</BaseTag
               >
             </div>
-            <CustomTag class="mx-5" v-if="state.activeTab == 'custom'" />
+            <CustomTag class="mx-5 pb-10" v-if="state.activeTab == 'custom'" />
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-row items-center justify-evenly">
+    <div
+      class="flex flex-row items-center justify-evenly pt-14 md:pt-2 lg:pt-2"
+    >
       <BaseButton
         @click="uploadMeme"
         class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
@@ -219,7 +221,7 @@
   }
 
   function selecTag(tag: any) {
-    if (selectedTags.value.length < 4) {
+    if (selectedTags.value.length < 4 && !selectedTags.value.includes(tag)) {
       if (!selectedTags.value.includes(tag)) {
         selectedTags.value.push(tag);
       } else {
@@ -314,7 +316,7 @@
       if (res.status == 201) {
         isUploading.value = false;
         uploadComplete.value = true;
-        await memeStore.fetchMemesWoC();
+        await memeStore.fetchMemesWoC(0, 10);
         setTimeout(() => {
           EventBus.emit("reloadMemes");
           emits("closeModal");
@@ -352,7 +354,9 @@
   //CUSTOM TAG
 
   EventBus.on("createdCustom", (tag: any) => {
-    selectedTags.value.push(tag);
+    if (selectedTags.value.length < 4 && !selectedTags.value.includes(tag)) {
+      selectedTags.value.push(tag);
+    }
   });
 </script>
 <style>

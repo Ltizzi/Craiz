@@ -25,9 +25,8 @@ require("dotenv").config();
 
 const app = express();
 
-
 //production
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 app.use(helmet());
 
@@ -51,12 +50,12 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: {
-      sameSite: "none",
-      secure: true,
-      rolling: true,
-      proxy: true,
-    },
+    // cookie: {
+    //   sameSite: "none",
+    //   secure: true,
+    //   rolling: true,
+    //   proxy: true,
+    // },
   })
 );
 
@@ -98,6 +97,8 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   }
 });
 
+// const WEB_URL = "https://craze-test.web.app/";
+const WEB_URL = "http://localhost:5173/";
 
 app.get("/success", async (req, res) => {
   console.log("Current user is:....", req.user);
@@ -109,16 +110,16 @@ app.get("/success", async (req, res) => {
     }
 
     if (!user.username || user.username == user.googleId) {
-      res.redirect(`https://craze-test.web.app/callback`);
+      res.redirect(`${WEB_URL}callback`);
     } else {
       console.log(user.username);
-      res.redirect("https://craze-test.web.app");
+      res.redirect(`${WEB_URL}`);
     }
   });
 });
 
 app.get("/failure", (req, res) => {
-  res.redirect("https://craze-test.web.app/logfail");
+  res.redirect(`${WEB_URL}logfail`);
 });
 
 app.get("/v1/logout", checkLoggedIn, (req, res) => {
