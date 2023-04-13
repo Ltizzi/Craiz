@@ -28,7 +28,7 @@
       <li
         v-for="(user, index) in usersTopTier"
         :key="user.userId"
-        class="mb-6 flex flex-row justify-between hover:cursor-pointer lg:w-4/5"
+        class="mb-6 flex flex-row justify-between hover:cursor-pointer md:w-5/6 lg:w-4/5"
       >
         <div
           class="flex flex-row items-center justify-start gap-3 text-start lg:gap-5"

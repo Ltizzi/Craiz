@@ -88,7 +88,7 @@
         EventBus.emit("reloadComments");
         showDropdown.value = !showDropdown.value;
       } else {
-        await memeStore.fetchMemesWoC();
+        await memeStore.fetchMemesWoC(0, 10);
         EventBus.emit("reloadMemes");
         showDropdown.value = !showDropdown.value;
       }

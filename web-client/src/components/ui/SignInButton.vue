@@ -19,7 +19,7 @@
   import { ref, watch } from "vue";
 
   import { spring } from "motion";
-
+  import EventBus from "@/utils/EventBus";
   import { API_URL } from "@/main";
   import axios from "axios";
 
@@ -40,6 +40,7 @@
     if (response.status == 200) {
       userStore.logout();
     }
+    EventBus.emit("logout");
   };
 
   watch(

@@ -1,18 +1,24 @@
 <template lang="">
   <BaseDialog
     class="absolute z-10 flex flex-col justify-center rounded-3xl px-2 py-5"
-    @closeModal="loadFriendsDialog"
+    @closeModal="modalSwitch"
   >
     <div
       class="mx-2 my-5 flex flex-col justify-center gap-2 text-lg text-gray-800"
     >
-      <h1 class="text-center text-xl font-bold">Editar perfil</h1>
+      <h1 class="text-center text-xl font-bold md:text-lg lg:text-xl">
+        Editar perfil
+      </h1>
       <div class="relative flex w-full items-center justify-center">
         <label
           for="dropzone-file"
-          class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 md:h-44 lg:h-64"
         >
-          <img :src="bannerPic" class="mx-auto h-52 w-full" v-if="bannerPic" />
+          <img
+            :src="bannerPic"
+            class="mx-auto h-52 w-full object-contain md:h-40 lg:h-52"
+            v-if="bannerPic"
+          />
           <div
             class="flex flex-col items-center justify-center pb-6 pt-5"
             v-if="!bannerPic"
@@ -49,7 +55,7 @@
       </div>
 
       <div
-        class="absolute top-64 z-50 flex h-20 w-20 items-center justify-center rounded-full"
+        class="absolute top-64 z-50 flex h-20 w-20 items-center justify-center rounded-full md:top-48 lg:top-64"
       >
         <label>
           <!-- for="dropzone-file"
@@ -125,15 +131,21 @@
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="username">Nombre de Usuario:</label>
-          <input
-            type="text"
-            v-model="username"
-            :placeholder="'@' + user.username"
-            :class="[
-              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
-              usernameError ? 'border-red-400' : '',
-            ]"
-          />
+          <div>
+            <input
+              type="text"
+              v-model="username"
+              :placeholder="user.username"
+              :class="[
+                'relative border-2 border-gray-200 px-1 py-2 pl-8 focus:border-gray-500',
+                usernameError ? 'border-red-400' : '',
+              ]"
+            />
+            <font-awesome-icon
+              icon="fa-solid fa-at"
+              class="absolute left-7 mt-0.5 items-center bg-purple-500 px-1.5 py-3 text-white"
+            />
+          </div>
           <span
             v-if="usernameError"
             class="text-xs font-semibold text-red-600"
@@ -165,7 +177,7 @@
           name="about"
           id=""
           cols="30"
-          rows="5"
+          rows="3"
           v-model="about"
           :placeholder="user.about"
           :class="[
@@ -181,7 +193,7 @@
       <div class="flex justify-center">
         <button
           @click="submitForm"
-          class="relative rounded-2xl bg-green-600 px-4 py-2 text-white"
+          class="relative rounded-2xl bg-green-600 px-4 py-2 text-white md:text-sm lg:text-lg"
         >
           Actualizar Perfil
         </button>

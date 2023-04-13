@@ -10,10 +10,16 @@
   import BaseButton from "../common/BaseButton.vue";
   import PostMemeDialog from "../layout/PostMemeDialog.vue";
   import EventBus from "@/utils/EventBus";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   function modalSwitch() {
-    EventBus.emit("openDialogNewMeme");
-    EventBus.emit("newMeme");
+    let user = JSON.parse(localStorage.getItem("user") as string);
+    if (!user) {
+      notUserModalHandler();
+    } else {
+      EventBus.emit("openDialogNewMeme");
+      EventBus.emit("newMeme");
+    }
   }
 </script>
 <style lang=""></style>
