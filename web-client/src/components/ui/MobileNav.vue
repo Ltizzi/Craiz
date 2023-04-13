@@ -56,7 +56,6 @@
           'transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white',
           state.activeButton == 'profile' ? 'text-white' : '',
         ]"
-        v-if="userIsSignedIn"
       >
         <font-awesome-icon icon="fa-solid fa-user" @click="goProfile" />
       </li>
@@ -85,6 +84,7 @@
   import { User } from "@/utils/models";
   import axios from "axios";
   import { onBeforeMount, onMounted, reactive, ref } from "vue";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   const userStore = useUserStore();
   let userIsSignedIn = ref();
@@ -114,11 +114,15 @@
   }
 
   function goProfile() {
-    state.activeButton = "profile";
-    const user = userStore.user as User;
-    EventBus.emit("loadUserMemes", user.userId);
-    EventBus.emit("reloadProfileInfo", user);
-    router.push(`${user.username}`);
+    if (!userIsSignedIn.value) {
+      notUserModalHandler();
+    } else {
+      state.activeButton = "profile";
+      const user = userStore.user as User;
+      EventBus.emit("loadUserMemes", user.userId);
+      EventBus.emit("reloadProfileInfo", user);
+      router.push(`${user.username}`);
+    }
   }
 
   async function handleSignInClick() {

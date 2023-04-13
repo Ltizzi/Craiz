@@ -109,6 +109,7 @@
   import LoopButton from "../common/LoopButton.vue";
   import MemeDropdown from "./MemeDropdown.vue";
   import ShareDropdown from "./ShareDropdown.vue";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
   import axios from "axios";
   import { Meme, User } from "@/utils/models";
   import { API_URL } from "@/main";
