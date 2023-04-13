@@ -125,15 +125,21 @@
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="username">Nombre de Usuario:</label>
-          <input
-            type="text"
-            v-model="username"
-            :placeholder="'@' + user.username"
-            :class="[
-              'border-2 border-gray-200 px-1 py-2 focus:border-gray-500',
-              usernameError ? 'border-red-400' : '',
-            ]"
-          />
+          <div>
+            <input
+              type="text"
+              v-model="username"
+              :placeholder="user.username"
+              :class="[
+                'relative border-2 border-gray-200 px-1 py-2 pl-8 focus:border-gray-500',
+                usernameError ? 'border-red-400' : '',
+              ]"
+            />
+            <font-awesome-icon
+              icon="fa-solid fa-at"
+              class="absolute left-7 mt-0.5 items-center bg-purple-500 px-1.5 py-3 text-white"
+            />
+          </div>
           <span
             v-if="usernameError"
             class="text-xs font-semibold text-red-600"
