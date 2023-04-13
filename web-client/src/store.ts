@@ -45,6 +45,7 @@ export const useUserStore = defineStore("user", {
       this.isGuest = true;
     },
     logout() {
+      localStorage.removeItem("user");
       this.user = {};
       this.isSignedIn = false;
     },

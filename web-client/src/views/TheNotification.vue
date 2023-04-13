@@ -1,12 +1,16 @@
 <template>
   <div class="h-full w-full bg-gray-200 text-start" v-if="isLoaded">
     <div
-      class="fixed w-full bg-slate-800 py-3 text-center opacity-90 md:-ml-0.5 md:w-6/12 lg:w-2/5"
+      class="l fixed w-full bg-slate-800 py-3 text-center opacity-90 md:-ml-0.5 md:w-6/12 lg:w-2/5"
     >
       <h1 class="text-xl font-bold text-white">Notificaciones</h1>
     </div>
 
-    <ul class="mt-14 flex w-full flex-col gap-0 text-start" id="lista">
+    <ul
+      class="mt-14 flex h-screen w-full flex-col gap-0 overflow-scroll text-start"
+      id="lista"
+      ref="listEl"
+    >
       <li
         v-for="(noti, index) in notifications"
         :key="noti.notificationId"
@@ -147,6 +151,9 @@
           />
         </router-link>
       </li>
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
     </ul>
   </div>
 </template>
@@ -154,20 +161,73 @@
   // import BaseFollow from "@/components/common/BaseFollow.vue";
   import axios from "axios";
   import { onBeforeMount, onMounted, ref } from "vue";
+  import BaseSpinner from "@/components/common/BaseSpinner.vue";
   import EventBus from "@/utils/EventBus";
   import { API_URL } from "@/main";
+  import { UseInfiniteScrollOptions, useInfiniteScroll } from "@vueuse/core";
 
   const notifications = ref();
 
   const isGuest = ref(false);
   const isLoaded = ref(false);
 
-  async function fetchNotifications(id: number) {
+  const userId = ref();
+
+  //metodo que hace query de notificaciones por id
+
+  async function fetchNotifications(id: number, skip: number, limit: number) {
     const response = await axios.get(
-      `${API_URL}notifications/byUserId?id=${id}`
+      `${API_URL}notifications/byUserId?id=${id}&skip=${skip}&limit=${limit}`
     );
     return response.data;
   }
+
+  //agrega mouseover event listener para marcar notificaciones como vistas
+
+  async function addHoverCheck() {
+    const allLis = document.querySelectorAll(".noti-list");
+    allLis.forEach((element) => {
+      element.addEventListener("mouseover", async (event) => {
+        const index = parseInt(element.getAttribute("id") as string);
+        const noti = notifications.value[index];
+        if (noti.isNewN) {
+          await axios
+            .post(`${API_URL}notifications/check`, noti, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              noti.isNewN = false;
+              EventBus.emit("reloadNewNotis");
+            });
+        }
+      });
+    });
+  }
+
+  //infinite scroll
+
+  const listEl = ref(null);
+
+  const notisToShow = 10;
+
+  const isLoading = ref(false);
+
+  useInfiniteScroll(
+    listEl,
+    async () => {
+      if (isLoading.value) return;
+      isLoading.value = true;
+      const newNotis = await fetchNotifications(
+        userId.value,
+        notifications.value.length,
+        notisToShow
+      );
+      notifications.value.push(...newNotis);
+      addHoverCheck();
+      isLoading.value = false;
+    },
+    { distance: 100 }
+  );
 
   //para actualizar las notificaciones cuando son vistas
 
@@ -193,12 +253,12 @@
   //   if(response.data.res =="followed"){
   //     user.follows.push(id);
   //     localStorage.setItem("user", JSON.stringify(user));
- 
+
   //   }
   //   if(response.data.res == "unfollowed"){
   //     user.follows = user.follows.filter((usr:number)=> usr != id);
   //     localStorage.setItem("user", JSON.stringify(user));
-      
+
   //   }
   // })
 
@@ -207,7 +267,8 @@
       const response = await axios.get(`${API_URL}auth/logincheck`, {
         withCredentials: true,
       });
-      notifications.value = await fetchNotifications(response.data.user.userId);
+      userId.value = response.data.user.userId;
+      notifications.value = await fetchNotifications(userId.value, 0, 10);
       isLoaded.value = true;
     } catch (err) {
       console.log(err);
@@ -218,23 +279,7 @@
   onMounted(async () => {
     setTimeout(() => {
       if (isLoaded.value) {
-        const allLis = document.querySelectorAll(".noti-list");
-        allLis.forEach((element) => {
-          element.addEventListener("mouseover", async (event) => {
-            const index = parseInt(element.getAttribute("id") as string);
-            const noti = notifications.value[index];
-            if (noti.isNewN) {
-              await axios
-                .post(`${API_URL}notifications/check`, noti, {
-                  withCredentials: true,
-                })
-                .then((res) => {
-                  noti.isNewN = false;
-                  EventBus.emit("reloadNewNotis");
-                });
-            }
-          });
-        });
+        addHoverCheck();
       }
     }, 2000);
 
