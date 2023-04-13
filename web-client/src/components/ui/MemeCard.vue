@@ -34,7 +34,7 @@
         <!-- </router-link> -->
 
         <h4
-          class="sm:text-base pl-2 text-base text-sm italic md:text-lg lg:mt-3 lg:text-lg"
+          class="sm:text-base pl-2 text-sm italic md:text-base lg:mt-3 lg:text-lg"
         >
           @{{ uploader.username }}
         </h4>

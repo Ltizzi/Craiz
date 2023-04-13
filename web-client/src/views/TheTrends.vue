@@ -1,9 +1,11 @@
 <template lang="">
-  <div class="flex h-full w-full flex-col bg-gray-100 pt-24">
-    <TrendsHeader class="w-full lg:w-2/5" />
-    <keep-alive>
-      <TrendList class="mt-10 md:ml-4" />
-    </keep-alive>
+  <div class="w-full overflow-scroll overflow-x-hidden">
+    <div class="flex w-full flex-col bg-gray-100 pt-24">
+      <TrendsHeader class="w-full lg:w-2/5" />
+      <keep-alive>
+        <TrendList class="mt-10 md:ml-4" />
+      </keep-alive>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
