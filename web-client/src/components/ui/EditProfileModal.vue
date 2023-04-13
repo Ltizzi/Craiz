@@ -143,7 +143,7 @@
             />
             <font-awesome-icon
               icon="fa-solid fa-at"
-              class="absolute left-7 mt-0.5 items-center bg-purple-500 px-1.5 py-3 text-white"
+              class="absolute left-7 -mt-11 items-center bg-purple-500 px-1.5 py-3 text-white md:mt-0.5"
             />
           </div>
           <span
