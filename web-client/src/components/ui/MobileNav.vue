@@ -56,6 +56,7 @@
           'transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-white',
           state.activeButton == 'profile' ? 'text-white' : '',
         ]"
+        v-if="userIsSignedIn"
       >
         <font-awesome-icon icon="fa-solid fa-user" @click="goProfile" />
       </li>

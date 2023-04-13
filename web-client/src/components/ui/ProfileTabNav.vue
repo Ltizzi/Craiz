@@ -1,10 +1,10 @@
 <template lang="">
   <div
-    class="flex flex-row justify-evenly bg-slate-600 py-3 px-4 text-center text-lg text-gray-300"
+    class="flex flex-row justify-evenly bg-slate-600 px-4 py-3 text-center text-lg text-gray-300"
   >
     <div
       :class="[
-        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        'rounded-t-xl px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
         state.activeButton === 'memes'
           ? 'border-b-2 border-gray-100 font-bold text-white'
           : '',
@@ -15,7 +15,7 @@
     </div>
     <div
       :class="[
-        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        'rounded-t-xl px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
         state.activeButton === 'loops'
           ? 'border-b-2 border-gray-100 font-bold text-white'
           : '',
@@ -26,7 +26,7 @@
     </div>
     <div
       :class="[
-        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        'rounded-t-xl px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
         state.activeButton === 'comments'
           ? 'border-b-2 border-gray-100 font-bold text-white'
           : '',
@@ -37,7 +37,7 @@
     </div>
     <div
       :class="[
-        'px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
+        'rounded-t-xl px-4 py-2 hover:cursor-pointer hover:bg-slate-500 hover:text-white',
         state.activeButton === 'likes'
           ? 'border-b-2 border-gray-100 font-bold text-white'
           : '',

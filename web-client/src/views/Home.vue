@@ -86,6 +86,7 @@
       });
       userStore.setUser(response.data.user);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.removeItem("guest");
       tagStore.fetchTags;
     } catch (err) {
       console.log(err);
