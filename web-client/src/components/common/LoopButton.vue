@@ -22,6 +22,7 @@
   import axios from "axios";
   import { onMounted, ref, watch } from "vue";
   import BaseButton from "./BaseButton.vue";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   let isLoopedByUser = ref(false);
 
@@ -47,6 +48,7 @@
   const counter = ref();
 
   async function loopMeme() {
+    notUserModalHandler();
     isLoopedByUser.value = !isLoopedByUser.value;
     if (isLoopedByUser.value) {
       counter.value += 1;

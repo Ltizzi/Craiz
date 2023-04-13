@@ -87,7 +87,6 @@
     <div
       class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
       @click="goProfile"
-      v-if="userIsSignIn"
     >
       <h1
         :class="[
@@ -117,6 +116,7 @@
   import { onMounted, reactive, ref } from "vue";
   import axios from "axios";
   import { API_URL, RELOAD_TIMER } from "@/main";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   const userStore = useUserStore();
   // const route = useRoute();
@@ -151,12 +151,16 @@
   }
 
   function goProfile() {
-    state.activeButton = "profile";
-    const user = userStore.user as User;
-    EventBus.emit("loadUserMemes", user.userId);
-    EventBus.emit("reloadProfileInfo", user);
-    console.log(user);
-    router.push(`${user.username}`);
+    if (!userIsSignIn.value) {
+      notUserModalHandler();
+    } else {
+      state.activeButton = "profile";
+      const user = userStore.user as User;
+      EventBus.emit("loadUserMemes", user.userId);
+      EventBus.emit("reloadProfileInfo", user);
+      console.log(user);
+      router.push(`${user.username}`);
+    }
   }
 
   const notis = ref();

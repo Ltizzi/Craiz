@@ -27,6 +27,7 @@
     <div v-if="state.isMobile">
       <MobileNav class="fixed bottom-0" />
     </div>
+    <NotUserModal />
   </div>
 </template>
 
@@ -34,6 +35,7 @@
   import LateralMenu from "../components/layout/LateralMenu.vue";
   import LateralRight from "@/components/layout/LateralRight.vue";
   import Callback from "../components/ui/Callback.vue";
+  import NotUserModal from "@/components/ui/NotUserModal.vue";
   import MobileNav from "../components/ui/MobileNav.vue";
   import { useUserStore } from "@/store";
   import { useTagStore } from "@/store/tags";
