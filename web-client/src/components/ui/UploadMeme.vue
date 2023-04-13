@@ -105,7 +105,7 @@
       <BaseButton
         @click="uploadMeme"
         class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
-        >Subir Meme
+        >Publicar Meme
       </BaseButton>
 
       <BaseSpinner class="absolute right-28" v-if="isUploading" />

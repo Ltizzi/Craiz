@@ -87,6 +87,7 @@
     <div
       class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
       @click="goProfile"
+      v-if="userIsSignIn"
     >
       <h1
         :class="[
@@ -123,6 +124,8 @@
   const state = reactive({
     activeButton: "inicio",
   });
+
+  const userIsSignIn = ref(false);
 
   function goHome() {
     state.activeButton = "inicio";
@@ -170,6 +173,10 @@
     loadNotifications(id);
   });
 
+  EventBus.on("logout", () => {
+    userIsSignIn.value = false;
+  });
+
   onMounted(async () => {
     let user = JSON.parse(localStorage.getItem("user") as string);
     if (!user) {
@@ -182,6 +189,7 @@
     user.value = user;
     if (user != undefined) {
       loadNotifications(user.userId);
+      userIsSignIn.value = true;
     }
     setInterval(() => {
       loadNotifications(user.userId);
