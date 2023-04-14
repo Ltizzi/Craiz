@@ -6,14 +6,14 @@
     <BaseButton @click="loopMeme">
       <font-awesome-icon icon="fa-solid fa-arrows-rotate" />
     </BaseButton>
-    <p v-if="counter != 0" class="ml-2 text-base">{{ counter }}</p>
+    <p v-if="counter != 0" class="ml-2 mt-0.5 text-base">{{ counter }}</p>
     <p v-else class="ml-2 text-base opacity-0">{{ counter }}</p>
   </div>
   <div class="flex flex-row text-lg hover:cursor-pointer" v-else>
     <BaseButton @click="loopMeme" class="text-xl text-green-600">
       <font-awesome-icon icon="fa-solid fa-arrows-rotate" />
     </BaseButton>
-    <p v-if="counter != 0" class="ml-2 text-base">{{ counter }}</p>
+    <p v-if="counter != 0" class="ml-2 mt-0.5 text-base">{{ counter }}</p>
     <p v-else class="ml-2 opacity-0">{{ counter }}</p>
   </div>
 </template>
