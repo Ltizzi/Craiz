@@ -131,13 +131,13 @@
         </div>
         <div class="flex flex-col justify-start gap-1">
           <label for="username">Nombre de Usuario:</label>
-          <div>
+          <div class="container">
             <input
               type="text"
               v-model="username"
               :placeholder="user.username"
               :class="[
-                'relative border-2 border-gray-200 px-1 py-2 pl-8 focus:border-gray-500',
+                ' border-2 border-gray-200 px-1 py-2 pl-8 focus:border-gray-500',
                 usernameError ? 'border-red-400' : '',
               ]"
             />
