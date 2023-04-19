@@ -46,7 +46,7 @@
       >
         <font-awesome-icon icon="fa-solid fa-bell" />
         <span
-          class="absolute -mt-1 -ml-1 rounded-full bg-purple-500 px-1 text-xs font-bold text-white"
+          class="absolute -ml-1 -mt-1 rounded-full bg-purple-500 px-1 text-xs font-bold text-white"
           v-if="notis > 0"
           >{{ notis }}</span
         >
@@ -61,14 +61,14 @@
       </li>
       <li
         class="text-green-500 transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-green-400"
-        v-if="userIsSignedIn"
+        v-if="!userIsSignedIn"
         @click="handleSignInClick"
       >
         <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
       </li>
       <li
         class="text-red-700 transition-transform duration-500 hover:scale-110 hover:cursor-pointer hover:text-red-600"
-        v-else
+        v-if="userIsSignedIn"
         @click="handleSignOutClick"
       >
         <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
@@ -83,10 +83,11 @@
   import EventBus from "@/utils/EventBus";
   import { User } from "@/utils/models";
   import axios from "axios";
-  import { onMounted, reactive, ref } from "vue";
+  import { onBeforeMount, onMounted, reactive, ref } from "vue";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   const userStore = useUserStore();
-  let userIsSignedIn = ref(userStore.isSignedIn);
+  let userIsSignedIn = ref();
 
   const state = reactive({
     activeButton: "inicio",
@@ -113,11 +114,15 @@
   }
 
   function goProfile() {
-    state.activeButton = "profile";
-    const user = userStore.user as User;
-    EventBus.emit("loadUserMemes", user.userId);
-    EventBus.emit("reloadProfileInfo", user);
-    router.push(`${user.username}`);
+    if (!userIsSignedIn.value) {
+      notUserModalHandler();
+    } else {
+      state.activeButton = "profile";
+      const user = userStore.user as User;
+      EventBus.emit("loadUserMemes", user.userId);
+      EventBus.emit("reloadProfileInfo", user);
+      router.push(`${user.username}`);
+    }
   }
 
   async function handleSignInClick() {
@@ -130,9 +135,9 @@
     });
     if (response.status == 200) {
       userStore.logout();
+      userIsSignedIn.value = false;
     }
     router.push("/");
-    location.reload();
   }
 
   const notis = ref();
@@ -149,18 +154,26 @@
     loadNotifications(id);
   });
 
-  onMounted(async () => {
-    const response = await axios.get(`${API_URL}auth/logincheck`, {
-      withCredentials: true,
-    });
+  onBeforeMount(async () => {
+    userIsSignedIn.value = false;
+    let localStorageUser = JSON.parse(localStorage.getItem("user") as string);
+    if (!localStorageUser) {
+      const response = await axios.get(`${API_URL}auth/logincheck`, {
+        withCredentials: true,
+      });
 
-    const user = response.data.user;
-    user.value = user;
-    if (user != undefined) {
-      loadNotifications(user.userId);
+      const fetchedUser = response.data.user;
+      user.value = fetchedUser;
+    } else user.value = localStorageUser;
+    if (user.value.username != undefined) {
+      userIsSignedIn.value = true;
+      loadNotifications(user.value.userId);
     }
+  });
+
+  onMounted(() => {
     setInterval(() => {
-      loadNotifications(user.userId);
+      loadNotifications(user.value.userId);
     }, RELOAD_TIMER);
   });
 </script>

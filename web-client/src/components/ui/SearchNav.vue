@@ -4,7 +4,7 @@
   >
     <div
       :class="[
-        ' px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
+        'rounded-t-xl  px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
         state.activeButton === 'highlight'
           ? 'front-bold border-b-2 border-gray-100 text-white'
           : '',
@@ -15,7 +15,7 @@
     </div>
     <div
       :class="[
-        ' px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
+        'rounded-t-xl  px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
         state.activeButton === 'recent'
           ? 'front-bold border-b-2 border-gray-100 text-white'
           : '',
@@ -26,7 +26,7 @@
     </div>
     <div
       :class="[
-        ' px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
+        'rounded-t-xl  px-4 py-2 hover:cursor-pointer hover:bg-slate-600 hover:text-white',
         state.activeButton === 'searchUsers'
           ? 'front-bold border-b-2 border-gray-100 text-white'
           : '',

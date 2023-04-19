@@ -116,6 +116,7 @@
   import { onMounted, reactive, ref } from "vue";
   import axios from "axios";
   import { API_URL, RELOAD_TIMER } from "@/main";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   const userStore = useUserStore();
   // const route = useRoute();
@@ -123,6 +124,8 @@
   const state = reactive({
     activeButton: "inicio",
   });
+
+  const userIsSignIn = ref(false);
 
   function goHome() {
     state.activeButton = "inicio";
@@ -148,12 +151,16 @@
   }
 
   function goProfile() {
-    state.activeButton = "profile";
-    const user = userStore.user as User;
-    EventBus.emit("loadUserMemes", user.userId);
-    EventBus.emit("reloadProfileInfo", user);
-    console.log(user);
-    router.push(`${user.username}`);
+    if (!userIsSignIn.value) {
+      notUserModalHandler();
+    } else {
+      state.activeButton = "profile";
+      const user = userStore.user as User;
+      EventBus.emit("loadUserMemes", user.userId);
+      EventBus.emit("reloadProfileInfo", user);
+      console.log(user);
+      router.push(`${user.username}`);
+    }
   }
 
   const notis = ref();
@@ -170,6 +177,10 @@
     loadNotifications(id);
   });
 
+  EventBus.on("logout", () => {
+    userIsSignIn.value = false;
+  });
+
   onMounted(async () => {
     let user = JSON.parse(localStorage.getItem("user") as string);
     if (!user) {
@@ -182,6 +193,7 @@
     user.value = user;
     if (user != undefined) {
       loadNotifications(user.userId);
+      userIsSignIn.value = true;
     }
     setInterval(() => {
       loadNotifications(user.userId);

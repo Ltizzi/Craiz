@@ -34,7 +34,7 @@
         <!-- </router-link> -->
 
         <h4
-          class="sm:text-base pl-2 text-base text-sm italic md:text-lg lg:mt-3 lg:text-lg"
+          class="sm:text-base pl-2 text-sm italic md:text-base lg:mt-3 lg:text-lg"
         >
           @{{ uploader.username }}
         </h4>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
-    <div class="sm:mx-1 flex flex-col lg:mx-12">
+    <div class="sm:mx-1 flex flex-col justify-normal lg:mx-12">
       <router-link :to="'/meme?id=' + props.data.memeId">
         <img
           :src="props.data.imgUrl"
@@ -57,7 +57,7 @@
         />
       </router-link>
 
-      <div class="flex h-12 flex-row justify-between">
+      <div class="mt-2 flex h-16 flex-row items-center justify-between">
         <div
           class="flex w-7/12 flex-row items-center justify-between lg:w-7/12"
         >
@@ -83,7 +83,7 @@
         </div>
 
         <div
-          class="mt-1 flex w-4/12 flex-wrap justify-start text-center lg:justify-center"
+          class="mt-1 flex w-5/12 flex-wrap justify-end text-center lg:justify-end"
         >
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"
@@ -109,6 +109,7 @@
   import LoopButton from "../common/LoopButton.vue";
   import MemeDropdown from "./MemeDropdown.vue";
   import ShareDropdown from "./ShareDropdown.vue";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
   import axios from "axios";
   import { Meme, User } from "@/utils/models";
   import { API_URL } from "@/main";

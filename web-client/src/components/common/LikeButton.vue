@@ -24,6 +24,7 @@
   import { useUserStore } from "@/store";
   import BaseButton from "./BaseButton.vue";
   import { User } from "@/utils/models";
+  import { notUserModalHandler } from "@/utils/notUserModalHandler";
 
   const userStore = useUserStore();
 
@@ -49,6 +50,7 @@
   const likeCounter = ref(props.meme.likeCounter);
 
   async function handleButtonClick() {
+    notUserModalHandler();
     liked.value = !liked.value;
     if (liked.value) {
       likeCounter.value += 1;
