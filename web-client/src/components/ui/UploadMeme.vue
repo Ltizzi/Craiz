@@ -256,7 +256,7 @@
     state.errors.fileToUpload = "";
     //prepara imagen para ser subida a la ThumbSnap
     if (state.fileToUpload == "") {
-      state.errors.fileToUpload = "Se requiere una image";
+      state.errors.fileToUpload = "Se requiere una imagen";
       state.fileToUpload = "";
       isUploading.value = false;
       uploadFailed.value = true;

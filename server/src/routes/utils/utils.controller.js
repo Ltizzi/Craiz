@@ -48,19 +48,6 @@ async function httpUploadImage(req, res) {
   }
 }
 
-// async function readFileAsBlob(filePath) {
-//   return await new Promise((resolve, reject) => {
-//     fs.readFile(filePath, (error, data) => {
-//       if (error) {
-//         reject(error);
-//       } else {
-//         const blob = new Blob([data], { type: "image/jpeg" });
-//         resolve(blob);
-//       }
-//     });
-//   });
-// }
-
 async function httpSearchValue(req, res) {
   const searchValue = req.query.value;
   const { skip, limit } = getPagination(req.query);
