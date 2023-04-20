@@ -18,7 +18,8 @@
       "@vee-validate/rules": [
         "node_modules/@vee-validate/rules/dist/vee-validate-rules.d.ts"
       ]
-    }
+    },
+    "types": ["dom-to-image"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
