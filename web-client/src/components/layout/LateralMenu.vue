@@ -94,8 +94,9 @@
           state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-hammer" />
-        Mod
+        <font-awesome-icon icon="fa-solid fa-user" class="mb-1 mr-2" />
+
+        Perfil
       </h1>
     </div>
     <div
@@ -124,8 +125,8 @@
           state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-user" class="mb-1 mr-2" />
-        Perfil
+        <font-awesome-icon icon="fa-solid fa-hammer" />
+        Mod
       </h1>
     </div>
 
