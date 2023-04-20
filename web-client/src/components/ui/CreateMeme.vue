@@ -240,17 +240,21 @@
 
   const topInput: any = ref(null);
   const bottomInput: any = ref(null);
+
   const topText = ref("Top text");
   const bottomText = ref("Bottom text");
-  const memeUrl = ref();
+
+  const memeUrl = ref(); //variable a la que se le asigna la imagen de fondo
+
   const textFields = ref<TextField[]>([]);
-  const textFieldsCount = ref(0);
+  const textFieldsCount = ref(0); //necesaria para asignar ids
+
   const topTextTop = ref(15); //15 70 300 70
   const topTextLeft = ref();
   const bottomTextTop = ref(250);
   const bottomTextLeft = ref();
 
-  const elDOM = ref();
+  const elDOM = ref(); //elemento del DOM a convertir en imagen
 
   //prepara la guia visual del generador -uploading, exito, fail-
   //ademas recupera los tags y define si el nuevo meme es hijo o no
@@ -258,8 +262,10 @@
     uploadComplete.value = false;
     uploadFailed.value = false;
     isUploading.value = false;
+
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
+
     let parentMeme = memeStore.parentMeme as Meme;
     if (parentMeme.memeId !== undefined) {
       isComment.value = true;
@@ -345,7 +351,7 @@
       id: textFieldsCount.value,
       top: 160,
       left: 70,
-      text: "Placeholder",
+      text: "Ingrese texto",
     };
     textFields.value.push(txtField);
 
@@ -378,11 +384,12 @@
       inputs[i].classList.remove("draggable");
       inputs[i].classList.add("postdraggable");
     }
-    //usa el tamaño de la imagen original de referencia
-    //convierte el dom en imagen
+    //usa el tamaño de la imagen original de referencia para el escalado
+
     const scaleWidth = imageWidth.value;
     const scaleHeight = imageHeight.value;
 
+    //convierte el dom en imagen
     await domToImage
       .toPng(elDOM.value, { width: scaleWidth, height: scaleHeight })
       .then(async function (dataUrl) {

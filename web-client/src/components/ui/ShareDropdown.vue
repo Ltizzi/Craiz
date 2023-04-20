@@ -32,7 +32,7 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, ref } from "vue";
   import BaseButton from "../common/BaseButton.vue";
-  import { stringify } from "querystring";
+  // import { stringify } from "querystring";
 
   const props = defineProps({
     memeUrl: {
