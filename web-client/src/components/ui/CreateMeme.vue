@@ -7,11 +7,11 @@
     <form @submit.prevent="generateMeme" class="flex flex-col">
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col">
-          <div class="container flex h-auto flex-col bg-gray-100 p-5">
-            <div class="flex w-full items-center justify-center">
+          <div class="container flex h-auto w-auto flex-col bg-gray-100 p-5">
+            <div class="flex w-auto items-center justify-center">
               <label
                 for="dropzone-file"
-                class="dark:hover:bg-bray-800 flex h-auto w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                class="dark:hover:bg-bray-800 flex h-auto w-auto cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
               >
                 <div
                   class="container relative mx-auto flex h-auto w-auto flex-col items-center justify-center overflow-hidden"
@@ -68,7 +68,7 @@
                     :src="memeUrl"
                     v-if="memeUrl"
                     ref="memeImage"
-                    class="img object-cover"
+                    class="img object-contain"
                   />
 
                   <div
@@ -116,7 +116,7 @@
 
           <div
             v-if="selectedTags"
-            class="flew-row my-2 flex w-96 flex-wrap justify-evenly"
+            class="flew-row my-4 flex w-96 flex-wrap justify-evenly"
           >
             <span class="h-7 pb-2"></span>
             <BaseTag
@@ -130,7 +130,7 @@
           </div>
         </div>
 
-        <div class="mt-3 flex h-40 flex-col justify-center gap-0">
+        <div class="my-auto flex h-40 flex-col justify-center gap-0">
           <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
             Elige los tags del meme:
           </h2>
@@ -609,7 +609,7 @@
     /*  user-select: none;*/
     border: 0;
     background: transparent;
-    width: auto;
+    width: max-content;
     height: auto;
     /* max-width: fit-content;*/
     overflow: hidden;
@@ -631,7 +631,7 @@
   }
 
   .img {
-    width: 500px;
+    width: auto;
     height: 375px;
   }
 
@@ -642,7 +642,7 @@
     }
 
     .img {
-      width: 400px;
+      width: auto;
       height: 300px;
     }
   }
