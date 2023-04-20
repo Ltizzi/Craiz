@@ -193,6 +193,10 @@
     }
   }
 
+  function goMod() {}
+
+  function goAdmin() {}
+
   const notis = ref();
   const user = ref();
 
