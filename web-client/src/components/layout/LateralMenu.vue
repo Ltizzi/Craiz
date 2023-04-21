@@ -130,7 +130,6 @@
       </h1>
     </div>
 
-    <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
     <SignInButton class="md:mt-14 lg:mt-72"></SignInButton>
   </div>
