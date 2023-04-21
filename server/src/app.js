@@ -97,7 +97,7 @@ app.get("/v1/auth/logincheck", checkLoggedIn, async (req, res) => {
   }
 });
 
-// const WEB_URL = "https://craze-test.web.app/";
+//const WEB_URL = "https://craze-test.web.app/";
 const WEB_URL = "http://localhost:5173/";
 
 app.get("/success", async (req, res) => {
