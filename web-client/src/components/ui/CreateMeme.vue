@@ -7,11 +7,11 @@
     <form @submit.prevent="generateMeme" class="flex flex-col">
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col">
-          <div class="container flex h-auto flex-col bg-gray-100 p-5">
-            <div class="flex w-full items-center justify-center">
+          <div class="container flex h-auto w-auto flex-col bg-gray-100 p-5">
+            <div class="flex w-auto items-center justify-center">
               <label
                 for="dropzone-file"
-                class="dark:hover:bg-bray-800 flex h-auto w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                class="dark:hover:bg-bray-800 flex h-auto w-auto cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
               >
                 <div
                   class="container relative mx-auto flex h-auto w-auto flex-col items-center justify-center overflow-hidden"
@@ -68,7 +68,7 @@
                     :src="memeUrl"
                     v-if="memeUrl"
                     ref="memeImage"
-                    class="img object-cover"
+                    class="img object-contain"
                   />
 
                   <div
@@ -116,7 +116,7 @@
 
           <div
             v-if="selectedTags"
-            class="flew-row my-2 flex w-96 flex-wrap justify-evenly"
+            class="flew-row my-4 flex w-96 flex-wrap justify-evenly"
           >
             <span class="h-7 pb-2"></span>
             <BaseTag
@@ -130,7 +130,7 @@
           </div>
         </div>
 
-        <div class="mt-3 flex h-40 flex-col justify-center gap-0">
+        <div class="my-auto flex h-40 flex-col justify-center gap-0">
           <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
             Elige los tags del meme:
           </h2>
@@ -240,17 +240,21 @@
 
   const topInput: any = ref(null);
   const bottomInput: any = ref(null);
+
   const topText = ref("Top text");
   const bottomText = ref("Bottom text");
-  const memeUrl = ref();
+
+  const memeUrl = ref(); //variable a la que se le asigna la imagen de fondo
+
   const textFields = ref<TextField[]>([]);
-  const textFieldsCount = ref(0);
+  const textFieldsCount = ref(0); //necesaria para asignar ids
+
   const topTextTop = ref(15); //15 70 300 70
   const topTextLeft = ref();
   const bottomTextTop = ref(250);
   const bottomTextLeft = ref();
 
-  const elDOM = ref();
+  const elDOM = ref(); //elemento del DOM a convertir en imagen
 
   //prepara la guia visual del generador -uploading, exito, fail-
   //ademas recupera los tags y define si el nuevo meme es hijo o no
@@ -258,8 +262,10 @@
     uploadComplete.value = false;
     uploadFailed.value = false;
     isUploading.value = false;
+
     await tagStore.fetchTags();
     tags.value = tagStore.tags;
+
     let parentMeme = memeStore.parentMeme as Meme;
     if (parentMeme.memeId !== undefined) {
       isComment.value = true;
@@ -345,7 +351,7 @@
       id: textFieldsCount.value,
       top: 160,
       left: 70,
-      text: "Placeholder",
+      text: "Ingrese texto",
     };
     textFields.value.push(txtField);
 
@@ -378,11 +384,12 @@
       inputs[i].classList.remove("draggable");
       inputs[i].classList.add("postdraggable");
     }
-    //usa el tamaño de la imagen original de referencia
-    //convierte el dom en imagen
+    //usa el tamaño de la imagen original de referencia para el escalado
+
     const scaleWidth = imageWidth.value;
     const scaleHeight = imageHeight.value;
 
+    //convierte el dom en imagen
     await domToImage
       .toPng(elDOM.value, { width: scaleWidth, height: scaleHeight })
       .then(async function (dataUrl) {
@@ -609,7 +616,7 @@
     /*  user-select: none;*/
     border: 0;
     background: transparent;
-    width: auto;
+    width: max-content;
     height: auto;
     /* max-width: fit-content;*/
     overflow: hidden;
@@ -631,7 +638,7 @@
   }
 
   .img {
-    width: 500px;
+    width: auto;
     height: 375px;
   }
 
@@ -642,7 +649,7 @@
     }
 
     .img {
-      width: 400px;
+      width: auto;
       height: 300px;
     }
   }

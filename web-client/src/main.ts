@@ -26,11 +26,14 @@ import {
   faArrowTrendUp,
   faCircleExclamation,
   faAt,
+  faLock,
+  faHammer,
+  faCircleMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
 export const API_URL = "http://localhost:4246/v1/";
-// export const API_URL = "https://crazeapi.onrender.com/v1/";
+//export const API_URL = "https://crazeapi.onrender.com/v1/";
 
 export const RELOAD_TIMER = 1000 * 60;
 
@@ -54,7 +57,10 @@ library.add(
   faHome,
   faArrowTrendUp,
   faCircleExclamation,
-  faAt
+  faAt,
+  faLock,
+  faHammer,
+  faCircleMinus
 );
 
 const app = createApp(App);

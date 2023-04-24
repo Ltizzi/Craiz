@@ -95,11 +95,41 @@
         ]"
       >
         <font-awesome-icon icon="fa-solid fa-user" class="mb-1 mr-2" />
+
         Perfil
       </h1>
     </div>
+    <div
+      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      @click="goMod"
+      v-if="isMod"
+    >
+      <h1
+        :class="[
+          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
+        ]"
+      >
+        <font-awesome-icon icon="fa-solid fa-lock" />
+        Admin
+      </h1>
+    </div>
+    <div
+      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      @click="goAdmin"
+      v-if="isAdmin"
+    >
+      <h1
+        :class="[
+          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
+        ]"
+      >
+        <font-awesome-icon icon="fa-solid fa-hammer" />
+        Mod
+      </h1>
+    </div>
 
-    <!-- <NewMemeMenu></NewMemeMenu> -->
     <CreateMemeButton />
     <SignInButton class="md:mt-14 lg:mt-72"></SignInButton>
   </div>
@@ -163,6 +193,10 @@
     }
   }
 
+  function goMod() {}
+
+  function goAdmin() {}
+
   const notis = ref();
   const user = ref();
 
@@ -180,6 +214,9 @@
   EventBus.on("logout", () => {
     userIsSignIn.value = false;
   });
+
+  const isAdmin = ref(false);
+  const isMod = ref(false);
 
   onMounted(async () => {
     let user = JSON.parse(localStorage.getItem("user") as string);

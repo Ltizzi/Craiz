@@ -9,6 +9,7 @@ import LandingPageVue from "./components/layout/LandingPage.vue";
 import TheSearchVue from "./views/TheSearch.vue";
 import TheTrendsVue from "./views/TheTrends.vue";
 import TheNotificationVue from "./views/TheNotification.vue";
+import AdminDashboardVue from "./components/layout/AdminDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,6 +44,11 @@ const router = createRouter({
           path: "/notifications",
           name: "TheNotifications",
           component: TheNotificationVue,
+        },
+        {
+          path: "/admin",
+          name: "AdminDashboard",
+          component: AdminDashboardVue,
         },
       ],
     },
