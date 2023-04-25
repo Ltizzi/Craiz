@@ -80,6 +80,11 @@ const usersSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  isMod: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   memes: [
     {
       type: Number,

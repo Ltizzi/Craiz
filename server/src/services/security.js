@@ -33,12 +33,22 @@ function checkLoggedIn(req, res, next) {
   next();
 }
 
-function checkIsAdmin(req, res, next) {
-  const isAdmin = req.isAdmin() && req.user;
+async function checkIsAdmin(req, res, next) {
+  const user = await getUserByEmail(req.user.email);
+  const isAdmin = user.isAdmin;
   if (!isAdmin) {
     return res.status(403).json({
       error: "You are forbidden!",
     });
+  }
+  next();
+}
+
+async function checkIsMod(req, res, next) {
+  const user = await getUserByEmail(req.user.email);
+  const isMod = user.isMod;
+  if (!isMod) {
+    return res.status(403).json({ error: "You are forbidden!" });
   }
   next();
 }
@@ -63,7 +73,6 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
     googleId: user.googleId,
   };
   done(null, passportUser);
-
 }
 
 //  moved from app.js and exported as setupPassport() method
@@ -82,7 +91,6 @@ function setupPassport() {
     console.log("serializando...");
     console.log(sessionData);
     done(null, sessionData);
-
   });
 
   passport.deserializeUser((obj, done) => {
@@ -97,6 +105,7 @@ module.exports = {
   AUTH_OPTIONS,
   checkLoggedIn,
   checkIsAdmin,
+  checkIsMod,
   verifyCallback,
   setupPassport,
 };

@@ -128,17 +128,28 @@ async function saveUser(user) {
 }
 
 async function updateUser(user) {
-  // console.log(user);
-  // const oldUser = await findUser({ userId: user.usderId });
-  // console.log("*****");
-  // console.log(oldUser);
+  user.isAdmin = false;
+  user.isMod = false;
+  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
+}
 
-  // //fill blank spaces
-  // for (const prop in oldUser) {
-  //   if (!user[prop]) {
-  //     user[prop] = oldUser[prop];
-  //   }
-  // }
+async function makeUserAdmin(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) throw new Error("invalid email");
+  user.isAdmin = !user.isAdmin;
+  user.isMod = !user.isMod;
+  user.updatedAt = Date.now();
+  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
+}
+async function makeUserMod(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) throw new Error("invalid email");
+  user.isMod = !user.isMod;
+  user.updatedAt = Date.now();
   return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
     upsert: true,
   });
@@ -245,6 +256,8 @@ module.exports = {
   saveUser,
   deleteUser,
   updateUser,
+  makeUserAdmin,
+  makeUserMod,
   handleFollows,
   findUsers,
 };
