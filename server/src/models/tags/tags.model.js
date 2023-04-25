@@ -3,6 +3,15 @@ const tagsRepo = require("./tags.mongo");
 
 const DEFAULT_TAG_ID = 0;
 
+async function getTotalTagsNumber() {
+  try {
+    const count = await tagsRepo.countDocuments({ isCustom: true });
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 async function getAllTags(skip, limit) {
   return await tagsRepo
     .find({ softDeleted: false, isCustom: false }, { _id: 0, __v: 0 })
@@ -123,6 +132,7 @@ async function tagDecrementalCounter(tagName) {
 }
 
 module.exports = {
+  getTotalTagsNumber,
   getAllTags,
   getTopTags,
   getAllCustomTags,

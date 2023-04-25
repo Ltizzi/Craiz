@@ -6,17 +6,17 @@
     <div
       class="mx-2 my-5 flex flex-col justify-center gap-2 text-lg text-gray-800"
     >
-      <h1 class="text-center text-xl font-bold md:text-lg lg:text-xl">
+      <h1 class="lg:text-lg 2xl:text-xl text-center text-xl font-bold">
         Editar perfil
       </h1>
       <div class="relative flex w-full items-center justify-center">
         <label
           for="dropzone-file"
-          class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 md:h-44 lg:h-64"
+          class="dark:hover:bg-bray-800 lg:h-44 2xl:h-64 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         >
           <img
             :src="bannerPic"
-            class="mx-auto h-52 w-full object-contain md:h-40 lg:h-52"
+            class="lg:h-40 2xl:h-52 mx-auto h-52 w-full object-contain"
             v-if="bannerPic"
           />
           <div
@@ -55,7 +55,7 @@
       </div>
 
       <div
-        class="absolute top-64 z-50 flex h-20 w-20 items-center justify-center rounded-full md:top-48 lg:top-64"
+        class="lg:top-48 2xl:top-64 absolute top-64 z-50 flex h-20 w-20 items-center justify-center rounded-full"
       >
         <label>
           <!-- for="dropzone-file"
@@ -143,7 +143,7 @@
             />
             <font-awesome-icon
               icon="fa-solid fa-at"
-              class="absolute left-7 -mt-11 items-center bg-purple-500 px-1.5 py-3 text-white md:mt-0.5"
+              class="lg:mt-0.5 absolute left-7 -mt-11 items-center bg-purple-500 px-1.5 py-3 text-white"
             />
           </div>
           <span
@@ -193,7 +193,7 @@
       <div class="flex justify-center">
         <button
           @click="submitForm"
-          class="relative rounded-2xl bg-green-600 px-4 py-2 text-white md:text-sm lg:text-lg"
+          class="lg:text-sm 2xl:text-lg relative rounded-2xl bg-green-600 px-4 py-2 text-white"
         >
           Actualizar Perfil
         </button>

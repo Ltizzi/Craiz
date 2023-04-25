@@ -1,9 +1,9 @@
 <template lang="">
   <div class="w-full overflow-scroll overflow-x-hidden">
     <div class="flex w-full flex-col bg-gray-100 pt-24">
-      <TrendsHeader class="w-full lg:w-2/5" />
+      <TrendsHeader class="2xlw-2/5 w-full" />
       <keep-alive>
-        <TrendList class="mt-10 md:ml-4" />
+        <TrendList class="lg:ml-4 mt-10" />
       </keep-alive>
     </div>
   </div>

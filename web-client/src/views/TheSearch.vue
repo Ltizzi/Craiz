@@ -1,18 +1,18 @@
 <template lang="">
   <div
-    class="flex h-full w-full flex-col bg-gray-200 pt-24 md:w-full lg:w-full"
+    class="flex h-auto w-full flex-col bg-gray-200 pt-28 lg:w-full 2xl:w-full"
     v-if="isLoaded"
   >
-    <SearchHeader class="sm:w-full md:w-full lg:w-6/12" />
+    <SearchHeader class="sm:w-full lg:w-full 2xl:w-6/12" />
     <div
       v-if="noSearch"
       class="sticky mt-40 h-screen w-full items-center text-center text-2xl"
     >
       Busca tags o usuarios
     </div>
-    <div v-else>
+    <div v-else class="">
       <div
-        class="mb-5 mt-12 w-full bg-violet-500 py-2 text-center text-lg font-bold text-gray-50"
+        class="sticky z-10 mt-2 w-full bg-violet-500 py-2 text-center text-lg font-bold text-gray-50 opacity-80"
       >
         <h2>
           Mostrando resultados de búsqueda para "{{
@@ -20,6 +20,7 @@
           }}"
         </h2>
       </div>
+
       <MemeList
         :searchedTag="searchedTag"
         v-if="state.activeTab == 'highlights'"

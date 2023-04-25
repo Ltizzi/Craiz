@@ -1,15 +1,17 @@
 <template lang="">
-  <div class="fixed flex w-64 flex-col gap-2 md:w-52 lg:-ml-5 lg:gap-10">
+  <div
+    class="container flex max-w-5xl flex-col gap-2 lg:-ml-2 2xl:ml-0 2xl:gap-10"
+  >
     <div class="w-full">
-      <SearchBar class="ml-0 w-64 bg-transparent" :back="false" />
+      <SearchBar class="ml-0 w-auto max-w-xs bg-transparent" :back="false" />
     </div>
     <TrendLateralList
-      class="flex w-48 flex-col justify-center rounded-2xl md:w-56"
+      class="flex max-w-xs flex-col justify-center rounded-2xl lg:w-auto"
     />
     <UserTopLateral
-      class="flex w-48 flex-col justify-center rounded-2xl md:w-56"
+      class="flex w-48 flex-col justify-center rounded-2xl lg:w-56"
     />
-    <div class="flex flex-col text-center text-sm text-gray-400 md:text-xs">
+    <div class="flex flex-col text-center text-sm text-gray-400 lg:text-xs">
       <p>©Craze 2023</p>
       <p>Creada por Leonardo Terlizzi</p>
       <p>@ltizzi</p>

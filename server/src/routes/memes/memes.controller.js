@@ -1,4 +1,5 @@
 const {
+  getTotalMemesNumber,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,
@@ -20,6 +21,15 @@ const {
 } = require("../../models/memes/memes.model");
 
 const { getPagination } = require("../../services/query");
+
+async function httpGetTotalMemesNumber(req, res) {
+  try {
+    const count = await getTotalMemesNumber();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
 
 async function httpGetAllMemes(req, res) {
   try {
@@ -236,6 +246,7 @@ async function httpLoopMeme(req, res) {
 }
 
 module.exports = {
+  httpGetTotalMemesNumber,
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
   httpGetAllMemesWithoutComments,

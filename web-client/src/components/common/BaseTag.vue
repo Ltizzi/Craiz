@@ -1,14 +1,14 @@
 <template lang="">
   <div
     v-if="props.list"
-    class="sm:text-base rounded-lg px-2 py-0.5 text-base font-bold text-white hover:cursor-pointer md:px-2 md:text-base lg:px-2 lg:text-base"
+    class="sm:text-base lg:px-2 lg:text-base 2xl:px-2 2xl:text-base rounded-lg px-2 py-0.5 text-base font-bold text-white hover:cursor-pointer"
     @click="openTag(props.name)"
   >
     <slot></slot>
   </div>
   <div
     v-else
-    class="sm:text-base rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer md:px-2 md:text-sm lg:px-2 lg:text-base"
+    class="sm:text-base lg:px-2 lg:text-sm 2xl:px-2 2xl:text-base rounded-lg px-2 py-0.5 text-xs font-bold text-white hover:cursor-pointer"
     @click="openTag(props.name)"
   >
     <slot></slot>

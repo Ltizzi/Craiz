@@ -1,6 +1,8 @@
 <template lang="">
   <div class="relative overflow-x-auto">
-    <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+    <table
+      class="mb-5 w-full rounded-2xl text-left text-sm text-gray-500 shadow-xl shadow-gray-400 dark:text-gray-400"
+    >
       <thead
         class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
       >
@@ -85,12 +87,76 @@
         </tr>
       </tbody>
     </table>
+
+    <nav aria-label="Page navigation example">
+      <div class="mb-5 flex justify-center">
+        <ul class="inline-flex items-center -space-x-px">
+          <li>
+            <a
+              class="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:cursor-pointer hover:bg-violet-500 hover:text-white"
+              @click="goPrevious"
+            >
+              <span class="sr-only">Anterior</span>
+              <svg
+                aria-hidden="true"
+                class="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </a>
+          </li>
+          <li v-for="page in pages" :key="page">
+            <a
+              href="#"
+              :class="[
+                'border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-violet-500 hover:font-extrabold hover:text-white',
+                state.currentPage === page
+                  ? 'bg-violet-500 font-extrabold text-violet-500'
+                  : '',
+              ]"
+              @click="goPage(page)"
+            >
+              {{ page }}
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:cursor-pointer hover:bg-violet-500 hover:text-white"
+              @click="goNext"
+            >
+              <span class="sr-only">Siguiente</span>
+              <svg
+                aria-hidden="true"
+                class="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
 </template>
 <script setup lang="ts">
   import { API_URL } from "@/main";
   import axios from "axios";
-  import { onBeforeMount, ref } from "vue";
+  import { onBeforeMount, reactive, ref } from "vue";
 
   const users = ref();
 
@@ -98,7 +164,8 @@
     const response = await axios.get(`${API_URL}user/makeAdmin?id=${userId}`);
     if (response.data.message == "ok") {
       console.log("user is admin");
-      const response = await getAllUsers();
+      const skip = state.currentPage * 10 - 10;
+      const response = await getAllUsers(skip, 10);
       users.value = response.data;
     } else console.log("something went wrong");
   }
@@ -107,17 +174,55 @@
     const response = await axios.get(`${API_URL}user/makeMod?id=${userId}`);
     if (response.data.message == "ok") {
       console.log("user is mod");
-      const response = await getAllUsers();
+      const skip = state.currentPage * 10 - 10;
+      const response = await getAllUsers(skip, 10);
       users.value = response.data;
     } else console.log("something went wrong");
   }
 
-  async function getAllUsers() {
-    return await axios.get(`${API_URL}user/all`);
+  async function getAllUsers(skip: number, limit: number) {
+    return await axios.get(`${API_URL}user/all?skip=${skip}&limit=${limit}`);
   }
 
   onBeforeMount(async () => {
-    const response = await getAllUsers();
+    const response = await getAllUsers(0, 10);
     users.value = response.data;
+
+    const res = await axios.get(`${API_URL}user/count`);
+    totalUserCount.value = res.data;
+    state.totalPages = Math.ceil(totalUserCount.value / 10);
+    for (let i = 1; i <= state.totalPages; i++) {
+      pages.value.push(i);
+    }
   });
+
+  //pagination
+  const totalUserCount = ref();
+  const pages = ref<number[]>([]);
+
+  const state = reactive({
+    currentPage: 1,
+    totalPages: 1,
+  });
+
+  async function goPrevious() {
+    if (state.currentPage != 1) {
+      const targetPage = state.currentPage - 1;
+      await goPage(targetPage);
+    }
+  }
+
+  async function goNext() {
+    if (state.currentPage != state.totalPages) {
+      const targetPage = state.currentPage + 1;
+      await goPage(targetPage);
+    }
+  }
+
+  async function goPage(page: number) {
+    const skip = page * 10 - 10;
+    const response = await getAllUsers(skip, 10);
+    users.value = response.data;
+    state.currentPage = page;
+  }
 </script>

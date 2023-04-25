@@ -15,14 +15,14 @@
       </div>
       <div class="flex w-full flex-row justify-center gap-2 pb-5 text-sm">
         <button
-          class="rounded-lg bg-green-600 px-2 py-1 font-bold text-white md:rounded-3xl md:px-3 md:py-1 lg:rounded-3xl lg:px-4 lg:py-2 lg:text-lg"
+          class="lg:rounded-3xl lg:px-3 lg:py-1 2xl:rounded-3xl 2xl:px-4 2xl:py-2 2xl:text-lg rounded-lg bg-green-600 px-2 py-1 font-bold text-white"
           @click="handleSignInClick"
         >
           Loguear con Google
         </button>
 
         <button
-          class="rounded-lg bg-orange-600 px-2 py-1 font-bold text-white md:rounded-3xl md:px-3 md:py-1 lg:px-4 lg:py-2 lg:text-lg"
+          class="lg:rounded-3xl lg:px-3 lg:py-1 2xl:px-4 2xl:py-2 2xl:text-lg rounded-lg bg-orange-600 px-2 py-1 font-bold text-white"
           @click="modalSwitch"
         >
           Seguir Navegando

@@ -1,6 +1,6 @@
 <template lang="">
   <BaseButton
-    class="sm:w-11/12 sm:text-base mx-auto mt-2 w-11/12 rounded-xl bg-violet-500 py-1 text-sm font-bold text-white md:w-11/12 lg:w-10/12"
+    class="sm:w-11/12 sm:text-base lg:w-11/12 2xl:w-10/12 mx-auto mt-2 w-11/12 rounded-xl bg-violet-500 py-1 text-sm font-bold text-white"
     @click="modalSwitch"
     >Comentar</BaseButton
   >

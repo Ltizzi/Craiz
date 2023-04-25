@@ -23,6 +23,15 @@ const FILTRO_DTO = {
   about: 0,
 };
 
+async function getTotalUsersNumber() {
+  try {
+    const count = await usersRepo.countDocuments({});
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 async function getAllUsers(skip, limit) {
   return await usersRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
@@ -244,6 +253,7 @@ async function findUsers(filter, skip, limit) {
 }
 
 module.exports = {
+  getTotalUsersNumber,
   getAllUsers,
   getSoftDeletedUsers,
   getUserById,
