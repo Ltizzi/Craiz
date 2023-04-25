@@ -7,6 +7,8 @@ const {
   getAllFriendsFromUserById,
   saveUser,
   updateUser,
+  makeUserAdmin,
+  makeUserMod,
   deleteUser,
   handleFollows,
 } = require("../../models/users/users.model");
@@ -112,6 +114,26 @@ async function httpUpdateUser(req, res) {
   }
 }
 
+async function httpMakeUserAdmin(req, res) {
+  try {
+    let userId = req.query.id;
+    await makeUserAdmin(userId);
+    return res.status(200).json({ message: "ok" });
+  } catch (err) {
+    return res.status(400).son({ error: err.message });
+  }
+}
+
+async function httpMakeUserMod(req, res) {
+  try {
+    let userId = req.query.id;
+    await makeUserMod(userId);
+    return res.status(200).json({ message: "ok" });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 async function httpDeleteUser(req, res) {
   const userId = req.query.id;
   const existUser = await getUserById(userId);
@@ -153,6 +175,8 @@ module.exports = {
   httpGetAllFriendsByUserId,
   httpSaveUser,
   httpUpdateUser,
+  httpMakeUserAdmin,
+  httpMakeUserMod,
   httpDeleteUser,
   httpHandleFollows,
 };

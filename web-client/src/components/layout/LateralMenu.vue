@@ -85,7 +85,7 @@
     </div>
 
     <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
       @click="goProfile"
     >
       <h1
@@ -99,39 +99,50 @@
         Perfil
       </h1>
     </div>
+    <router-link to="/admin">
+      <div
+        class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goAdmin"
+        v-if="isAdmin"
+      >
+        <h1
+          :class="[
+            'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            state.activeButton === 'admin' ? 'font-extrabold text-white' : '',
+          ]"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-lock"
+            class="relative mb-1 mr-2"
+          />
+          Admin
+        </h1>
+      </div>
+    </router-link>
+
     <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
       @click="goMod"
       v-if="isMod"
     >
       <h1
         :class="[
           'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
-          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
+          state.activeButton === 'mod' ? 'font-extrabold text-white' : '',
         ]"
       >
-        <font-awesome-icon icon="fa-solid fa-lock" />
-        Admin
-      </h1>
-    </div>
-    <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
-      @click="goAdmin"
-      v-if="isAdmin"
-    >
-      <h1
-        :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
-          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
-        ]"
-      >
-        <font-awesome-icon icon="fa-solid fa-hammer" />
+        <font-awesome-icon
+          icon="fa-solid fa-hammer"
+          class="relative mb-1 mr-2"
+        />
         Mod
       </h1>
     </div>
 
     <CreateMemeButton />
-    <SignInButton class="md:mt-14 lg:mt-72"></SignInButton>
+    <SignInButton
+      :class="['md:mt-14 lg:mt-72', isAdmin || isMod ? 'md:mt-5 lg:mt-48' : '']"
+    ></SignInButton>
   </div>
 </template>
 <script setup lang="ts">
@@ -147,6 +158,7 @@
   import axios from "axios";
   import { API_URL, RELOAD_TIMER } from "@/main";
   import { notUserModalHandler } from "@/utils/notUserModalHandler";
+  import { faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 
   const userStore = useUserStore();
   // const route = useRoute();
@@ -193,9 +205,13 @@
     }
   }
 
-  function goMod() {}
+  function goMod() {
+    state.activeButton = "mod";
+  }
 
-  function goAdmin() {}
+  function goAdmin() {
+    state.activeButton = "admin";
+  }
 
   const notis = ref();
   const user = ref();
@@ -215,6 +231,7 @@
     userIsSignIn.value = false;
   });
 
+  //is User Admin/Mod?
   const isAdmin = ref(false);
   const isMod = ref(false);
 
@@ -235,6 +252,12 @@
     setInterval(() => {
       loadNotifications(user.userId);
     }, RELOAD_TIMER);
+    if (user.value.isAdmin) {
+      isAdmin.value = true;
+    }
+    if (user.value.isMod) {
+      isMod.value = true;
+    }
   });
 </script>
 <style lang=""></style>

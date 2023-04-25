@@ -11,6 +11,8 @@ import TheTrendsVue from "./views/TheTrends.vue";
 import TheNotificationVue from "./views/TheNotification.vue";
 import AdminDashboardVue from "./components/layout/AdminDashboard.vue";
 
+import { User } from "./utils/models";
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -54,6 +56,15 @@ const router = createRouter({
     },
     { path: "/landing", component: LandingPageVue },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const currentUser = JSON.parse(localStorage.getItem("user") as string);
+  if (to.path == "/admin" && !currentUser.isAdmin) {
+    next("/");
+  } else {
+    next();
+  }
 });
 
 export default router;
