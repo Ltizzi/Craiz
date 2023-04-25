@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="fixed top-0 z-20 w-full bg-slate-700 bg-opacity-95 md:left-72 md:ml-1 md:w-3/6 lg:left-1/4 lg:ml-10 lg:w-5/12"
+    class="fixed top-0 z-20 w-full bg-slate-700 bg-opacity-95 lg:left-72 lg:-ml-0.5 lg:w-3/6 2xl:left-1/4 2xl:ml-10 2xl:w-5/12"
   >
     <div class="mx-5 flex flex-row items-center py-2">
       <router-link to="/">

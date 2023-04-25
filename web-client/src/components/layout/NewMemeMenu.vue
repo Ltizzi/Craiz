@@ -1,7 +1,7 @@
 <template lang="">
   <div class="mt-2 flex flex-col">
     <BaseButton
-      class="w-14 rounded-xl bg-emerald-500 py-1 text-sm font-bold text-white sm:w-3/12 sm:text-base"
+      class="sm:w-3/12 sm:text-base w-14 rounded-xl bg-emerald-500 py-1 text-sm font-bold text-white"
       @click="modalSwitch"
       >Crear Meme</BaseButton
     >
@@ -13,17 +13,17 @@
       class="z-50"
     >
       <div class="flex flex-col justify-center px-7 py-5">
-        <h1 class="text-center text-xs font-bold lg:text-3xl">
+        <h1 class="2xltext-3xl text-center text-xs font-bold">
           What do you want to do?
         </h1>
         <div class="flex flex-row justify-around py-3">
           <BaseButton
-            class="mr-5 rounded-lg bg-purple-500 py-1 px-3 text-lg font-bold text-white"
+            class="mr-5 rounded-lg bg-purple-500 px-3 py-1 text-lg font-bold text-white"
             @click="turnShowUpload"
             >Upload meme</BaseButton
           >
           <BaseButton
-            class="rounded-lg bg-green-500 py-1 px-3 text-lg font-bold text-white"
+            class="rounded-lg bg-green-500 px-3 py-1 text-lg font-bold text-white"
             @click="turnShowCreate"
             >Create new meme</BaseButton
           >

@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="sm:w-full container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md md:w-11/12 lg:w-11/12"
+    class="sm:w-full lg:w-11/12 2xl:w-11/12 container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md"
     v-if="isLoaded"
   >
     <div
@@ -15,18 +15,18 @@
       <h4 v-else>{{ looper }} loopeo este meme</h4>
     </div>
     <div class="flex flex-row items-center justify-between">
-      <div class="container flex flex-row items-center py-1 lg:my-1">
+      <div class="2xlmy-1 container flex flex-row items-center py-1">
         <img
           :src="uploader.avatar"
           alt=""
-          class="mr-2 h-10 w-10 rounded-full object-cover md:h-12 md:w-12"
+          class="lg:h-12 lg:w-12 mr-2 h-10 w-10 rounded-full object-cover"
         />
         <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
         > -->
 
         <h3
-          class="lg:text-2x2 sm:text-xl ml-2 text-xl font-bold hover:cursor-pointer md:text-xl lg:mt-3"
+          class="2xltext-2x2 sm:text-xl lg:text-xl 2xl:mt-3 ml-2 text-xl font-bold hover:cursor-pointer"
           @click="goProfile"
         >
           {{ uploader.nickname }}
@@ -34,7 +34,7 @@
         <!-- </router-link> -->
 
         <h4
-          class="sm:text-base pl-2 text-sm italic md:text-base lg:mt-3 lg:text-lg"
+          class="sm:text-base lg:text-base 2xl:mt-3 2xl:text-lg pl-2 text-sm italic"
         >
           @{{ uploader.username }}
         </h4>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
-    <div class="sm:mx-1 flex flex-col justify-normal lg:mx-12">
+    <div class="sm:mx-1 2xl:mx-12 flex flex-col justify-normal">
       <router-link :to="'/meme?id=' + props.data.memeId">
         <img
           :src="props.data.imgUrl"
@@ -59,7 +59,7 @@
 
       <div class="mt-2 flex h-16 flex-row items-center justify-between">
         <div
-          class="flex w-7/12 flex-row items-center justify-between lg:w-7/12"
+          class="2xlw-7/12 flex w-7/12 flex-row items-center justify-between"
         >
           <LikeButton
             :memeId="props.data.memeId"
@@ -83,7 +83,7 @@
         </div>
 
         <div
-          class="mt-1 flex w-5/12 flex-wrap justify-end text-center lg:justify-end"
+          class="2xljustify-end mt-1 flex w-5/12 flex-wrap justify-end text-center"
         >
           <BaseTag
             v-for="(tag, index) in lowerCaseTags"

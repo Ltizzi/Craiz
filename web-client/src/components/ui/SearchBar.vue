@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="flex w-full flex-row gap-2 bg-slate-700 py-3" v-else>
-    <div class="flex items-center justify-center">
+    <div class="relative flex items-center justify-center">
       <input
         type="text"
         placeholder="Buscar en Craze"
@@ -38,7 +38,7 @@
       />
       <font-awesome-icon
         icon="fa-solid fa-magnifying-glass"
-        class="absolute right-2 rounded-r-full bg-slate-500 py-2 pl-2 pr-3 text-gray-300 hover:cursor-pointer"
+        class="absolute right-0 rounded-r-full bg-slate-500 py-2 pl-2 pr-3 text-gray-300 hover:cursor-pointer"
         @click="handleEnterEvent"
       />
     </div>

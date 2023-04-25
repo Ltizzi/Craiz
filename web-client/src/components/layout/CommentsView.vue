@@ -1,17 +1,17 @@
 <template lang="">
   <div
-    class="mx-auto -mt-2 flex flex-col items-center justify-center gap-0 md:mr-8"
+    class="lg:mr-8 mx-auto -mt-2 flex flex-col items-center justify-center gap-0"
     v-if="isLoaded"
   >
     <template v-for="comment in comments" :key="comment.memeId">
       <div
-        class="fit flex w-full flex-row justify-center gap-0 sm:w-11/12 lg:w-11/12"
+        class="fit sm:w-11/12 2xl:w-11/12 flex w-full flex-row justify-center gap-0"
       >
         <div
           class="mx-auto flex h-full w-6 flex-col items-center justify-center"
         >
           <div
-            class="h-full w-3 border-l-2 border-b-2 border-gray-300 sm:w-10 md:ml-4 lg:w-10"
+            class="sm:w-10 lg:ml-4 2xl:w-10 h-full w-3 border-b-2 border-l-2 border-gray-300"
           ></div>
           <div class="h-full w-full border-l-2 border-gray-300"></div>
         </div>

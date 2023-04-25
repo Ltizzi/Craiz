@@ -25,7 +25,7 @@ const { getPagination } = require("../../services/query");
 async function httpGetTotalMemesNumber(req, res) {
   try {
     const count = await getTotalMemesNumber();
-    return count;
+    return res.status(200).json(count);
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }

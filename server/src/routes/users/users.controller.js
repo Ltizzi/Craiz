@@ -24,7 +24,7 @@ const {
 async function httpGetTotalUsersNumber(req, res) {
   try {
     const count = await getTotalUsersNumber();
-    return count;
+    return res.status(200).json(count);
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }

@@ -19,6 +19,7 @@ const DEFAULT_MEME_ID = 0;
 async function getTotalMemesNumber() {
   try {
     const count = await memesRepo.countDocuments({});
+    console.log("la cantidad de memes es:", count);
     return count;
   } catch (err) {
     return { error: err.message };
