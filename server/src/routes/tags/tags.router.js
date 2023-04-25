@@ -10,10 +10,12 @@ const {
   httpCreateCustomTag,
   httpUpdateTag,
   httpDeleteTag,
+  httpGetTotalTagsNumber,
 } = require("./tags.controller");
 
 const tagsRouter = express.Router();
 
+tagsRouter.get("/count", checkIsAdmin, httpGetTotalTagsNumber);
 tagsRouter.get("/all", httpGetAllTags);
 tagsRouter.get("/top", httpGetTopTags);
 tagsRouter.get("/byId", httpGetTagById);

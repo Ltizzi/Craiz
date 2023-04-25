@@ -20,10 +20,12 @@ const {
   httpAddCommentToMeme,
   httpLikeMeme,
   httpLoopMeme,
+  httpGetTotalMemesNumber,
 } = require("./memes.controller");
 
 const memesRouter = express.Router();
 
+memesRouter.get("/count", checkIsAdmin, httpGetTotalMemesNumber);
 memesRouter.get("/", httpGetAllMemes);
 memesRouter.get("/softDeleted", httpGetAllSoftDeletedMemes);
 memesRouter.get("/allWoC", httpGetAllMemesWithoutComments);

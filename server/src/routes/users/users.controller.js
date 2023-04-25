@@ -1,4 +1,5 @@
 const {
+  getTotalUsersNumber,
   getAllUsers,
   getSoftDeletedUsers,
   getUserById,
@@ -19,6 +20,15 @@ const {
   notNullUserValidator,
   userHasBirthdayAndValidateIt,
 } = require("../../services/validators");
+
+async function httpGetTotalUsersNumber(req, res) {
+  try {
+    const count = await getTotalUsersNumber();
+    return count;
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
 
 async function httpGetAllUsers(req, res) {
   try {
@@ -167,6 +177,7 @@ async function httpHandleFollows(req, res) {
 }
 
 module.exports = {
+  httpGetTotalUsersNumber,
   httpGetAllUsers,
   httpGetSoftDeletedUsers,
   httpGetUserById,
