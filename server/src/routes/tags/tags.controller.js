@@ -1,4 +1,5 @@
 const {
+  getTotalTagsNumber,
   getAllTags,
   getTopTags,
   getTagById,
@@ -10,6 +11,15 @@ const {
 } = require("../../models/tags/tags.model");
 
 const { getPagination } = require("../../services/query");
+
+async function httpGetTotalTagsNumber(req, res) {
+  try {
+    const count = await getTotalTagsNumber();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
 
 async function httpGetAllTags(req, res) {
   try {
@@ -105,6 +115,7 @@ async function httpDeleteTag(req, res) {
 }
 
 module.exports = {
+  httpGetTotalTagsNumber,
   httpGetAllTags,
   httpGetTopTags,
   httpGetTagById,

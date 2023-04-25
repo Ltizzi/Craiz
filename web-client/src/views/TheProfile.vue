@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="w-full" v-if="isLoaded">
+  <div class="h-screen w-full overflow-y-scroll" v-if="isLoaded">
     <ProfileHeader :user="user" />
     <ProfileTabNav :id="user.userId" />
     <keep-alive>

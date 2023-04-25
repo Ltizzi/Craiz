@@ -17,10 +17,12 @@ const {
   httpMakeUserMod,
   httpDeleteUser,
   httpHandleFollows,
+  httpGetTotalUsersNumber,
 } = require("./users.controller");
 
 const usersRouter = express.Router();
 
+usersRouter.get("/count", checkIsAdmin, httpGetTotalUsersNumber);
 usersRouter.get("/all", checkIsMod, httpGetAllUsers);
 usersRouter.get("/softDeleted", checkIsMod, httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);

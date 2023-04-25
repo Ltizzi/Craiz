@@ -20,7 +20,7 @@
   <CreateMemeMobileButton v-if="state.isMobile && !state.isProfile" />
   <div
     v-if="!isLoaded"
-    class="mx-auto my-auto flex items-center justify-center lg:h-full"
+    class="2xlh-full mx-auto my-auto flex items-center justify-center"
   >
     <BaseSpinner />
   </div>
@@ -252,7 +252,7 @@
   });
 
   function handleWindowSize() {
-    state.isMobile = window.innerWidth < 768;
+    state.isMobile = window.innerWidth < 1024;
   }
 
   onUnmounted(() => {

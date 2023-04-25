@@ -1,5 +1,5 @@
 <template lang="">
-  <div v-if="isLoaded" class="flex h-screen w-full flex-col pl-3 pt-5 lg:pl-5">
+  <div v-if="isLoaded" class="2xlpl-5 flex h-screen w-full flex-col pl-3 pt-5">
     <ul v-if="state.activeButton === 'trends'" class="flex flex-col gap-5">
       <li
         v-for="(trend, index) in trendTags"
@@ -28,10 +28,10 @@
       <li
         v-for="(user, index) in usersTopTier"
         :key="user.userId"
-        class="mb-6 flex flex-row justify-between hover:cursor-pointer md:w-5/6 lg:w-4/5"
+        class="lg:w-5/6 2xl:w-4/5 mb-6 flex flex-row justify-between hover:cursor-pointer"
       >
         <div
-          class="flex flex-row items-center justify-start gap-3 text-start lg:gap-5"
+          class="2xlgap-5 flex flex-row items-center justify-start gap-3 text-start"
           @click="goProfile(user.username)"
         >
           <p class="sm:text-lg text-right text-base font-bold">
@@ -40,11 +40,11 @@
           <img
             :src="user.avatar"
             alt="user profile picture"
-            class="h-10 w-10 rounded-full md:h-14 md:w-14"
+            class="lg:h-14 lg:w-14 h-10 w-10 rounded-full"
           />
           <div class="flex flex-col justify-start gap-0">
             <div class="flex flex-row items-center gap-1">
-              <h3 class="text-start text-lg font-bold md:text-xl">
+              <h3 class="lg:text-xl text-start text-lg font-bold">
                 {{ user.nickname }}
               </h3>
               <p class="text-base">- @{{ user.username }}</p>

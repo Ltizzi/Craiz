@@ -1,19 +1,19 @@
 <template lang="">
   <BaseDialog :is-active="showModal" v-if="showModal" @closeModal="modalSwitch">
     <div class="sm:px-7 sm:py-5 flex flex-col justify-center px-2 py-2">
-      <h1 class="text-center text-xl font-bold lg:text-3xl">
+      <h1 class="2xltext-3xl text-center text-xl font-bold">
         Qué te gustaría hacer?
       </h1>
       <div class="flex flex-row justify-around py-3">
         <BaseButton
-          class="mr-5 rounded-lg bg-pink-600 px-3 py-1 text-base font-bold text-white lg:text-lg"
+          class="2xltext-lg mr-5 rounded-lg bg-pink-600 px-3 py-1 text-base font-bold text-white"
           @click="turnShowUpload"
           >Subir meme</BaseButton
         >
         <!-- v-if="btnTurn"
         v-else -->
         <BaseButton
-          class="rounded-lg bg-green-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+          class="2xltext-lg rounded-lg bg-green-500 px-3 py-1 text-base font-bold text-white"
           @click="turnShowCreate"
           >Crear nuevo meme</BaseButton
         >

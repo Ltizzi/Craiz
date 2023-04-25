@@ -1,10 +1,10 @@
 <template lang="">
   <div class="flex-flex-col -mt-5 h-auto">
-    <h1 class="py-2 text-center text-xl font-bold md:text-lg lg:text-2xl">
+    <h1 class="lg:text-lg 2xl:text-2xl py-2 text-center text-xl font-bold">
       Subir un nuevo meme
     </h1>
     <div
-      class="flex h-auto w-full flex-col items-center gap-10 md:flex-row md:gap-0"
+      class="lg:flex-row lg:gap-0 flex h-auto w-full flex-col items-center gap-10"
     >
       <div>
         <div class="flex w-full items-center justify-center">
@@ -16,7 +16,7 @@
               :src="memeImage"
               v-if="memeImage"
               ref="meme"
-              class="mx-auto h-64 w-4/5 object-contain md:h-72 lg:h-72 lg:w-4/5"
+              class="lg:h-72 2xl:h-72 2xl:w-4/5 mx-auto h-64 w-4/5 object-contain"
             />
             <div
               class="flex flex-col items-center justify-center pb-6 pt-5"
@@ -55,7 +55,7 @@
           >{{ state.errors.fileToUpload }}</span
         >
 
-        <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 lg:w-full"></div> -->
+        <!-- <div v-else class="mx-auto my-2 h-72 w-4/5 bg-gray-200 2xl:w-full"></div> -->
         <div
           v-if="selectedTags"
           class="flew-row my-2 flex w-96 flex-wrap justify-evenly"
@@ -73,14 +73,14 @@
       </div>
 
       <div class="flex h-40 flex-col justify-center gap-0">
-        <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
+        <h2 class="2xltext-lg mb-0.5 ml-10 mt-2 text-base font-bold">
           Elige los tags del meme:
         </h2>
         <div class="flex w-fit flex-col items-center justify-center">
           <SelectTagNav />
           <div class="h-32">
             <div
-              class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
+              class="flew-row lg:w-96 flex w-96 flex-wrap justify-evenly px-5 py-2"
             >
               <BaseTag
                 v-for="tag in tags"
@@ -100,11 +100,11 @@
     </div>
 
     <div
-      class="flex flex-row items-center justify-evenly pt-14 md:pt-2 lg:pt-2"
+      class="lg:pt-2 2xl:pt-2 flex flex-row items-center justify-evenly pt-14"
     >
       <BaseButton
         @click="uploadMeme"
-        class="relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white lg:text-lg"
+        class="2xltext-lg relative rounded-lg bg-violet-500 px-3 py-1 text-base font-bold text-white"
         >Publicar Meme
       </BaseButton>
 

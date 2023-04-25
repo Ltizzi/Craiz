@@ -16,6 +16,16 @@ const {
 
 const DEFAULT_MEME_ID = 0;
 
+async function getTotalMemesNumber() {
+  try {
+    const count = await memesRepo.countDocuments({});
+    console.log("la cantidad de memes es:", count);
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 async function getAllMemes(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
@@ -394,6 +404,7 @@ async function findMemes(filter, skip, limit) {
 }
 
 module.exports = {
+  getTotalMemesNumber,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,

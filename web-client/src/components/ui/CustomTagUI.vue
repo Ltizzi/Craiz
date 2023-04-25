@@ -58,7 +58,7 @@
         <BaseTag
           v-for="tag in searchedTags"
           :key="tag.tagId"
-          class="sm:text-base custom rounded-lg px-2 py-1 pb-2 text-base font-bold text-white hover:cursor-pointer md:px-2 md:text-base lg:px-2 lg:text-base"
+          class="sm:text-base custom lg:px-2 lg:text-base 2xl:px-2 2xl:text-base rounded-lg px-2 py-1 pb-2 text-base font-bold text-white hover:cursor-pointer"
           @click="selectTag(tag)"
           :clickeable="true"
           >{{ tag.name }}</BaseTag
@@ -68,7 +68,7 @@
       <p v-if="noSearch" class="py-2">
         Clickea en
         <BaseTag
-          class="sm:text-base custom rounded-lg px-2 py-1 pb-2 text-base font-bold text-white hover:cursor-pointer md:px-2 md:text-base lg:px-2 lg:text-base"
+          class="sm:text-base custom lg:px-2 lg:text-base 2xl:px-2 2xl:text-base rounded-lg px-2 py-1 pb-2 text-base font-bold text-white hover:cursor-pointer"
           :clickeable="true"
           :name="tagValue"
           @click="createTag"
