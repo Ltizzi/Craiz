@@ -1,5 +1,9 @@
 const express = require("express");
-const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
+const {
+  checkLoggedIn,
+  checkIsAdmin,
+  checkIsMod,
+} = require("../../services/security");
 const {
   httpGetAllUsers,
   httpGetSoftDeletedUsers,
@@ -9,18 +13,22 @@ const {
   httpGetAllFriendsByUserId,
   httpSaveUser,
   httpUpdateUser,
+  httpMakeUserAdmin,
+  httpMakeUserMod,
   httpDeleteUser,
   httpHandleFollows,
 } = require("./users.controller");
 
 const usersRouter = express.Router();
 
-usersRouter.get("/all", httpGetAllUsers);
-usersRouter.get("/softDeleted", httpGetSoftDeletedUsers);
+usersRouter.get("/all", checkIsMod, httpGetAllUsers);
+usersRouter.get("/softDeleted", checkIsMod, httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);
 usersRouter.get("/byUsername", httpGetUserByUsername);
 usersRouter.get("/byNickname", httpGetUserByNickname);
 usersRouter.get("/friends", httpGetAllFriendsByUserId);
+usersRouter.get("/makeAdmin", checkIsAdmin, httpMakeUserAdmin);
+usersRouter.get("/makeMod", checkIsAdmin, httpMakeUserMod);
 usersRouter.post("/new", httpSaveUser);
 usersRouter.patch("/update", checkLoggedIn, httpUpdateUser);
 usersRouter.delete("/delete", checkLoggedIn, httpDeleteUser);

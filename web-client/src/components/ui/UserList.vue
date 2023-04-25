@@ -20,14 +20,21 @@
           :key="user.userId"
         >
           <td>
-            <img :src="user.avatar" class="h-10 w-10 rounded-full" alt="" />
+            <img
+              :src="user.avatar"
+              class="mx-auto h-10 w-10 rounded-full"
+              alt=""
+            />
           </td>
-          <th
-            scope="row"
-            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-          >
-            {{ user.username }}
-          </th>
+          <router-link :to="'/' + user.username">
+            <th
+              scope="row"
+              class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            >
+              {{ user.username }}
+            </th>
+          </router-link>
+
           <td class="px-6 py-4">{{ user.nickname }}</td>
           <td class="px-6 py-4">
             <div class="row flex flex-row gap-2">
@@ -58,11 +65,13 @@
             <div class="flex flex-row gap-1">
               <button
                 class="rounded-xl bg-amber-500 px-2 py-1 text-white shadow-md shadow-gray-400"
+                @click="makeUserAdmin(user.userId)"
               >
                 <font-awesome-icon icon="fa-solid fa-lock" />
               </button>
               <button
                 class="rounded-xl bg-slate-700 px-2 py-1 text-white shadow-md shadow-gray-400"
+                @click="makeUserMod(user.userId)"
               >
                 <font-awesome-icon icon="fa-solid fa-hammer" />
               </button>
@@ -85,8 +94,30 @@
 
   const users = ref();
 
+  async function makeUserAdmin(userId: number) {
+    const response = await axios.get(`${API_URL}user/makeAdmin?id=${userId}`);
+    if (response.data.message == "ok") {
+      console.log("user is admin");
+      const response = await getAllUsers();
+      users.value = response.data;
+    } else console.log("something went wrong");
+  }
+
+  async function makeUserMod(userId: number) {
+    const response = await axios.get(`${API_URL}user/makeMod?id=${userId}`);
+    if (response.data.message == "ok") {
+      console.log("user is mod");
+      const response = await getAllUsers();
+      users.value = response.data;
+    } else console.log("something went wrong");
+  }
+
+  async function getAllUsers() {
+    return await axios.get(`${API_URL}user/all`);
+  }
+
   onBeforeMount(async () => {
-    const response = await axios.get(`${API_URL}user/all`);
+    const response = await getAllUsers();
     users.value = response.data;
   });
 </script>
