@@ -145,7 +145,7 @@
     <SignInButton
       :class="[
         'lg:mt-14 2xl:mt-72',
-        isAdmin || isMod ? 'lg:mt-5 2xl:mt-40' : '',
+        isAdmin || isMod ? 'lg:mt-5 2xl:mt-36' : '',
       ]"
     ></SignInButton>
   </div>

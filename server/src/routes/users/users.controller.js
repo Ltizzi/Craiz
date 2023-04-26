@@ -1,6 +1,7 @@
 const {
   getTotalUsersNumber,
   getAllUsers,
+  getTop10Users,
   getSoftDeletedUsers,
   getUserById,
   getUserByNickname,
@@ -39,6 +40,17 @@ async function httpGetAllUsers(req, res) {
     return res.status(200).json(users);
   } catch (err) {
     return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetTop10Users(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const users = await getTop10Users(skip, limit);
+    console.log(users);
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
 }
 
@@ -190,6 +202,7 @@ async function httpBanUser(req, res) {
 module.exports = {
   httpGetTotalUsersNumber,
   httpGetAllUsers,
+  httpGetTop10Users,
   httpGetSoftDeletedUsers,
   httpGetUserById,
   httpGetUserByUsername,
