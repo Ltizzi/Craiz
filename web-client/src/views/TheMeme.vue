@@ -109,7 +109,9 @@
         route.path == "/search" ||
         route.path == "/trends" ||
         route.path == "/notifications" ||
-        route.path == "/meme"
+        route.path == "/meme" ||
+        route.path == "/admin" ||
+        route.path == "/mod"
       ) {
         //por esto es necesaria, la ruta cambiaba pero se activaba en el watcher
 

@@ -26,6 +26,31 @@ async function getTotalMemesNumber() {
   }
 }
 
+async function getTotalFlaggedMemes() {
+  try {
+    const count = await memesRepo.countDocuments({
+      isFlagged: true,
+      softDeleted: false,
+    });
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+async function getTotalModeratedMemes() {
+  try {
+    const count = await memesRepo.countDocuments({
+      isFlagged: true,
+      softDeleted: true,
+      isReviewed: true,
+    });
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 async function getAllMemes(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
@@ -36,8 +61,11 @@ async function getAllMemes(skip, limit) {
 
 async function getAllSoftDeletedMemes(skip, limit) {
   return await memesRepo
-    .find({ softDeleted: true }, { _id: 0, __v: 0 })
-    .sort({ memeId: 1 })
+    .find(
+      { softDeleted: true, isReviewed: true, isFlagged: true },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -443,6 +471,7 @@ async function modDeleteMeme(memeId) {
     throw new Error("Meme not found!");
   }
   meme.softDeleted = !meme.softDeleted;
+
   await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
     upsert: true,
   });
@@ -453,6 +482,17 @@ async function modDeleteMeme(memeId) {
   } else {
     return { error: "Can't deleted unflagged memes!" };
   }
+}
+
+async function modReviewMeme(memeId) {
+  const meme = await findMeme({ memeId: memeId });
+  if (!meme) throw new Error("Meme not found");
+  meme.isReviewed = !meme.isReviewed;
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
+  if (meme.isReviewed) return { ok: "Meme has been reviewed" };
+  if (!meme.isReviewed) return { ok: "Meme status changed to unreviewed" };
 }
 
 async function adminDeleteMeme(memeId) {
@@ -471,6 +511,8 @@ async function adminDeleteMeme(memeId) {
 
 module.exports = {
   getTotalMemesNumber,
+  getTotalFlaggedMemes,
+  getTotalModeratedMemes,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,
@@ -493,5 +535,6 @@ module.exports = {
   flagMeme,
   getAllFlaggedMemes,
   modDeleteMeme,
+  modReviewMeme,
   adminDeleteMeme,
 };

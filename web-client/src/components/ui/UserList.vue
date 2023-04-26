@@ -97,6 +97,11 @@
               >
                 <font-awesome-icon icon="fa-solid fa-circle-minus" />
               </button>
+              <button
+                class="rounded-xl bg-fuchsia-700 px-2 py-1 text-white shadow-md shadow-gray-400"
+              >
+                <font-awesome-icon icon="fa-solid fa-ban" />
+              </button>
             </div>
           </td>
         </tr>
@@ -175,14 +180,14 @@
 
   const users = ref();
 
-  const USERS_BY_PAGE = 5;
+  const USERS_PER_PAGE = 5;
 
   async function makeUserAdmin(userId: number) {
     const response = await axios.get(`${API_URL}user/makeAdmin?id=${userId}`);
     if (response.data.message == "ok") {
       console.log("user is admin");
-      const skip = state.currentPage * USERS_BY_PAGE - USERS_BY_PAGE;
-      const response = await getAllUsers(skip, USERS_BY_PAGE);
+      const skip = state.currentPage * USERS_PER_PAGE - USERS_PER_PAGE;
+      const response = await getAllUsers(skip, USERS_PER_PAGE);
       users.value = response.data;
     } else console.log("something went wrong");
   }
@@ -191,8 +196,8 @@
     const response = await axios.get(`${API_URL}user/makeMod?id=${userId}`);
     if (response.data.message == "ok") {
       console.log("user is mod");
-      const skip = state.currentPage * USERS_BY_PAGE - USERS_BY_PAGE;
-      const response = await getAllUsers(skip, USERS_BY_PAGE);
+      const skip = state.currentPage * USERS_PER_PAGE - USERS_PER_PAGE;
+      const response = await getAllUsers(skip, USERS_PER_PAGE);
       users.value = response.data;
     } else console.log("something went wrong");
   }
@@ -202,12 +207,12 @@
   }
 
   onBeforeMount(async () => {
-    const response = await getAllUsers(0, USERS_BY_PAGE);
+    const response = await getAllUsers(0, USERS_PER_PAGE);
     users.value = response.data;
 
     const res = await axios.get(`${API_URL}user/count`);
     totalUserCount.value = res.data;
-    state.totalPages = Math.ceil(totalUserCount.value / USERS_BY_PAGE);
+    state.totalPages = Math.ceil(totalUserCount.value / USERS_PER_PAGE);
     for (let i = 1; i <= state.totalPages; i++) {
       pages.value.push(i);
     }
@@ -237,8 +242,8 @@
   }
 
   async function goPage(page: number) {
-    const skip = page * USERS_BY_PAGE - USERS_BY_PAGE;
-    const response = await getAllUsers(skip, USERS_BY_PAGE);
+    const skip = page * USERS_PER_PAGE - USERS_PER_PAGE;
+    const response = await getAllUsers(skip, USERS_PER_PAGE);
     users.value = response.data;
     state.currentPage = page;
   }
