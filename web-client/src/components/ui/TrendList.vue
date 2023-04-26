@@ -28,23 +28,23 @@
       <li
         v-for="(user, index) in usersTopTier"
         :key="user.userId"
-        class="lg:w-5/6 2xl:w-4/5 mb-6 flex flex-row justify-between hover:cursor-pointer"
+        class="mb-6 flex flex-row justify-between hover:cursor-pointer lg:w-5/6 2xl:w-4/5"
       >
         <div
           class="2xlgap-5 flex flex-row items-center justify-start gap-3 text-start"
           @click="goProfile(user.username)"
         >
-          <p class="sm:text-lg text-right text-base font-bold">
+          <p class="text-right text-base font-bold sm:text-lg">
             {{ index + 1 }}.
           </p>
           <img
             :src="user.avatar"
             alt="user profile picture"
-            class="lg:h-14 lg:w-14 h-10 w-10 rounded-full"
+            class="h-10 w-10 rounded-full lg:h-14 lg:w-14"
           />
           <div class="flex flex-col justify-start gap-0">
             <div class="flex flex-row items-center gap-1">
-              <h3 class="lg:text-xl text-start text-lg font-bold">
+              <h3 class="text-start text-lg font-bold lg:text-xl">
                 {{ user.nickname }}
               </h3>
               <p class="text-base">- @{{ user.username }}</p>
@@ -169,7 +169,7 @@
       isLoaded.value = true;
     }
 
-    const topUserRes = await axios.get(`${API_URL}user/all?skip=0&limit=10`);
+    const topUserRes = await axios.get(`${API_URL}user/top?skip=0&limit=10`);
     usersTopTier.value = topUserRes.data;
     // if (topUserRes) {
     //   usersTopTier.value = topUserRes.data;

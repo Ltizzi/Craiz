@@ -34,6 +34,7 @@ function checkLoggedIn(req, res, next) {
 }
 
 async function checkIsAdmin(req, res, next) {
+  console.log(req.user);
   const user = await getUserByEmail(req.user.email);
   const isAdmin = user.isAdmin;
   if (!isAdmin) {

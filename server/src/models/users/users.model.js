@@ -21,6 +21,8 @@ const FILTRO_DTO = {
   birthday: 0,
   updatedAt: 0,
   about: 0,
+  isMod: 0,
+  isBanned: 0,
 };
 
 async function getTotalUsersNumber() {
@@ -35,9 +37,39 @@ async function getTotalUsersNumber() {
 async function getAllUsers(skip, limit) {
   return await usersRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ userId: 1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getTop10Users(skip, limit) {
+  if (limit > 10) {
+    throw new Error("Can't fetch more than 10 users");
+  }
+  const users = await usersRepo
+    .find(
+      { softDeleted: false },
+      {
+        _id: 0,
+        __v: 0,
+        email: 0,
+        name: 0,
+        googleId: 0,
+        isAdmin: 0,
+        likedMemes: 0,
+        searchEntries: 0,
+        tags: 0,
+        birthday: 0,
+        updatedAt: 0,
+        about: 0,
+        isMod: 0,
+        isBanned: 0,
+      }
+    )
     .sort({ likeCounter: -1 })
     .skip(skip)
     .limit(limit);
+  return users;
 }
 
 async function getSoftDeletedUsers(skip, limit) {
@@ -273,6 +305,7 @@ async function banUser(userId) {
 module.exports = {
   getTotalUsersNumber,
   getAllUsers,
+  getTop10Users,
   getSoftDeletedUsers,
   getUserById,
   getUserByEmail,

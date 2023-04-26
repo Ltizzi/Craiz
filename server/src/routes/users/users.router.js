@@ -6,6 +6,7 @@ const {
 } = require("../../services/security");
 const {
   httpGetAllUsers,
+  httpGetTop10Users,
   httpGetSoftDeletedUsers,
   httpGetUserById,
   httpGetUserByUsername,
@@ -25,6 +26,7 @@ const usersRouter = express.Router();
 
 usersRouter.get("/count", checkIsAdmin, httpGetTotalUsersNumber);
 usersRouter.get("/all", checkIsMod, httpGetAllUsers);
+usersRouter.get("/top", httpGetTop10Users);
 usersRouter.get("/softDeleted", checkIsMod, httpGetSoftDeletedUsers);
 usersRouter.get("/byId", httpGetUserById);
 usersRouter.get("/byUsername", httpGetUserByUsername);
