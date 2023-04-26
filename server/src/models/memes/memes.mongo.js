@@ -94,6 +94,16 @@ const memesSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  isFlagged: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  flagCounter: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Meme", memesSchema);
