@@ -120,24 +120,26 @@
       </div>
     </router-link>
 
-    <div
-      class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
-      @click="goMod"
-      v-if="isMod"
-    >
-      <h1
-        :class="[
-          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
-          state.activeButton === 'mod' ? 'font-extrabold text-white' : '',
-        ]"
+    <router-link to="/mod">
+      <div
+        class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goMod"
+        v-if="isMod"
       >
-        <font-awesome-icon
-          icon="fa-solid fa-hammer"
-          class="relative mb-1 mr-2"
-        />
-        Mod
-      </h1>
-    </div>
+        <h1
+          :class="[
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
+            state.activeButton === 'mod' ? 'font-extrabold text-white' : '',
+          ]"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-hammer"
+            class="relative mb-1 mr-2"
+          />
+          Mod
+        </h1>
+      </div>
+    </router-link>
 
     <CreateMemeButton />
     <SignInButton

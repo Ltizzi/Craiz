@@ -1,5 +1,7 @@
 const {
   getTotalMemesNumber,
+  getTotalFlaggedMemes,
+  getTotalModeratedMemes,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,
@@ -21,6 +23,7 @@ const {
   flagMeme,
   getAllFlaggedMemes,
   modDeleteMeme,
+  modReviewMeme,
   adminDeleteMeme,
 } = require("../../models/memes/memes.model");
 
@@ -29,6 +32,24 @@ const { getPagination } = require("../../services/query");
 async function httpGetTotalMemesNumber(req, res) {
   try {
     const count = await getTotalMemesNumber();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpGetTotalFlaggedMemesNumber(req, res) {
+  try {
+    const count = await getTotalFlaggedMemes();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpGetTotalModeratedMemesNumber(req, res) {
+  try {
+    const count = await getTotalModeratedMemes();
     return res.status(200).json(count);
   } catch (err) {
     return res.status(400).json({ error: err.message });
@@ -279,6 +300,16 @@ async function httpModDeleteMeme(req, res) {
   }
 }
 
+async function httpModReviewMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const response = await modReviewMeme(memeId);
+    return res.status(200).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
 async function httpAdminDeleteMeme(req, res) {
   try {
     const memeId = req.query.memeId;
@@ -291,6 +322,8 @@ async function httpAdminDeleteMeme(req, res) {
 
 module.exports = {
   httpGetTotalMemesNumber,
+  httpGetTotalFlaggedMemesNumber,
+  httpGetTotalModeratedMemesNumber,
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
   httpGetAllMemesWithoutComments,
@@ -312,5 +345,6 @@ module.exports = {
   httpFlagMeme,
   httpGetAllFlaggedMemes,
   httpModDeleteMeme,
+  httpModReviewMeme,
   httpAdminDeleteMeme,
 };

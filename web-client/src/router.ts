@@ -12,6 +12,7 @@ import TheNotificationVue from "./views/TheNotification.vue";
 import AdminDashboardVue from "./components/layout/AdminDashboard.vue";
 
 import { User } from "./utils/models";
+import ModDashboard from "./components/layout/ModDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,6 +53,11 @@ const router = createRouter({
           name: "AdminDashboard",
           component: AdminDashboardVue,
         },
+        {
+          path: "/mod",
+          name: "ModeratorDashboard",
+          component: ModDashboard,
+        },
       ],
     },
     { path: "/landing", component: LandingPageVue },
@@ -61,6 +67,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const currentUser = JSON.parse(localStorage.getItem("user") as string);
   if (to.path == "/admin" && !currentUser.isAdmin) {
+    next("/");
+  }
+  if (to.path == "/mod" && !currentUser.isMod) {
     next("/");
   } else {
     next();
