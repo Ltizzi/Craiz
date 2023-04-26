@@ -129,7 +129,11 @@ async function getMemesByTemplate(template, skip, limit) {
 }
 
 async function getMemeById(id) {
-  return await findMeme({ memeId: id, softDeleted: false });
+  const meme = await findMeme({ memeId: id, softDeleted: false });
+  if (!meme) {
+    throw new Error("meme not found!");
+  }
+  return meme;
 }
 
 async function getLastMemeId() {
@@ -230,6 +234,9 @@ async function updateMeme(meme) {
 
 async function deleteMeme(memeId, userId) {
   const meme = await findMeme({ memeId: memeId });
+  if (!meme) {
+    throw new Error("Meme not found!");
+  }
   const user = await getUserById(meme.uploader);
   console.log("****");
   console.log("user:", user.userId);
@@ -403,6 +410,53 @@ async function findMemes(filter, skip, limit) {
     .limit(limit);
 }
 
+//moderation
+
+async function flagMeme(memeId) {
+  const meme = await findMeme({ memeId: memeId });
+  if (!meme) {
+    throw new Error("Meme not found!");
+  }
+  if (meme.isFlagged) {
+    meme.flagCounter++;
+    return { ok: "meme flagged" };
+  } else {
+    meme.isFlagged = true;
+    meme.flagCounter++;
+    return { ok: "meme flagged" };
+  }
+}
+
+async function getAllFlaggedMemes(skip, limit) {
+  return await findMemes({ isFlagged: true, softDeleted: false }, skip, limit);
+}
+
+async function modDeleteMeme(memeId) {
+  const meme = await findMeme({ memeId: memeId });
+  if (!meme) {
+    throw new Error("Meme not found!");
+  }
+  meme.softDeleted = !meme.softDeleted;
+  if (meme.softDeleted && meme.isFlagged) {
+    return { ok: "meme soft deleted!" };
+  } else if (!meme.softDeleted && meme.isFlagged) {
+    return { ok: "meme was recovered!" };
+  } else {
+    return { error: "Can't deleted unflagged memes!" };
+  }
+}
+
+async function adminDeleteMeme(memeId) {
+  const meme = await findMeme({ memeId: memeId });
+  if (!meme) {
+    throw new Error("Meme not found!");
+  }
+  meme.softDeleted = !meme.softDeleted;
+  if (meme.softDeleted) {
+    return { ok: "meme soft deleted!" };
+  } else return { ok: "meme was recovered!" };
+}
+
 module.exports = {
   getTotalMemesNumber,
   getAllMemes,
@@ -424,4 +478,8 @@ module.exports = {
   addCommentToMeme,
   likeMeme,
   loopMeme,
+  flagMeme,
+  getAllFlaggedMemes,
+  modDeleteMeme,
+  adminDeleteMeme,
 };

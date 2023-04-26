@@ -8,8 +8,8 @@
       >
         <tr>
           <th scope="col" class="px-6 py-3">Avatar</th>
-          <th scope="col" class="px-6 py-3">Username</th>
-          <th scope="col" class="px-6 py-3">Nickname</th>
+          <th scope="col" class="px-6 py-3">Usuario</th>
+          <!-- <th scope="col" class="px-6 py-3">Email</th> -->
           <th scope="col" class="px-6 py-3">Estado</th>
           <th scope="col" class="px-6 py-3">Info</th>
           <th scope="col" class="px-6 py-3">Acciones</th>
@@ -33,11 +33,26 @@
               scope="row"
               class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
             >
-              {{ user.username }}
+              <div class="flex flex-col justify-center">
+                <p>
+                  <span class="font-extrabold">Usuario: </span>
+                  {{ user.username }}
+                </p>
+                <p>
+                  <span class="font-extrabold">Nickname: </span>
+                  {{ user.nickname }}
+                </p>
+                <p>
+                  <span class="font-extrabold">E-mail: </span> {{ user.email }}
+                </p>
+                <p>
+                  <span class="font-extrabold">Nombre: </span> {{ user.name }}
+                </p>
+              </div>
             </th>
           </router-link>
 
-          <td class="px-6 py-4">{{ user.nickname }}</td>
+          <!-- <td class="px-6 py-4">{{ user.nickname }}</td> -->
           <td class="px-6 py-4">
             <div class="row flex flex-row gap-2">
               <font-awesome-icon

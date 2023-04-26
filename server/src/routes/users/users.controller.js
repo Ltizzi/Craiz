@@ -12,6 +12,7 @@ const {
   makeUserMod,
   deleteUser,
   handleFollows,
+  banUser,
 } = require("../../models/users/users.model");
 
 const { getPagination } = require("../../services/query");
@@ -172,7 +173,17 @@ async function httpHandleFollows(req, res) {
     const followHandled = await handleFollows(userId, userToFollowId);
     return res.status(200).json(followHandled);
   } catch (err) {
-    return res.status(400).json(err.message);
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpBanUser(req, res) {
+  try {
+    const userId = req.query.userId;
+    const response = await banUser(userId);
+    return res.status(200).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
   }
 }
 
@@ -190,4 +201,5 @@ module.exports = {
   httpMakeUserMod,
   httpDeleteUser,
   httpHandleFollows,
+  httpBanUser,
 };

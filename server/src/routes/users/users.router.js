@@ -18,6 +18,7 @@ const {
   httpDeleteUser,
   httpHandleFollows,
   httpGetTotalUsersNumber,
+  httpBanUser,
 } = require("./users.controller");
 
 const usersRouter = express.Router();
@@ -35,5 +36,6 @@ usersRouter.post("/new", httpSaveUser);
 usersRouter.patch("/update", checkLoggedIn, httpUpdateUser);
 usersRouter.delete("/delete", checkLoggedIn, httpDeleteUser);
 usersRouter.patch("/handleFollows", checkLoggedIn, httpHandleFollows);
+usersRouter.get("/ban", checkIsMod, httpBanUser);
 
 module.exports = usersRouter;
