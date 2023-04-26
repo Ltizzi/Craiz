@@ -1,6 +1,6 @@
 <template lang="">
   <div
-    class="sm:w-full lg:w-11/12 2xl:w-11/12 container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md"
+    class="container relative my-2 flex flex-col rounded-xl border-2 bg-gray-50 p-5 shadow-md sm:w-full lg:w-11/12 2xl:w-11/12"
     v-if="isLoaded"
   >
     <div
@@ -19,14 +19,14 @@
         <img
           :src="uploader.avatar"
           alt=""
-          class="lg:h-12 lg:w-12 mr-2 h-10 w-10 rounded-full object-cover"
+          class="mr-2 h-10 w-10 rounded-full object-cover lg:h-12 lg:w-12"
         />
         <!-- <router-link
           :to="{ name: 'TheProfile', params: { username: uploader.username } }"
         > -->
 
         <h3
-          class="2xltext-2x2 sm:text-xl lg:text-xl 2xl:mt-3 ml-2 text-xl font-bold hover:cursor-pointer"
+          class="2xltext-2x2 ml-2 text-xl font-bold hover:cursor-pointer sm:text-xl lg:text-xl 2xl:mt-3"
           @click="goProfile"
         >
           {{ uploader.nickname }}
@@ -34,7 +34,7 @@
         <!-- </router-link> -->
 
         <h4
-          class="sm:text-base lg:text-base 2xl:mt-3 2xl:text-lg pl-2 text-sm italic"
+          class="pl-2 text-sm italic sm:text-base lg:text-base 2xl:mt-3 2xl:text-lg"
         >
           @{{ uploader.username }}
         </h4>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- <h5 class="text-md pt-3 pl-2 italic">{{ props.data.createdAt }}</h5> -->
-    <div class="sm:mx-1 2xl:mx-12 flex flex-col justify-normal">
+    <div class="flex flex-col justify-normal sm:mx-1 2xl:mx-12">
       <router-link :to="'/meme?id=' + props.data.memeId">
         <img
           :src="props.data.imgUrl"
@@ -99,7 +99,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onBeforeMount, ref, watch } from "vue";
+  import { onBeforeMount, onMounted, ref, watch } from "vue";
   import { useMemesStore } from "@/store/memes";
   import { useUserStore } from "@/store";
   import router from "@/router";
@@ -208,7 +208,7 @@
     router.replace(`/${uploader.value.username}`);
   }
 
-  onBeforeMount(async () => {
+  onMounted(async () => {
     const uploaderData = await axios.get(
       `${API_URL}user/byId?id=${props.data.uploader}`
     );

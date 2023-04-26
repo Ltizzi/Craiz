@@ -1,17 +1,17 @@
 <template lang="">
   <div
-    class="lg:mr-8 mx-auto -mt-2 flex flex-col items-center justify-center gap-0"
+    class="mx-auto -mt-2 flex flex-col items-center justify-center gap-0 lg:mr-8"
     v-if="isLoaded"
   >
     <template v-for="comment in comments" :key="comment.memeId">
       <div
-        class="fit sm:w-11/12 2xl:w-11/12 flex w-full flex-row justify-center gap-0"
+        class="fit flex w-full flex-row justify-center gap-0 sm:w-11/12 2xl:w-11/12"
       >
         <div
           class="mx-auto flex h-full w-6 flex-col items-center justify-center"
         >
           <div
-            class="sm:w-10 lg:ml-4 2xl:w-10 h-full w-3 border-b-2 border-l-2 border-gray-300"
+            class="h-full w-3 border-b-2 border-l-2 border-gray-300 sm:w-10 lg:ml-4 2xl:w-10"
           ></div>
           <div class="h-full w-full border-l-2 border-gray-300"></div>
         </div>
@@ -66,7 +66,11 @@
     isLoaded.value = true;
   });
 
-  onBeforeMount(async () => {
+  EventBus.on("isLoaded", () => {
+    isLoaded.value = true;
+  });
+
+  onMounted(async () => {
     if (memesStore.comments) {
       comments.value = memesStore.comments;
     }
@@ -75,6 +79,5 @@
       `${API_URL}meme/getCommentsById?id=${id.value}`
     );
     comments.value = response.data;
-    isLoaded.value = true;
   });
 </script>
