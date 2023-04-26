@@ -13,7 +13,7 @@
       <!-- items-center justify-center -->
       <div
         :class="[
-          'flex w-full flex-col items-center rounded-sm border-2 border-stone-500 bg-gray-50 pb-0 sm:w-full md:w-full lg:w-3/5 2xl:-ml-24 2xl:w-3/5',
+          'flex w-full flex-col items-center  rounded-sm border-2 border-stone-500 bg-gray-50 pb-0 sm:w-full md:w-full lg:w-3/5 2xl:-ml-24 2xl:w-3/5',
           state.adminDashboard ? 'lg:w-5/6 xl:w-5/6 2xl:w-5/6' : '',
         ]"
       >

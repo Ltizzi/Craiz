@@ -10,7 +10,7 @@
     >
       <ul class="m-2 p-2">
         <li
-          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-emerald-500"
+          class="rounded-xl px-3 py-2 text-white hover:cursor-pointer hover:bg-violet-500"
           @click="downloadImage"
         >
           Descargar meme

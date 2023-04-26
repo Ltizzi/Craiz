@@ -419,10 +419,16 @@ async function flagMeme(memeId) {
   }
   if (meme.isFlagged) {
     meme.flagCounter++;
+    await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+      upsert: true,
+    });
     return { ok: "meme flagged" };
   } else {
     meme.isFlagged = true;
     meme.flagCounter++;
+    await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+      upsert: true,
+    });
     return { ok: "meme flagged" };
   }
 }
@@ -437,6 +443,9 @@ async function modDeleteMeme(memeId) {
     throw new Error("Meme not found!");
   }
   meme.softDeleted = !meme.softDeleted;
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
   if (meme.softDeleted && meme.isFlagged) {
     return { ok: "meme soft deleted!" };
   } else if (!meme.softDeleted && meme.isFlagged) {
@@ -452,6 +461,9 @@ async function adminDeleteMeme(memeId) {
     throw new Error("Meme not found!");
   }
   meme.softDeleted = !meme.softDeleted;
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
   if (meme.softDeleted) {
     return { ok: "meme soft deleted!" };
   } else return { ok: "meme was recovered!" };
