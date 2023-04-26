@@ -252,6 +252,20 @@ async function findUsers(filter, skip, limit) {
     .limit(limit);
 }
 
+async function banUser(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) {
+    throw new Error("User not found!");
+  }
+  if (user.isAdmin && user.isMod) {
+    throw new Error("Can't ban admins or moderators");
+  }
+  user.isBanned = !user.isBanned;
+  if (user.isBanned) {
+    return { ok: "user is now banned!" };
+  } else return { ok: "user unbanned!" };
+}
+
 module.exports = {
   getTotalUsersNumber,
   getAllUsers,
@@ -270,4 +284,5 @@ module.exports = {
   makeUserMod,
   handleFollows,
   findUsers,
+  banUser,
 };
