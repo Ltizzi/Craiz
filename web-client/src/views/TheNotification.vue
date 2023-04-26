@@ -226,7 +226,7 @@
         notisToShow
       );
       notifications.value.push(...newNotis);
-      addHoverCheck();
+      await addHoverCheck();
       isLoading.value = false;
     },
     { distance: 100 }

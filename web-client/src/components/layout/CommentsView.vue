@@ -1,19 +1,19 @@
 <template lang="">
   <div
-    class="mx-auto -mt-2 flex flex-col items-center justify-center gap-0 lg:mr-8"
+    class="mx-auto -mt-2 flex h-auto flex-col items-center justify-center gap-0 lg:mr-8"
     v-if="isLoaded"
   >
     <template v-for="comment in comments" :key="comment.memeId">
       <div
-        class="fit flex w-full flex-row justify-center gap-0 sm:w-11/12 2xl:w-11/12"
+        class="flex h-max w-full flex-row justify-center gap-0 sm:w-11/12 2xl:w-11/12"
       >
         <div
-          class="mx-auto flex h-full w-6 flex-col items-center justify-center"
+          class="mx-auto flex h-auto w-6 flex-col items-center justify-center"
         >
           <div
-            class="h-full w-3 border-b-2 border-l-2 border-gray-300 sm:w-10 lg:ml-4 2xl:w-10"
+            class="h-2/4 w-3 border-b-2 border-l-2 border-gray-300 sm:w-10 lg:ml-4 2xl:w-10"
           ></div>
-          <div class="h-full w-full border-l-2 border-gray-300"></div>
+          <div class="h-2/4 w-full border-l-2 border-gray-300"></div>
         </div>
 
         <MemeCard :data="comment" class="mx-0 w-full"></MemeCard>

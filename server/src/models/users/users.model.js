@@ -137,8 +137,9 @@ async function saveUser(user) {
 }
 
 async function updateUser(user) {
-  user.isAdmin = false;
-  user.isMod = false;
+  const previousUser = await findUser({ userId: user.userId });
+  if (!previousUser.isAdmin) user.isAdmin = false;
+  if (!previousUser.isMod) user.isMod = false;
   return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
     upsert: true,
   });
@@ -261,6 +262,9 @@ async function banUser(userId) {
     throw new Error("Can't ban admins or moderators");
   }
   user.isBanned = !user.isBanned;
+  await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
   if (user.isBanned) {
     return { ok: "user is now banned!" };
   } else return { ok: "user unbanned!" };

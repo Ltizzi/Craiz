@@ -104,6 +104,11 @@ const memesSchema = new mongoose.Schema({
     default: 0,
     required: false,
   },
+  isReviewed: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Meme", memesSchema);

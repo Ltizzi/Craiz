@@ -26,6 +26,31 @@ async function getTotalMemesNumber() {
   }
 }
 
+async function getTotalFlaggedMemes() {
+  try {
+    const count = await memesRepo.countDocuments({
+      isFlagged: true,
+      softDeleted: false,
+    });
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+async function getTotalModeratedMemes() {
+  try {
+    const count = await memesRepo.countDocuments({
+      isFlagged: true,
+      softDeleted: true,
+      isReviewed: true,
+    });
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 async function getAllMemes(skip, limit) {
   return await memesRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
@@ -36,8 +61,11 @@ async function getAllMemes(skip, limit) {
 
 async function getAllSoftDeletedMemes(skip, limit) {
   return await memesRepo
-    .find({ softDeleted: true }, { _id: 0, __v: 0 })
-    .sort({ memeId: 1 })
+    .find(
+      { softDeleted: true, isReviewed: true, isFlagged: true },
+      { _id: 0, __v: 0 }
+    )
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit);
 }
@@ -419,10 +447,16 @@ async function flagMeme(memeId) {
   }
   if (meme.isFlagged) {
     meme.flagCounter++;
+    await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+      upsert: true,
+    });
     return { ok: "meme flagged" };
   } else {
     meme.isFlagged = true;
     meme.flagCounter++;
+    await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+      upsert: true,
+    });
     return { ok: "meme flagged" };
   }
 }
@@ -437,6 +471,10 @@ async function modDeleteMeme(memeId) {
     throw new Error("Meme not found!");
   }
   meme.softDeleted = !meme.softDeleted;
+
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
   if (meme.softDeleted && meme.isFlagged) {
     return { ok: "meme soft deleted!" };
   } else if (!meme.softDeleted && meme.isFlagged) {
@@ -446,12 +484,26 @@ async function modDeleteMeme(memeId) {
   }
 }
 
+async function modReviewMeme(memeId) {
+  const meme = await findMeme({ memeId: memeId });
+  if (!meme) throw new Error("Meme not found");
+  meme.isReviewed = !meme.isReviewed;
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
+  if (meme.isReviewed) return { ok: "Meme has been reviewed" };
+  if (!meme.isReviewed) return { ok: "Meme status changed to unreviewed" };
+}
+
 async function adminDeleteMeme(memeId) {
   const meme = await findMeme({ memeId: memeId });
   if (!meme) {
     throw new Error("Meme not found!");
   }
   meme.softDeleted = !meme.softDeleted;
+  await memesRepo.findOneAndUpdate({ memeId: meme.memeId }, meme, {
+    upsert: true,
+  });
   if (meme.softDeleted) {
     return { ok: "meme soft deleted!" };
   } else return { ok: "meme was recovered!" };
@@ -459,6 +511,8 @@ async function adminDeleteMeme(memeId) {
 
 module.exports = {
   getTotalMemesNumber,
+  getTotalFlaggedMemes,
+  getTotalModeratedMemes,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,
@@ -481,5 +535,6 @@ module.exports = {
   flagMeme,
   getAllFlaggedMemes,
   modDeleteMeme,
+  modReviewMeme,
   adminDeleteMeme,
 };
