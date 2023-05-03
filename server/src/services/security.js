@@ -34,24 +34,32 @@ function checkLoggedIn(req, res, next) {
 }
 
 async function checkIsAdmin(req, res, next) {
-  console.log(req.user);
-  const user = await getUserByEmail(req.user.email);
-  const isAdmin = user.isAdmin;
-  if (!isAdmin) {
-    return res.status(403).json({
-      error: "You are forbidden!",
-    });
+  try {
+    console.log(req.user);
+    const user = await getUserByEmail(req.user.email);
+    const isAdmin = user.isAdmin;
+    if (!isAdmin) {
+      return res.status(403).json({
+        error: "You are forbidden!",
+      });
+    }
+    next();
+  } catch (err) {
+    console.log(err);
   }
-  next();
 }
 
 async function checkIsMod(req, res, next) {
-  const user = await getUserByEmail(req.user.email);
-  const isMod = user.isMod;
-  if (!isMod) {
-    return res.status(403).json({ error: "You are forbidden!" });
+  try {
+    const user = await getUserByEmail(req.user.email);
+    const isMod = user.isMod;
+    if (!isMod) {
+      return res.status(403).json({ error: "You are forbidden!" });
+    }
+    next();
+  } catch (err) {
+    console.log(err);
   }
-  next();
 }
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
