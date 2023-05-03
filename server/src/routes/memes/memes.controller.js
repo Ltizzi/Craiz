@@ -1,4 +1,7 @@
 const {
+  getTotalMemesNumber,
+  getTotalFlaggedMemes,
+  getTotalModeratedMemes,
   getAllMemes,
   getAllSoftDeletedMemes,
   getAllMemesWithoutComments,
@@ -17,9 +20,41 @@ const {
   addCommentToMeme,
   likeMeme,
   loopMeme,
+  flagMeme,
+  getAllFlaggedMemes,
+  modDeleteMeme,
+  modReviewMeme,
+  adminDeleteMeme,
 } = require("../../models/memes/memes.model");
 
 const { getPagination } = require("../../services/query");
+
+async function httpGetTotalMemesNumber(req, res) {
+  try {
+    const count = await getTotalMemesNumber();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpGetTotalFlaggedMemesNumber(req, res) {
+  try {
+    const count = await getTotalFlaggedMemes();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function httpGetTotalModeratedMemesNumber(req, res) {
+  try {
+    const count = await getTotalModeratedMemes();
+    return res.status(200).json(count);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
 
 async function httpGetAllMemes(req, res) {
   try {
@@ -235,7 +270,60 @@ async function httpLoopMeme(req, res) {
   }
 }
 
+async function httpFlagMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const response = await flagMeme(memeId);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpGetAllFlaggedMemes(req, res) {
+  try {
+    const { skip, limit } = getPagination(req.query);
+    const response = await getAllFlaggedMemes(skip, limit);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpModDeleteMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const response = await modDeleteMeme(memeId);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpModReviewMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const response = await modReviewMeme(memeId);
+    return res.status(200).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
+async function httpAdminDeleteMeme(req, res) {
+  try {
+    const memeId = req.query.memeId;
+    const response = await adminDeleteMeme(memeId);
+    return res.status(201).json(response);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
+}
+
 module.exports = {
+  httpGetTotalMemesNumber,
+  httpGetTotalFlaggedMemesNumber,
+  httpGetTotalModeratedMemesNumber,
   httpGetAllMemes,
   httpGetAllSoftDeletedMemes,
   httpGetAllMemesWithoutComments,
@@ -254,4 +342,9 @@ module.exports = {
   httpAddCommentToMeme,
   httpLikeMeme,
   httpLoopMeme,
+  httpFlagMeme,
+  httpGetAllFlaggedMemes,
+  httpModDeleteMeme,
+  httpModReviewMeme,
+  httpAdminDeleteMeme,
 };

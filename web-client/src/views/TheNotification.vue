@@ -1,7 +1,10 @@
 <template>
-  <div class="h-full w-full bg-gray-200 text-start" v-if="isLoaded">
+  <div
+    class="h-screen w-full overflow-hidden bg-gray-200 text-start"
+    v-if="isLoaded"
+  >
     <div
-      class="l fixed w-full bg-slate-800 py-3 text-center opacity-90 md:-ml-0.5 md:w-6/12 lg:w-2/5"
+      class="l fixed w-full bg-slate-800 py-3 text-center opacity-90 lg:-ml-0.5 lg:w-6/12 2xl:w-2/5"
     >
       <h1 class="text-xl font-bold text-white">Notificaciones</h1>
     </div>
@@ -26,7 +29,7 @@
           />
           <div
             v-if="noti.type == 'like'"
-            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+            class="flex flex-row items-center gap-3 text-lg lg:text-xl"
           >
             <p>
               A
@@ -55,7 +58,7 @@
           </div>
           <div
             v-if="noti.type == 'loop'"
-            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+            class="flex flex-row items-center gap-3 text-lg lg:text-xl"
           >
             <p>
               <router-link
@@ -84,7 +87,7 @@
 
           <div
             v-if="noti.type == 'comment'"
-            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+            class="flex flex-row items-center gap-3 text-lg lg:text-xl"
           >
             <p>
               <router-link
@@ -113,7 +116,7 @@
           </div>
           <div
             v-if="noti.type === 'follow'"
-            class="flex flex-row items-center gap-3 text-lg md:text-xl"
+            class="flex flex-row items-center gap-3 text-lg lg:text-xl"
           >
             <router-link :to="'/' + noti.fromUser[0].username">
               <p>
@@ -223,7 +226,7 @@
         notisToShow
       );
       notifications.value.push(...newNotis);
-      addHoverCheck();
+      await addHoverCheck();
       isLoading.value = false;
     },
     { distance: 100 }

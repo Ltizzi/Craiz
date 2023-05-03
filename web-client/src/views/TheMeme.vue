@@ -1,48 +1,50 @@
 <template lang="">
-  <div
-    class="relative flex w-full flex-col items-center justify-center"
-    v-if="isLoaded"
-  >
-    <button
-      class="fixed right-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-green-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3"
-      @click="scrollToParent"
-      v-show="parentOutOfView"
+  <div class="h-screen overflow-y-scroll" id="thememe">
+    <div
+      class="relative flex w-full flex-col items-center justify-center"
+      v-if="isLoaded"
     >
-      <font-awesome-icon
-        icon="fa-solid fa-circle-chevron-up"
-        class="text-3xl"
-      />
-    </button>
+      <button
+        class="fixed right-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-green-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-green-600 hover:transition-transform active:animate-ping after:active:animate-ping lg:right-1/3 2xl:right-1/3"
+        @click="scrollToParent"
+        v-show="parentOutOfView"
+      >
+        <font-awesome-icon
+          icon="fa-solid fa-circle-chevron-up"
+          class="text-3xl"
+        />
+      </button>
 
-    <button
-      class="fixed left-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/4 lg:ml-20"
-      v-if="isComment"
-      @click="backToParent"
-    >
-      <font-awesome-icon
-        icon="fa-solid fa-circle-chevron-left"
-        class="text-3xl"
-      />
-    </button>
+      <button
+        class="fixed left-1 top-3/4 z-50 w-10 animate-bounce rounded-full bg-teal-900 px-1 py-1 font-bold text-white shadow-lg shadow-gray-700 duration-500 hover:scale-105 hover:cursor-pointer hover:bg-teal-500 hover:transition-transform active:animate-ping after:active:animate-ping lg:left-1/4 lg:-ml-6 2xl:left-1/4 2xl:ml-20"
+        v-if="isComment"
+        @click="backToParent"
+      >
+        <font-awesome-icon
+          icon="fa-solid fa-circle-chevron-left"
+          class="text-3xl"
+        />
+      </button>
 
-    <div class="mx-auto flex flex-col justify-center">
-      <MemeCard
-        :data="meme"
-        class="mx-auto"
-        id="parent"
-        ref="parent"
-      ></MemeCard>
-
-      <PostCommentButton :memeId="meme.memeId" />
-      <CommentsView
-        class="mx-auto"
-        :comments="comments"
-        :memeId="meme.memeId"
-      ></CommentsView>
+      <div class="mx-auto flex flex-col justify-center">
+        <MemeCard
+          :data="meme"
+          class="mx-auto"
+          id="parent"
+          ref="parent"
+        ></MemeCard>
+        <PostCommentButton :memeId="meme.memeId" />
+        <CommentsView
+          v-show="showComments"
+          class="mx-auto"
+          :comments="comments"
+          :memeId="meme.memeId"
+        ></CommentsView>
+      </div>
     </div>
-  </div>
-  <div class="mx-auto my-auto flex items-center justify-center" v-else>
-    <BaseSpinner />
+    <div class="mx-auto my-auto flex items-center justify-center" v-else>
+      <BaseSpinner />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -107,7 +109,9 @@
         route.path == "/search" ||
         route.path == "/trends" ||
         route.path == "/notifications" ||
-        route.path == "/meme"
+        route.path == "/meme" ||
+        route.path == "/admin" ||
+        route.path == "/mod"
       ) {
         //por esto es necesaria, la ruta cambiaba pero se activaba en el watcher
 
@@ -166,22 +170,22 @@
 
   //carga la data de memes y comments y las guarda en local
   onMounted(async () => {
-    try {
-      const response = await axios.get(
-        `${API_URL}auth/logincheck`,
-        //"http://localhost:4246/v1/auth/logincheck",
-        { withCredentials: true }
-      );
-      userStore.setUser(response.data.user);
-      if (!response.data.user) {
-        let localGuest = localStorage.getItem("guest");
-        if (localGuest == "userIsGuest") {
-          userStore.setGuest();
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   const response = await axios.get(
+    //     `${API_URL}auth/logincheck`,
+    //     //"http://localhost:4246/v1/auth/logincheck",
+    //     { withCredentials: true }
+    //   );
+    //   userStore.setUser(response.data.user);
+    //   if (!response.data.user) {
+    //     let localGuest = localStorage.getItem("guest");
+    //     if (localGuest == "userIsGuest") {
+    //       userStore.setGuest();
+    //     }
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
 
     let memeString = localStorage.getItem("meme");
     if (memeString) {
@@ -212,12 +216,16 @@
       }
       isLoaded.value = true;
     }
+    // setTimeout(() => {
+    //   showComments.value = true;
+    // }, 2000);
   });
 
   //manejo del boton que scrollea al componente padre
 
   const parentOutOfView = ref(false);
   const parentRef = ref<HTMLElement | null>(null);
+  const showComments = ref(false);
 
   function scrollToParent() {
     if (parentRef.value) {
@@ -233,8 +241,10 @@
   }
 
   EventBus.on("isLoaded", () => {
-    window.addEventListener("scroll", handleScroll);
+    const thememe = document.getElementById("thememe");
+    thememe?.addEventListener("scroll", handleScroll);
     parentRef.value = document.getElementById("parent");
+    showComments.value = true;
   });
 
   // onMounted(() => {

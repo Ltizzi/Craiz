@@ -1,11 +1,11 @@
 <template lang="">
   <div
-    class="items-left sm:ml-2 sm:w-2/5 container fixed mt-24 flex flex-col gap-4 md:-ml-20 md:mt-12 md:w-fit md:gap-2 lg:ml-36 lg:w-fit"
+    class="items-left container mt-24 flex h-screen flex-col gap-4 sm:ml-2 sm:w-2/5 lg:ml-2 lg:mt-12 lg:w-32 lg:gap-2 xl:w-36 2xl:ml-4 2xl:w-48"
   >
     <img
       src="/assets/img/logo.png"
       alt="Craze logo"
-      class="w-14 md:ml-4 md:w-20 lg:ml-8 lg:w-32"
+      class="w-14 max-w-2xl lg:ml-4 lg:w-20 2xl:ml-8 2xl:w-32"
     />
 
     <div
@@ -14,7 +14,7 @@
     >
       <h1
         :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
           state.activeButton === 'inicio' ? 'font-extrabold text-white' : '',
         ]"
       >
@@ -30,7 +30,7 @@
       >
         <h1
           :class="[
-            'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
             state.activeButton === 'search' ? 'font-extrabold text-white' : '',
           ]"
         >
@@ -50,7 +50,7 @@
       >
         <h1
           :class="[
-            'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
             state.activeButton === 'trends' ? 'font-extrabold text-white' : '',
           ]"
         >
@@ -68,7 +68,7 @@
     >
       <h1
         :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
           state.activeButton === 'notifications'
             ? 'font-extrabold text-white'
             : '',
@@ -85,53 +85,69 @@
     </div>
 
     <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+      class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
       @click="goProfile"
     >
       <h1
         :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
-          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
-        ]"
-      >
-        <font-awesome-icon icon="fa-solid fa-hammer" />
-        Mod
-      </h1>
-    </div>
-    <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
-      @click="goMod"
-      v-if="isMod"
-    >
-      <h1
-        :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
-          state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
-        ]"
-      >
-        <font-awesome-icon icon="fa-solid fa-lock" />
-        Admin
-      </h1>
-    </div>
-    <div
-      class="mb-2 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
-      @click="goAdmin"
-      v-if="isAdmin"
-    >
-      <h1
-        :class="[
-          'sm:text-left sm:text-lg my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer md:text-lg lg:ml-2 lg:text-start lg:text-xl',
+          'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
           state.activeButton === 'profile' ? 'font-extrabold text-white' : '',
         ]"
       >
         <font-awesome-icon icon="fa-solid fa-user" class="mb-1 mr-2" />
+
         Perfil
       </h1>
     </div>
+    <router-link to="/admin">
+      <div
+        class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goAdmin"
+        v-if="isAdmin"
+      >
+        <h1
+          :class="[
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
+            state.activeButton === 'admin' ? 'font-extrabold text-white' : '',
+          ]"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-lock"
+            class="relative mb-1 mr-2"
+          />
+          Admin
+        </h1>
+      </div>
+    </router-link>
 
-    <!-- <NewMemeMenu></NewMemeMenu> -->
+    <router-link to="/mod">
+      <div
+        class="mb-1 flex h-12 items-center rounded-2xl px-2 hover:cursor-pointer hover:bg-slate-600"
+        @click="goMod"
+        v-if="isMod"
+      >
+        <h1
+          :class="[
+            'my-5 ml-1 text-lg font-bold text-gray-300 hover:cursor-pointer sm:text-left sm:text-lg lg:text-lg 2xl:ml-2 2xl:text-start 2xl:text-xl',
+            state.activeButton === 'mod' ? 'font-extrabold text-white' : '',
+          ]"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-hammer"
+            class="relative mb-1 mr-2"
+          />
+          Mod
+        </h1>
+      </div>
+    </router-link>
+
     <CreateMemeButton />
-    <SignInButton class="md:mt-14 lg:mt-72"></SignInButton>
+    <SignInButton
+      :class="[
+        'lg:mt-14 2xl:mt-72',
+        isAdmin || isMod ? 'lg:mt-5 2xl:mt-36' : '',
+      ]"
+    ></SignInButton>
   </div>
 </template>
 <script setup lang="ts">
@@ -139,7 +155,6 @@
   import NewMemeMenu from "./NewMemeMenu.vue";
   import CreateMemeButton from "../ui/CreateMemeButton.vue";
   import router from "@/router";
-  // import { useRoute } from "vue-router";
   import EventBus from "@/utils/EventBus";
   import { useUserStore } from "@/store";
   import { User } from "@/utils/models";
@@ -147,9 +162,9 @@
   import axios from "axios";
   import { API_URL, RELOAD_TIMER } from "@/main";
   import { notUserModalHandler } from "@/utils/notUserModalHandler";
+  import { faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 
   const userStore = useUserStore();
-  // const route = useRoute();
 
   const state = reactive({
     activeButton: "inicio",
@@ -193,6 +208,14 @@
     }
   }
 
+  function goMod() {
+    state.activeButton = "mod";
+  }
+
+  function goAdmin() {
+    state.activeButton = "admin";
+  }
+
   const notis = ref();
   const user = ref();
 
@@ -211,6 +234,7 @@
     userIsSignIn.value = false;
   });
 
+  //is User Admin/Mod?
   const isAdmin = ref(false);
   const isMod = ref(false);
 
@@ -231,6 +255,12 @@
     setInterval(() => {
       loadNotifications(user.userId);
     }, RELOAD_TIMER);
+    if (user.value.isAdmin) {
+      isAdmin.value = true;
+    }
+    if (user.value.isMod) {
+      isMod.value = true;
+    }
   });
 </script>
 <style lang=""></style>

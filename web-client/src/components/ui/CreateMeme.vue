@@ -5,7 +5,7 @@
     </h1>
 
     <form @submit.prevent="generateMeme" class="flex flex-col">
-      <div class="flex flex-col md:flex-row">
+      <div class="lg:flex-row flex flex-col">
         <div class="flex flex-col">
           <div class="container flex h-auto w-auto flex-col bg-gray-100 p-5">
             <div class="flex w-auto items-center justify-center">
@@ -131,14 +131,14 @@
         </div>
 
         <div class="my-auto flex h-40 flex-col justify-center gap-0">
-          <h2 class="mb-0.5 ml-10 mt-2 text-base font-bold lg:text-lg">
+          <h2 class="2xltext-lg mb-0.5 ml-10 mt-2 text-base font-bold">
             Elige los tags del meme:
           </h2>
           <div class="flex w-fit flex-col items-center justify-center">
             <SelectTagNav />
             <div class="h-32">
               <div
-                class="flew-row flex w-96 flex-wrap justify-evenly px-5 py-2 md:w-96"
+                class="flew-row lg:w-96 flex w-96 flex-wrap justify-evenly px-5 py-2"
               >
                 <BaseTag
                   v-for="tag in tags"
@@ -181,7 +181,7 @@
         />
       </div>
       <!-- <div
-        class="flex flex-row items-center justify-evenly pt-14 md:pt-2 lg:pt-2"
+        class="flex flex-row items-center justify-evenly pt-14 lg:pt-2 2xl:pt-2"
       ></div> -->
     </form>
   </div>

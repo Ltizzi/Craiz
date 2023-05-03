@@ -28,11 +28,13 @@ import {
   faAt,
   faLock,
   faHammer,
+  faCircleMinus,
+  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 
-//export const API_URL = "http://localhost:4246/v1/";
-export const API_URL = "https://crazeapi.onrender.com/v1/";
+export const API_URL = "http://localhost:4246/v1/";
+//export const API_URL = "https://crazeapi.onrender.com/v1/";
 
 export const RELOAD_TIMER = 1000 * 60;
 
@@ -58,14 +60,16 @@ library.add(
   faCircleExclamation,
   faAt,
   faLock,
-  faHammer
+  faHammer,
+  faCircleMinus,
+  faBan
 );
 
 const app = createApp(App);
 const pinia = createPinia();
 
-app.use(router);
 app.use(pinia);
+app.use(router);
 
 axios.interceptors.request.use((config) => {
   config.withCredentials = true;

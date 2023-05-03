@@ -21,14 +21,55 @@ const FILTRO_DTO = {
   birthday: 0,
   updatedAt: 0,
   about: 0,
+  isMod: 0,
+  isBanned: 0,
 };
+
+async function getTotalUsersNumber() {
+  try {
+    const count = await usersRepo.countDocuments({});
+    return count;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
 
 async function getAllUsers(skip, limit) {
   return await usersRepo
     .find({ softDeleted: false }, { _id: 0, __v: 0 })
+    .sort({ userId: 1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getTop10Users(skip, limit) {
+  if (limit > 10) {
+    throw new Error("Can't fetch more than 10 users");
+  }
+  const users = await usersRepo
+    .find(
+      { softDeleted: false },
+      {
+        _id: 0,
+        __v: 0,
+        email: 0,
+        name: 0,
+        googleId: 0,
+        isAdmin: 0,
+        likedMemes: 0,
+        searchEntries: 0,
+        tags: 0,
+        birthday: 0,
+        updatedAt: 0,
+        about: 0,
+        isMod: 0,
+        isBanned: 0,
+      }
+    )
     .sort({ likeCounter: -1 })
     .skip(skip)
     .limit(limit);
+  return users;
 }
 
 async function getSoftDeletedUsers(skip, limit) {
@@ -128,17 +169,29 @@ async function saveUser(user) {
 }
 
 async function updateUser(user) {
-  // console.log(user);
-  // const oldUser = await findUser({ userId: user.usderId });
-  // console.log("*****");
-  // console.log(oldUser);
+  const previousUser = await findUser({ userId: user.userId });
+  if (!previousUser.isAdmin) user.isAdmin = false;
+  if (!previousUser.isMod) user.isMod = false;
+  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
+}
 
-  // //fill blank spaces
-  // for (const prop in oldUser) {
-  //   if (!user[prop]) {
-  //     user[prop] = oldUser[prop];
-  //   }
-  // }
+async function makeUserAdmin(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) throw new Error("invalid email");
+  user.isAdmin = !user.isAdmin;
+  user.isMod = !user.isMod;
+  user.updatedAt = Date.now();
+  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
+}
+async function makeUserMod(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) throw new Error("invalid email");
+  user.isMod = !user.isMod;
+  user.updatedAt = Date.now();
   return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
     upsert: true,
   });
@@ -232,8 +285,27 @@ async function findUsers(filter, skip, limit) {
     .limit(limit);
 }
 
+async function banUser(userId) {
+  const user = await findUser({ userId: userId });
+  if (!user) {
+    throw new Error("User not found!");
+  }
+  if (user.isAdmin && user.isMod) {
+    throw new Error("Can't ban admins or moderators");
+  }
+  user.isBanned = !user.isBanned;
+  await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+    upsert: true,
+  });
+  if (user.isBanned) {
+    return { ok: "user is now banned!" };
+  } else return { ok: "user unbanned!" };
+}
+
 module.exports = {
+  getTotalUsersNumber,
   getAllUsers,
+  getTop10Users,
   getSoftDeletedUsers,
   getUserById,
   getUserByEmail,
@@ -245,6 +317,9 @@ module.exports = {
   saveUser,
   deleteUser,
   updateUser,
+  makeUserAdmin,
+  makeUserMod,
   handleFollows,
   findUsers,
+  banUser,
 };

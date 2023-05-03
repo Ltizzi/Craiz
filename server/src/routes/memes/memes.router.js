@@ -1,5 +1,9 @@
 const express = require("express");
-const { checkLoggedIn, checkIsAdmin } = require("../../services/security");
+const {
+  checkLoggedIn,
+  checkIsAdmin,
+  checkIsMod,
+} = require("../../services/security");
 
 const {
   httpGetAllMemes,
@@ -20,12 +24,23 @@ const {
   httpAddCommentToMeme,
   httpLikeMeme,
   httpLoopMeme,
+  httpGetTotalMemesNumber,
+  httpFlagMeme,
+  httpGetAllFlaggedMemes,
+  httpModDeleteMeme,
+  httpAdminDeleteMeme,
+  httpModReviewMeme,
+  httpGetTotalFlaggedMemesNumber,
+  httpGetTotalModeratedMemesNumber,
 } = require("./memes.controller");
 
 const memesRouter = express.Router();
 
+memesRouter.get("/count", checkIsAdmin, httpGetTotalMemesNumber);
+memesRouter.get("/countFlagged", checkIsMod, httpGetTotalFlaggedMemesNumber);
+memesRouter.get("/countMod", checkIsMod, httpGetTotalModeratedMemesNumber);
 memesRouter.get("/", httpGetAllMemes);
-memesRouter.get("/softDeleted", httpGetAllSoftDeletedMemes);
+memesRouter.get("/softDeleted", checkIsMod, httpGetAllSoftDeletedMemes);
 memesRouter.get("/allWoC", httpGetAllMemesWithoutComments);
 memesRouter.get("/getCommentsById", httpGetAllCommentsFromMemeById);
 memesRouter.get("/byId", httpGetMemeById);
@@ -42,5 +57,10 @@ memesRouter.post("/like", checkLoggedIn, httpLikeMeme);
 memesRouter.post("/loop", checkLoggedIn, httpLoopMeme);
 memesRouter.patch("/update", checkLoggedIn, httpUpdateMeme);
 memesRouter.delete("/delete", checkLoggedIn, httpDeleteMeme);
+memesRouter.get("/flag", checkLoggedIn, httpFlagMeme);
+memesRouter.get("/getAllFlagged", checkIsMod, httpGetAllFlaggedMemes);
+memesRouter.delete("/modDelete", checkIsMod, httpModDeleteMeme);
+memesRouter.get("/review", checkIsMod, httpModReviewMeme);
+memesRouter.delete("/adminDelete", checkIsAdmin, httpAdminDeleteMeme);
 
 module.exports = memesRouter;
