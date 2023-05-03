@@ -146,7 +146,7 @@
         user.follows.push(id);
         localStorage.setItem("user", JSON.stringify(user));
         const topUserRes = await axios.get(
-          `${API_URL}user/all?skip=0&limit=10`
+          `${API_URL}user/top?skip=0&limit=10`
         );
         usersTopTier.value = topUserRes.data;
       }
@@ -154,7 +154,7 @@
         user.follows = user.follows.filter((usr: number) => usr != id);
         localStorage.setItem("user", JSON.stringify(user));
         const topUserRes = await axios.get(
-          `${API_URL}user/all?skip=0&limit=10`
+          `${API_URL}user/top?skip=0&limit=10`
         );
         usersTopTier.value = topUserRes.data;
       }
