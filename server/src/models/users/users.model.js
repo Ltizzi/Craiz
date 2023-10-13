@@ -170,16 +170,21 @@ async function saveUser(user) {
 
 async function updateUser(user) {
   const previousUser = await findUser({ userId: user.userId });
+  const requestEmailUserOwner = await findUser({ email: user.email });
   if (!previousUser.isAdmin) user.isAdmin = false;
   if (!previousUser.isMod) user.isMod = false;
-  return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
-    upsert: true,
-  });
+
+  //TODO: testear esto
+  if (previousUser.userId === requestEmailUserOwner.userId) {
+    return await usersRepo.findOneAndUpdate({ userId: user.userId }, user, {
+      upsert: true,
+    });
+  } else throw new Error("E-mail already taken");
 }
 
 async function makeUserAdmin(userId) {
   const user = await findUser({ userId: userId });
-  if (!user) throw new Error("invalid email");
+  if (!user) throw new Error("invalid id");
   user.isAdmin = !user.isAdmin;
   user.isMod = !user.isMod;
   user.updatedAt = Date.now();

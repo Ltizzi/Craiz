@@ -160,7 +160,7 @@
 
   const moderatedMemes = ref();
 
-  const MEMES_PER_PAGE = 10;
+  const MEMES_PER_PAGE = 5;
 
   async function getAllModeratedMemes(skip: number, limit: number) {
     return await axios.get(
